@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2011 Sonja Pieper
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:delusions= "http://schemas.android.com/apk/res/de.delusions.measure">
+
+ <PreferenceCategory android:title="@string/pref_cat_basic" android:summary="Basic Settings"><!-- todo -->
+
+ <de.delusions.measure.activities.prefs.FloatEditTextPreference
+                android:key="user.goal" 
+                android:name="@string/pref_goal"
+                android:summary="@string/pref_goal_summary"
+                android:defaultValue="0"
+                android:title="@string/pref_goal"  
+                android:inputType="number|numberDecimal"
+                delusions:unit="KG"/>
+
+ <de.delusions.measure.activities.prefs.FloatEditTextPreference
+                android:key="user.height" 
+                android:name="@string/pref_height"
+                android:summary="@string/pref_height_summary"
+                android:defaultValue="0"
+                android:title="@string/pref_height"
+                android:inputType="number|numberDecimal" 
+                delusions:unit="CM" />
+
+ <ListPreference android:key="user.units" 
+    android:title="@string/pref_units" 
+    android:entries="@array/units_names"
+    android:entryValues="@array/units_values" 
+    android:dialogTitle="@string/pref_units" 
+    android:defaultValue="true"/>
+</PreferenceCategory>
+<PreferenceCategory android:title="@string/pref_cat_tracking" android:summary="Enable Additional Tracking">
+ <CheckBoxPreference android:key="user.fat"    
+    android:title="@string/pref_fat"
+    android:summary="@string/pref_fat_summary" />
+ <CheckBoxPreference android:key="user.waisttracking"    
+    android:title="@string/pref_waist"
+    android:summary="@string/pref_waist_summary" />  
+ <CheckBoxPreference android:key="user.fastinput"    
+    android:title="@string/pref_createinput"
+    android:summary="@string/pref_createinput_summary" />      
+</PreferenceCategory>
+
+<PreferenceCategory android:title="@string/pref_cat_reminder" android:summary="Daily Reminder Settings">
+ <CheckBoxPreference 
+    android:key="user.notification.enabled"
+    android:title="@string/pref_notificationenabled"
+    android:summary="@string/pref_notificationenabled_summary" />
+
+<de.delusions.measure.activities.prefs.TimeDialogPreference android:key="user.notification"
+    android:dependency="user.notification.enabled"  
+    android:title="@string/pref_notification"
+    android:summary="@string/pref_notification_summary"    
+    />
+  
+  <de.delusions.measure.activities.prefs.IntEditTextPreference
+               android:key="user.notification.frequency"
+               android:dependency="user.notification.enabled"   
+               android:title="@string/pref_frequency"
+               android:name="@string/pref_frequency"
+               android:summary="@string/pref_frequency_summary"
+               android:defaultValue="1"               
+               android:inputType="number"                        
+  />
+    
+
+
+ </PreferenceCategory>
+
+</PreferenceScreen>

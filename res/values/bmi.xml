@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2011 Sonja Pieper
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.-->
+<resources>
+   
+    
+<integer-array name="underweight">
+<item>0</item>
+<item>19</item>
+</integer-array>
+
+<integer-array name="normalweight">
+<item>19</item>
+<item>25</item>
+</integer-array>
+
+<integer-array name="overweight">
+<item>25</item>
+<item>30</item>
+</integer-array>
+
+<integer-array name="obese">
+<item>30</item>
+<item>100</item>
+</integer-array>
+
+<color name="underweight">#6699FF</color>
+<color name="normalweight">#99CC33</color>
+<color name="overweight">#FFCC00</color>
+<color name="obese">#FF6600</color>
+
+<color name="yourweight">#FF9900</color>
+<color name="yourgoal">#669900</color>
+
+</resources>
