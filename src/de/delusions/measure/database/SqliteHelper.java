@@ -64,15 +64,10 @@ public class SqliteHelper {
 
     private final Context mCtx;
 
-    private static boolean UPDATING = false;
-
     private static class DatabaseHelper extends SQLiteOpenHelper {
-
-        private final Context ctx;
 
         DatabaseHelper(Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
-            this.ctx = context;
         }
 
         @Override
