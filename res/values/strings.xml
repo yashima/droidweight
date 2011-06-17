@@ -34,7 +34,7 @@
 <string name="activity_editmeasure">Edit </string>
 <string name="activity_createmeasure">Create new entry </string>
 <string name="activity_prefs">Preferences</string>
-<string name="no_measures">There are no measures yet, record one! (Hint: use the menu)</string>
+<string name="no_measures">There are no measurements yet. Use Menu > Create Entry to record one.</string>
 <string name="label_female">Female</string>
 <string name="label_male">Male</string>
 <string name="label_metric">Metric</string>
