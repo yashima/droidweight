@@ -124,6 +124,7 @@ containing a value of this type.
         public static final int basic_menu_showtype=0x7f090020;
         public static final int bmi=0x7f090032;
         public static final int calculator=0x7f09000c;
+        public static final int change_arrow=0x7f090030;
         public static final int chart_title=0x7f090011;
         public static final int chooseType=0x7f090018;
         public static final int context_menu_delete=0x7f090026;
@@ -144,7 +145,6 @@ containing a value of this type.
         public static final int months_3=0x7f090014;
         public static final int months_6=0x7f090013;
         public static final int ok=0x7f09001c;
-        public static final int percentchange=0x7f090030;
         public static final int plus=0x7f090028;
         public static final int plusplus=0x7f09002c;
         public static final int range_normalweight=0x7f09000a;

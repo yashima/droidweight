@@ -177,8 +177,8 @@ public class Measurement implements Serializable {
         }
     }
 
-    public int getPercentDifference(Measurement measurement) {
-        return 100 - Math.round(100 * measurement.getValue() / this.value);
+    public float getPercentDifference(Measurement measurement) {
+        return 100 - (100 * measurement.getValue() / this.value);
     }
 
     public String prettyPrint(Context ctx) {

@@ -21,7 +21,7 @@
 	<TableRow>
         <TextView android:id="@+id/label_measure"  style="@style/TextMedium" android:text="@string/row_weight" android:paddingRight="15dp"/>          
 		<TextView android:id="@+id/measure" style="@style/TextLarge" />
-		<TextView android:id="@+id/percentchange" style="@style/TextSmall" android:text="-5%" android:gravity="right" android:paddingRight="10dp"/>				     		    		
+		<ImageView android:src="@android:drawable/arrow_up_float" android:id="@+id/change_arrow" android:layout_height="fill_parent" android:layout_width="fill_parent"></ImageView>				     		    		
 	</TableRow>
 
 	<TableRow>
