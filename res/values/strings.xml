@@ -121,7 +121,7 @@
 <string name="pref_frequency">Frequency</string>
 
 <string name="pref_goal_summary">Your target weight in kg</string>
-<string name="pref_goal_summary_imperial">Your target weight in pd</string>
+<string name="pref_goal_summary_imperial">Your target weight in lb</string>
 <string name="pref_height_summary">Your height in cm</string>
 <string name="pref_height_summary_imperial">Your height in inches</string>
 <string name="pref_units_summary">Choose length and weight units</string>

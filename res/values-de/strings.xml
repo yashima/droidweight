@@ -38,7 +38,7 @@
 <string name="label_female">Weiblich</string>
 <string name="label_male">Männlich</string>
 <string name="label_metric">kg &amp; cm</string>
-<string name="label_imperial">pd &amp; in</string>
+<string name="label_imperial">lb &amp; in</string>
 <string name="label_weight">Gewicht</string>
 <string name="label_height">Größe</string>
 <string name="label_bodyfat">Körperfett</string>
@@ -112,7 +112,7 @@
 
 <string-array name="units_names">
 <item>Metrisch (kg, cm)</item>
-<item>Imperial (pd, in)</item>
+<item>Imperial (lb, in)</item>
 </string-array>
 
 <string name="pref_goal">Ziel</string>

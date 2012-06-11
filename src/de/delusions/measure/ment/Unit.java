@@ -25,7 +25,7 @@ public enum Unit {
 
     CM(new Float(0.39), "cm", "in"),
 
-    KG(new Float(2.2), "kg", "pd"),
+    KG(new Float(2.2), "kg", "lb"),
 
     PERCENT(new Float(1), "%", "%");
 
