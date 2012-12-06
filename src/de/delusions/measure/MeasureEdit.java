@@ -24,8 +24,13 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.MeasureCursorAdapter;
 import de.delusions.measure.database.SqliteHelper;
@@ -89,7 +94,7 @@ public class MeasureEdit extends Activity {
     private void createConfirmButton() {
         final Button confirmButton = (Button) findViewById(R.id.ok);
         confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 setResult(RESULT_OK);
                 try {
@@ -179,14 +184,14 @@ public class MeasureEdit extends Activity {
         spinner.setAdapter(adapter);
         spinner.setSelection(this.spinnerPosition);
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
+
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
                 MeasureEdit.this.field = types.get(pos);
                 setUnitLabel();
                 UserPreferences.setDisplayField(MeasureEdit.this, MeasureEdit.this.field);
             }
 
-            @Override
+
             public void onNothingSelected(AdapterView<?> parent) {
                 // Do nothing.
             }

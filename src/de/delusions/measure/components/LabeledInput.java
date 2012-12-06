@@ -79,7 +79,7 @@ public class LabeledInput extends TableRow {
         final boolean buttons = a.getBoolean(R.styleable.MeasureInput_buttons, false);
         if (buttons) {
             this.plus.setOnClickListener(new View.OnClickListener() {
-                @Override
+
                 public void onClick(View view) {
                     LabeledInput.this.current.inc(metric);
                     LabeledInput.this.rewriteText();
@@ -87,7 +87,7 @@ public class LabeledInput extends TableRow {
             });
 
             this.minus.setOnClickListener(new View.OnClickListener() {
-                @Override
+
                 public void onClick(View view) {
                     LabeledInput.this.current.dec(metric);
                     LabeledInput.this.rewriteText();

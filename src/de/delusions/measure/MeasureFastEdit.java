@@ -70,7 +70,7 @@ public class MeasureFastEdit extends Activity {
     private void createConfirmButton() {
         final Button confirmButton = (Button) findViewById(R.id.ok);
         confirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 setResult(RESULT_OK);
                 try {

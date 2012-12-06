@@ -138,7 +138,7 @@ public class MeasureTabs extends TabActivity {
         final AlertDialog.Builder builder = new AlertDialog.Builder(a);
         builder.setTitle(R.string.menu_showtype);
         builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
-            @Override
+
             public void onClick(DialogInterface dialog, int item) {
                 UserPreferences.setDisplayField(a, tracked.get(item));
                 dialog.dismiss();

@@ -54,7 +54,7 @@ public class BmiCalc extends Activity {
         final Button goButton = (Button) findViewById(R.id.go);
         goButton.setOnClickListener(new View.OnClickListener() {
 
-            @Override
+
             public void onClick(View view) {
                 BmiCalc.this.weight = tryGetValue(BmiCalc.this.weightField, MeasureType.WEIGHT);
                 BmiCalc.this.height = tryGetValue(BmiCalc.this.heightField, MeasureType.HEIGHT);

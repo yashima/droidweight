@@ -48,7 +48,7 @@ public class BmiTable extends Activity {
 
         final Button calc = (Button) findViewById(R.id.calculator);
         calc.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 startCalculator();
             }
@@ -97,7 +97,7 @@ public class BmiTable extends Activity {
     }
 
     private void setText(int textId, Measurement measurement) {
-    	Log.d(MeasureActivity.TAG,"BmiTable.setText: "+measurement);
+        Log.d(MeasureActivity.TAG,"BmiTable.setText: "+measurement);
         final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
         text.display(measurement);
     }

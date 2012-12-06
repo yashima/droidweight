@@ -22,8 +22,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.*;
+import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.ListView;
@@ -66,7 +69,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
         setButtonText();
 
         this.set.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 createEntry();
             }
@@ -186,7 +189,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
         this.recorder.setCurrent(lastMeasure);
     }
 
-    @Override
+
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(PrefItem.DISPLAY_MEASURE.getKey())) {
             Log.d(TAG, "onSharedPreferenceChanged " + key);

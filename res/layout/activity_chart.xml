@@ -36,6 +36,14 @@
 				android:layout_height="wrap_content" android:orientation="horizontal"
 				android:layout_gravity="center">
 
+                 <Button android:id="@+id/all" android:text="@string/chart_all"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
+                
+                <Button android:id="@+id/year_1" android:text="@string/chart_year1"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
+                
 				<Button android:id="@+id/months_6" android:text="@string/chart_month6"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textColor="@color/Grey1" android:background="@drawable/custom_button" />

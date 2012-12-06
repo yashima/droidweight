@@ -21,8 +21,15 @@ import java.util.Calendar;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.*;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Paint.Style;
+import android.graphics.Path;
+import android.graphics.PixelFormat;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -41,6 +48,7 @@ import de.delusions.measure.activities.bmi.BMI;
 import de.delusions.measure.activities.bmi.StatisticsFactory;
 import de.delusions.measure.activities.prefs.PrefItem;
 import de.delusions.measure.activities.prefs.UserPreferences;
+import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 
@@ -61,6 +69,8 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     private static final int MONTH_3 = 90;
     private static final int MONTH_6 = 180;
     private static final int WEEK_2 = 14;
+    private static final int YEAR_1 = 360;
+    private static final int ALL = -1;
 
     private static final SimpleDateFormat DATE_LABEL_FORMAT = new SimpleDateFormat("dd/MM");
 
@@ -101,7 +111,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
 
         final Button month1 = (Button) findViewById(R.id.months_1);
         month1.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 WeightChart.this.days = MONTH;
                 refresh();
@@ -110,7 +120,6 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
 
         final Button month3 = (Button) findViewById(R.id.months_3);
         month3.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 WeightChart.this.days = MONTH_3;
                 refresh();
@@ -118,7 +127,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         });
         final Button month6 = (Button) findViewById(R.id.months_6);
         month6.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 WeightChart.this.days = MONTH_6;
                 refresh();
@@ -126,16 +135,39 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         });
         final Button week2 = (Button) findViewById(R.id.week_2);
         week2.setOnClickListener(new View.OnClickListener() {
-            @Override
             public void onClick(View view) {
                 WeightChart.this.days = WEEK_2;
                 refresh();
             }
         });
 
+        final Button year1 = (Button) findViewById(R.id.year_1);
+        year1.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                WeightChart.this.days = YEAR_1;
+                refresh();
+            }
+        });
+
+        final Button all = (Button) findViewById(R.id.all);
+        all.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                final SqliteHelper db = new SqliteHelper(WeightChart.this);
+                db.open();
+                final Cursor cursor = db.fetchFirst(WeightChart.this.displayField);
+                final Measurement first = MeasureType.WEIGHT.createMeasurement(cursor);
+                WeightChart.this.days = new Long((System.currentTimeMillis()-first.getTimestamp().getTime())/(1000*60*60*24)).intValue();
+                cursor.close();
+                db.close();
+                refresh();
+            }
+        });
+
         final ToggleButton showbutton = (ToggleButton) findViewById(R.id.showall);
         showbutton.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 WeightChart.this.showAll = showbutton.isChecked();
                 refresh();
@@ -164,7 +196,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         refreshGraph();
     }
 
-    @Override
+
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         if (key.equals(PrefItem.DISPLAY_MEASURE.getKey())) {
             Log.d(MeasureActivity.TAG, "onSharedPreferenceChanged " + key);

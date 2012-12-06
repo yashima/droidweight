@@ -48,7 +48,7 @@ public class UserPreferences extends PreferenceActivity {
     Preference metricPref;
     Preference goalPref;
     Preference heightPref;
-    
+
     private static final String LOG_TAG = UserPreferences.class.getName();
 
     @Override
@@ -66,7 +66,7 @@ public class UserPreferences extends PreferenceActivity {
         this.goalPref = findPreference(PrefItem.GOAL.getKey());
 
         this.metricPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
+
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 final Boolean metric = Boolean.parseBoolean(newValue.toString());
                 changeSummaries(metric);
@@ -76,7 +76,7 @@ public class UserPreferences extends PreferenceActivity {
 
         final Preference notificationEnabled = findPreference(PrefItem.NOTIFICATION_ENABLED.getKey());
         notificationEnabled.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-            @Override
+
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 Log.d(LOG_TAG, "notification enabled changed");
                 final Boolean enabled = Boolean.parseBoolean(newValue.toString());

@@ -28,7 +28,7 @@ public class SqliteManagement {
         builder.setMessage(R.string.dialog_message_deleteall);
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-            @Override
+
             public void onClick(DialogInterface dialog, int id) {
                 final SqliteHelper db = new SqliteHelper(a);
                 db.open();
@@ -40,7 +40,7 @@ public class SqliteManagement {
             }
         });
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-            @Override
+
             public void onClick(DialogInterface dialog, int id) {
                 dialog.cancel();
             }

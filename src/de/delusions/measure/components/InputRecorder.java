@@ -58,7 +58,7 @@ public class InputRecorder extends RelativeLayout {
         this.current = (TextView) findViewById(R.id.currentWeight);
 
         this.current.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View v) {
                 Log.d(MeasureActivity.TAG, "test clicky");
                 editCurrent().show();
@@ -66,28 +66,28 @@ public class InputRecorder extends RelativeLayout {
         });
 
         this.plus.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 changeMeasure(true, true);
             }
         });
 
         this.plusplus.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 changeMeasure(true, false);
             }
         });
 
         this.minus.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 changeMeasure(false, true);
             }
         });
 
         this.minusminus.setOnClickListener(new View.OnClickListener() {
-            @Override
+
             public void onClick(View view) {
                 changeMeasure(false, false);
             }
@@ -128,11 +128,11 @@ public class InputRecorder extends RelativeLayout {
 
     public AlertDialog editCurrent() {
         final LayoutInflater factory = LayoutInflater.from(this.context);
-        final View textEntryView = factory.inflate(R.layout.dialog_edit_text, null);        
+        final View textEntryView = factory.inflate(R.layout.dialog_edit_text, null);
         return new AlertDialog.Builder(this.context).setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle(this.currentMeasure.getField().getLabelId()).setView(textEntryView)
                 .setPositiveButton(R.string.button_go, new DialogInterface.OnClickListener() {
-                    @Override
+
                     public void onClick(DialogInterface dialog, int whichButton) {
                         final EditText input = (EditText) textEntryView.findViewById(R.id.dialoginput);
                         final String strValue = input.getText().toString();

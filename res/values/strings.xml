@@ -97,6 +97,8 @@
 <string name="chart_month6">6 months</string>
 <string name="chart_month3">3 months</string>
 <string name="chart_month1">1 month</string>
+<string name="chart_year1">1 year</string>
+<string name="chart_all">All</string>
 <string name="chart_toggle_show">Show others</string>
 <string name="chart_toggle_hide">Hide others</string>
 
