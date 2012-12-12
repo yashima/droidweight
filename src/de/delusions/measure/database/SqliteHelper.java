@@ -194,21 +194,25 @@ public class SqliteHelper {
     }
 
     public boolean exists(Measurement measurement) {
+        final boolean result;
         if (measurement.getId() != null) {
             final Cursor cursor = fetchById(measurement.getId());
-            return cursor != null && cursor.getCount() > 0;
+            result = cursor != null && cursor.getCount() > 0;
         } else {
-            return false;
+            result = false;
         }
+        return result;
     }
 
     public boolean exists(MeasureType type) {
+        final boolean result;
         if (type.name() != null) {
             final Cursor cursor = fetchByName(type.name());
-            return cursor != null && cursor.getCount() > 0;
+            result = cursor != null && cursor.getCount() > 0;
         } else {
-            return false;
+            result = false;
         }
+        return result;
     }
 
     /**
@@ -226,6 +230,7 @@ public class SqliteHelper {
     public boolean updateMeasure(long rowId, Measurement measurement) {
         final ContentValues args = new ContentValues();
         args.put(KEY_MEASURE_VALUE, measurement.getValue());
+        args.put(KEY_DATE, measurement.getTimestamp().getTime());
         return this.mDb.update(WEIGHT_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
