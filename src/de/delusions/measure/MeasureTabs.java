@@ -35,7 +35,6 @@ import de.delusions.measure.activities.bmi.BmiTable;
 import de.delusions.measure.activities.chart.WeightChart;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.SqliteExport;
-import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.database.SqliteManagement;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.MeasurementException;
@@ -88,7 +87,7 @@ public class MeasureTabs extends TabActivity {
             if (UserPreferences.isFastInput(a)) {
                 i = new Intent(a, MeasureFastEdit.class);
             } else {
-                i = createMeasureEditIntent(a, -1l, UserPreferences.getDisplayField(a));
+                i = createMeasureIntent(a, UserPreferences.getDisplayField(a));
             }
             a.startActivityForResult(i, 0);
             return true;
@@ -120,10 +119,9 @@ public class MeasureTabs extends TabActivity {
         return false;
     }
 
-    public static Intent createMeasureEditIntent(Context ctx, Long rowId, MeasureType type) {
+    public static Intent createMeasureIntent(Context ctx, MeasureType type) {
         final Intent i;
-        i = new Intent(ctx, MeasureEdit.class);
-        i.putExtra(SqliteHelper.KEY_ROWID, rowId);
+        i = new Intent(ctx, MeasureCreateActivity.class);
         i.putExtra(MeasureEdit.EDIT_TYPE, type);
         return i;
     }

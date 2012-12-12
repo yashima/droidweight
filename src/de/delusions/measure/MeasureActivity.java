@@ -52,6 +52,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(MeasureActivity.TAG,"onCreate MeasureActivity");
         setContentView(R.layout.activity_weight);
 
         if (this.sqliteHelper != null) {

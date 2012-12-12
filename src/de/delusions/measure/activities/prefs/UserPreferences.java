@@ -35,6 +35,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
+import de.delusions.measure.MeasureActivity;
 import de.delusions.measure.R;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
@@ -54,6 +55,7 @@ public class UserPreferences extends PreferenceActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(MeasureActivity.TAG,"onCreate UserPreferences");
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         addPreferencesFromResource(R.xml.preferences);

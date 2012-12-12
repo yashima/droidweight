@@ -39,7 +39,7 @@ public class BmiTable extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.i(MeasureActivity.TAG,"onCreate BmiTable");
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         setContentView(R.layout.activity_bmi);

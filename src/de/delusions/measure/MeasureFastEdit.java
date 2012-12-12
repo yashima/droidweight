@@ -40,7 +40,7 @@ public class MeasureFastEdit extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(MeasureActivity.TAG, "onCreate MeasureFastEdit 1");
+        Log.d(MeasureActivity.TAG, "onCreate MeasureFastEdit");
         setContentView(R.layout.activity_fastinput);
         setTitle(getResources().getString(R.string.activity_createmeasure));
         Log.d(MeasureActivity.TAG, "onCreate MeasureFastEdit 2");

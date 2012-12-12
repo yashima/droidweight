@@ -88,7 +88,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.i(MeasureActivity.TAG,"onCreate WeightChart");
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         setContentView(R.layout.activity_chart);
