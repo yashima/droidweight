@@ -18,6 +18,7 @@
 <string name="yes">Ja</string>
 <string name="no">Nein</string>
 <string name="button_ok">Ok</string>
+<string name="button_change_date">Datum ändern</string>
 <string name="button_cancel">Abbrechen</string>
 <string name="button_go">Los</string>
 <string name="menu_add">Messung hinzufügen</string>

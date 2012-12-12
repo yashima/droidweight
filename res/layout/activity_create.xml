@@ -25,12 +25,14 @@
 <View android:layout_width="fill_parent" android:layout_height="1dp"
       android:background="@color/Grey3" android:layout_marginBottom="5dp"/>     
         
-
-<Button android:id="@+id/entryDate"
+<Spinner android:id="@+id/chooseType"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:inputType="date"/>  
+        android:layout_height="wrap_content"        
+        android:prompt="@string/choose_type_prompt"
+/> 
+
+ 
+
   
         
 <LinearLayout android:layout_width="180dp"

@@ -17,6 +17,8 @@
 			android:configChanges="orientation" />
 		<activity android:name="de.delusions.measure.MeasureEdit"
 			android:theme="@android:style/Theme.Dialog" />
+        <activity android:name="de.delusions.measure.MeasureCreateActivity"
+            android:theme="@android:style/Theme.Dialog" />
 		<activity android:name="de.delusions.measure.MeasureFastEdit"
 			android:theme="@android:style/Theme.Dialog" />
 		<activity android:name="de.delusions.measure.activities.bmi.BmiTable" />

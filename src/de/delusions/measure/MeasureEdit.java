@@ -15,21 +15,16 @@
  */
 package de.delusions.measure;
 
-import java.util.ArrayList;
+import java.text.ParseException;
 import java.util.Date;
-import java.util.List;
 
 import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.MeasureCursorAdapter;
@@ -37,6 +32,7 @@ import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 import de.delusions.measure.ment.MeasurementException;
+import de.delusions.measure.ment.MeasurementException.ErrorId;
 
 public class MeasureEdit extends Activity {
 
@@ -47,25 +43,40 @@ public class MeasureEdit extends Activity {
     private Long mRowId;
     private MeasureType field;
     private EditText input;
-    private boolean createMode;
-    private int spinnerPosition = 0;
+    private Button date;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(MeasureActivity.TAG,"onCreate MeasureEdit");
         setContentView(R.layout.activity_edit);
 
         this.mDbHelper = new SqliteHelper(this);
         this.mDbHelper.open();
         this.input = (EditText) findViewById(R.id.input);
 
+        this.date = (Button) findViewById(R.id.entryDate);
+        this.date.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View view) {
+                // try {
+                // DatePickerDialog datePickerDialog = new DatePickerDialog(MeasureEdit.this, callBack, year, monthOfYear, dayOfMonth)
+                // } catch (final MeasurementException e) {
+                //     e.createToast(MeasureEdit.this, "confirmButton");
+                //  }
+            }
+        });
+
         retrieveExtras(savedInstanceState);
         setUnitLabel();
         setTitle();
         populateInput();
         createConfirmButton();
-        manageFieldSpinner();
+
     }
+
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -120,31 +131,26 @@ public class MeasureEdit extends Activity {
             this.field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
             Log.d(MeasureActivity.TAG, "retrieveExtras " + this.field);
         }
-        this.createMode = this.mRowId == -1;
+
     }
 
     private void setTitle() {
-        if (this.createMode) {
-            setTitle(getResources().getString(R.string.activity_createmeasure));
-        } else {
-            final String label = this.field == null ? null : this.field.getLabel(this);
-            setTitle(getResources().getString(R.string.activity_editmeasure) + " " + label);
-        }
+
+        final String label = this.field == null ? null : this.field.getLabel(this);
+        setTitle(getResources().getString(R.string.activity_editmeasure) + " " + label);
+
     }
 
     private void populateInput() {
-        final TextView date = (TextView) findViewById(R.id.entryDate);
-        if (!this.createMode) {
-            final Cursor cursor = this.mDbHelper.fetchById(this.mRowId);
-            if (cursor.getCount() != 0) {
-                final Measurement measurement = this.field.createMeasurement(cursor);
-                this.input.setText(measurement.prettyPrint(this));
-                date.setText(MeasureCursorAdapter.DATEFORMAT.format(measurement.getTimestamp()));
-            }
-            cursor.close();
-        } else {
-            date.setVisibility(View.GONE);
+
+        final Cursor cursor = this.mDbHelper.fetchById(this.mRowId);
+        if (cursor.getCount() != 0) {
+            final Measurement measurement = this.field.createMeasurement(cursor);
+            this.input.setText(measurement.prettyPrint(this));
+            this.date.setText(MeasureCursorAdapter.DATEFORMAT.format(measurement.getTimestamp()));
         }
+        cursor.close();
+
     }
 
     public void setUnitLabel() {
@@ -156,63 +162,23 @@ public class MeasureEdit extends Activity {
         final String strValue = this.input.getText().toString();
         final Measurement measurement = new Measurement(null, strValue, this.field, UserPreferences.isMetric(this), new Date());
         measurement.setField(this.field);
-        if (this.createMode) {
-            final long id = this.mDbHelper.createMeasure(measurement);
-            if (id > 0) { // TODO may not be needed
-                this.mRowId = id;
-            }
-        } else {
-            this.mDbHelper.updateMeasure(this.mRowId, measurement);
+        measurement.setTimestamp(parseDateFromInput(this.date));
+
+        this.mDbHelper.updateMeasure(this.mRowId, measurement);
+
+    }
+
+
+
+    private static Date parseDateFromInput(TextView dateView) throws MeasurementException {
+        try {
+            final String input = dateView.getText().toString();
+            return MeasureCursorAdapter.DATEFORMAT.parse(input);
+        } catch (final ParseException e){
+            Log.e(MeasureActivity.TAG,"Could not parse date input");
+            throw new MeasurementException(ErrorId.PARSEERROR_DATE);
         }
     }
 
-    public void manageFieldSpinner() {
-        final Spinner spinner = (Spinner) findViewById(R.id.chooseType);
-        if (this.createMode) {
-            spinnerFill(spinner);
-        } else {
-            spinner.setVisibility(View.GONE);
-        }
-    }
 
-    protected void spinnerFill(final Spinner spinner) {
-        final List<MeasureType> types = MeasureType.getEnabledTypes(this);
-        final List<String> spinnerLabels = createLabels(types);
-        Log.d(MeasureActivity.TAG, "spinnerFill in edit " + spinnerLabels);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, spinnerLabels);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(this.spinnerPosition);
-        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                MeasureEdit.this.field = types.get(pos);
-                setUnitLabel();
-                UserPreferences.setDisplayField(MeasureEdit.this, MeasureEdit.this.field);
-            }
-
-
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Do nothing.
-            }
-        });
-    }
-
-    protected int getSpinnerPosition() {
-        return this.spinnerPosition;
-    }
-
-    protected List<String> createLabels(final List<MeasureType> types) {
-        final List<String> spinnerLabels = new ArrayList<String>();
-        this.spinnerPosition = 0;
-        boolean found = false;
-        for (final MeasureType field : types) {
-            spinnerLabels.add(getResources().getString(field.getLabelId()));
-            found = found || field.equals(MeasureEdit.this.field);
-            if (!found) {
-                this.spinnerPosition++;
-            }
-        }
-        return spinnerLabels;
-    }
 }

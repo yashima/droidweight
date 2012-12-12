@@ -18,6 +18,7 @@
 <string name="yes">Yes</string>
 <string name="no">No</string>
 <string name="button_ok">Ok</string>
+<string name="button_change_date">Change Date</string>
 <!--string name="button_cancel">Cancel</string-->
 <string name="button_go">Go</string>
 <string name="menu_add">Add Measure</string>
