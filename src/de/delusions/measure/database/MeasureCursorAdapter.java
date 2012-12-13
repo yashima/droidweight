@@ -15,6 +15,20 @@
  */
 package de.delusions.measure.database;
 
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CursorAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 import de.delusions.measure.R;
 import de.delusions.measure.activities.bmi.StatisticsFactory;
 import de.delusions.measure.activities.prefs.UserPreferences;
@@ -27,8 +41,11 @@ public class MeasureCursorAdapter extends CursorAdapter {
     public static final String DAY_MONTH_YEAR = "dd/MM/yyyy";
 
     //only ok because this app is not multithreaded!
-    public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat(
+    public static final SimpleDateFormat TIME_AND_DATE_FORMAT = new SimpleDateFormat(
             String.format("%s, %s", HOUR_MINUTE, DAY_MONTH_YEAR));
+
+    public static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat(HOUR_MINUTE);
+    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DAY_MONTH_YEAR);
 
     private final Measurement height;
     private final Context ctx;
@@ -107,7 +124,7 @@ public class MeasureCursorAdapter extends CursorAdapter {
      */
     private void displayDate(View view, String strDate) {
         final long timestamp = Long.parseLong(strDate);
-        final String formattedDate = DATEFORMAT.format(new Date(timestamp));
+        final String formattedDate = TIME_AND_DATE_FORMAT.format(new Date(timestamp));
         final TextView t2 = (TextView) view.findViewById(R.id.date);
         t2.setText(formattedDate);
     }

@@ -57,6 +57,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener,OnTimeSet
         populateUI();
         addConfirmButtonOnClickListener();
         addShowDatePickerButtonOnClickListener();
+        addShowTimePickerButtonOnClickListener();
     }
 
     @Override
@@ -137,6 +138,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener,OnTimeSet
         if(this.measure!=null){
             populateValueEdit();
             populateDateButton();
+            populateTimeButton();
             populateUnitLabel();
             populateTitle();
         }
@@ -159,12 +161,12 @@ public class MeasureEdit extends Activity implements OnDateSetListener,OnTimeSet
 
     private void populateDateButton() {
         final TextView showDatePickerButton = (TextView) findViewById(R.id.entryDate);
-        showDatePickerButton.setText(MeasureCursorAdapter.DATEFORMAT.format(this.measure.getTimestamp()));
+        showDatePickerButton.setText(MeasureCursorAdapter.DATE_FORMAT.format(this.measure.getTimestamp()));
     }
 
-    private void populateDateButton() {
-        final TextView showDatePickerButton = (TextView) findViewById(R.id.entryTime);
-        showDatePickerButton.setText(MeasureCursorAdapter.DATEFORMAT.format(this.measure.getTimestamp()));
+    private void populateTimeButton() {
+        final TextView timePickerButton = (TextView) findViewById(R.id.entryTime);
+        timePickerButton.setText(MeasureCursorAdapter.TIME_FORMAT.format(this.measure.getTimestamp()));
     }
 
     private void retrieveMeasureFromExtras(Bundle savedInstanceState) {
