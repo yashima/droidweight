@@ -15,35 +15,36 @@
  */
 package de.delusions.measure;
 
-import java.text.ParseException;
-import java.util.Date;
+import java.util.Calendar;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.MeasureCursorAdapter;
 import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 import de.delusions.measure.ment.MeasurementException;
-import de.delusions.measure.ment.MeasurementException.ErrorId;
 
-public class MeasureEdit extends Activity {
+public class MeasureEdit extends Activity implements OnDateSetListener,OnTimeSetListener {
 
     public static final String EDIT_TYPE = "type";
 
-    private SqliteHelper mDbHelper;
 
-    private Long mRowId;
-    private MeasureType field;
-    private EditText input;
-    private Button date;
+
+    private Measurement measure;
 
 
     @Override
@@ -51,133 +52,219 @@ public class MeasureEdit extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(MeasureActivity.TAG,"onCreate MeasureEdit");
         setContentView(R.layout.activity_edit);
-
-        this.mDbHelper = new SqliteHelper(this);
-        this.mDbHelper.open();
-        this.input = (EditText) findViewById(R.id.input);
-
-        this.date = (Button) findViewById(R.id.entryDate);
-        this.date.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                // try {
-                // DatePickerDialog datePickerDialog = new DatePickerDialog(MeasureEdit.this, callBack, year, monthOfYear, dayOfMonth)
-                // } catch (final MeasurementException e) {
-                //     e.createToast(MeasureEdit.this, "confirmButton");
-                //  }
-            }
-        });
-
-        retrieveExtras(savedInstanceState);
-        setUnitLabel();
-        setTitle();
-        populateInput();
-        createConfirmButton();
-
+        retrieveMeasureFromExtras(savedInstanceState);
+        finishOnMissingMeasure();
+        populateUI();
+        addConfirmButtonOnClickListener();
+        addShowDatePickerButtonOnClickListener();
     }
-
-
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(SqliteHelper.KEY_ROWID, this.mRowId);
-        outState.putSerializable(EDIT_TYPE, this.field);
+        outState.putLong(SqliteHelper.KEY_ROWID, this.measure.getId());
+        outState.putSerializable(EDIT_TYPE, this.measure.getField());
     }
+
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        retrieveMeasureFromExtras(savedInstanceState);
+        populateUI();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        populateInput();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        this.mDbHelper.close();
-    }
-
-    private void createConfirmButton() {
-        final Button confirmButton = (Button) findViewById(R.id.ok);
-        confirmButton.setOnClickListener(new View.OnClickListener() {
-
+    private void addShowDatePickerButtonOnClickListener() {
+        final Button showDatePickerButton = (Button) findViewById(R.id.entryDate);
+        showDatePickerButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                setResult(RESULT_OK);
-                try {
-                    saveMeasurement();
-                    finish();
-                } catch (final MeasurementException e) {
-                    e.createToast(MeasureEdit.this, "confirmButton");
-                }
+                executeShowDatePickerButtonOnClick();
             }
         });
     }
 
-    private void retrieveExtras(Bundle savedInstanceState) {
-        this.mRowId = savedInstanceState == null ? null : (Long) savedInstanceState.getSerializable(SqliteHelper.KEY_ROWID);
-        if (this.mRowId == null) {
-            final Bundle extras = getIntent().getExtras();
-            this.mRowId = extras != null ? extras.getLong(SqliteHelper.KEY_ROWID) : null;
-            Log.d(MeasureActivity.TAG, "retrieveExtras " + this.mRowId);
-        }
-        this.field = savedInstanceState == null ? null : (MeasureType) savedInstanceState.getSerializable(EDIT_TYPE);
-        if (this.field == null) {
-            final Bundle extras = getIntent().getExtras();
-            this.field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
-            Log.d(MeasureActivity.TAG, "retrieveExtras " + this.field);
-        }
-
+    private void addShowTimePickerButtonOnClickListener() {
+        final Button showDatePickerButton = (Button) findViewById(R.id.entryTime);
+        showDatePickerButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                executeShowTimePickerButtonOnClick();
+            }
+        });
     }
 
-    private void setTitle() {
-
-        final String label = this.field == null ? null : this.field.getLabel(this);
-        setTitle(getResources().getString(R.string.activity_editmeasure) + " " + label);
-
+    private void executeShowDatePickerButtonOnClick() {
+        Log.i(MeasureActivity.TAG,"MeasureEdit:executeShowDatePickerButtonOnClick");
+        final Calendar timestamp = Calendar.getInstance();
+        timestamp.setTime(this.measure.getTimestamp());
+        final int year = timestamp.get(Calendar.YEAR);
+        final int month = timestamp.get(Calendar.MONTH);
+        final int dayOfMonth = timestamp.get(Calendar.DAY_OF_MONTH);
+        final DatePickerDialog datePickerDialog = new DatePickerDialog(this, this, year, month, dayOfMonth);
+        datePickerDialog.show();
     }
 
-    private void populateInput() {
-
-        final Cursor cursor = this.mDbHelper.fetchById(this.mRowId);
-        if (cursor.getCount() != 0) {
-            final Measurement measurement = this.field.createMeasurement(cursor);
-            this.input.setText(measurement.prettyPrint(this));
-            this.date.setText(MeasureCursorAdapter.DATEFORMAT.format(measurement.getTimestamp()));
-        }
-        cursor.close();
-
+    private void executeShowTimePickerButtonOnClick() {
+        Log.i(MeasureActivity.TAG,"MeasureEdit:executeShowTimePickerButtonOnClick");
+        final Calendar timestamp = Calendar.getInstance();
+        timestamp.setTime(this.measure.getTimestamp());
+        final int hour = timestamp.get(Calendar.HOUR_OF_DAY);
+        final int minute = timestamp.get(Calendar.MINUTE);
+        final TimePickerDialog datePickerDialog = new TimePickerDialog(this, this, hour, minute,true);
+        datePickerDialog.show();
     }
 
-    public void setUnitLabel() {
-        final TextView unit = (TextView) findViewById(R.id.unit);
-        unit.setText(this.field.getUnit().retrieveUnitName(this));
+    private void addConfirmButtonOnClickListener() {
+        final Button confirmButton = (Button) findViewById(R.id.ok);
+        confirmButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                executeConfirmButtonOnClick();
+            }
+        });
     }
 
-    private void saveMeasurement() throws MeasurementException {
-        final String strValue = this.input.getText().toString();
-        final Measurement measurement = new Measurement(null, strValue, this.field, UserPreferences.isMetric(this), new Date());
-        measurement.setField(this.field);
-        measurement.setTimestamp(parseDateFromInput(this.date));
-
-        this.mDbHelper.updateMeasure(this.mRowId, measurement);
-
-    }
-
-
-
-    private static Date parseDateFromInput(TextView dateView) throws MeasurementException {
+    private void executeConfirmButtonOnClick() {
+        setResult(RESULT_OK);
         try {
-            final String input = dateView.getText().toString();
-            return MeasureCursorAdapter.DATEFORMAT.parse(input);
-        } catch (final ParseException e){
-            Log.e(MeasureActivity.TAG,"Could not parse date input");
-            throw new MeasurementException(ErrorId.PARSEERROR_DATE);
+            updateMeasureValueFromInput();
+            saveMeasurement(this.measure);
+            finish();
+        } catch (final MeasurementException e) {
+            e.createToast(this, "confirmButton");
         }
+    }
+
+    private void populateUI(){
+        if(this.measure!=null){
+            populateValueEdit();
+            populateDateButton();
+            populateUnitLabel();
+            populateTitle();
+        }
+    }
+
+    private void populateTitle() {
+        final String label = this.measure.getField() == null ? null : this.measure.getField().getLabel(this);
+        setTitle(getResources().getString(R.string.activity_editmeasure) + " " + label);
+    }
+
+    private void populateUnitLabel() {
+        final TextView unit = (TextView) findViewById(R.id.unit);
+        unit.setText(this.measure.getField().getUnit().retrieveUnitName(this));
+    }
+
+    private void populateValueEdit() {
+        final EditText valueEdit = retrieveMeasureValueEditView();
+        valueEdit.setText(this.measure.prettyPrint(this));
+    }
+
+    private void populateDateButton() {
+        final TextView showDatePickerButton = (TextView) findViewById(R.id.entryDate);
+        showDatePickerButton.setText(MeasureCursorAdapter.DATEFORMAT.format(this.measure.getTimestamp()));
+    }
+
+    private void populateDateButton() {
+        final TextView showDatePickerButton = (TextView) findViewById(R.id.entryTime);
+        showDatePickerButton.setText(MeasureCursorAdapter.DATEFORMAT.format(this.measure.getTimestamp()));
+    }
+
+    private void retrieveMeasureFromExtras(Bundle savedInstanceState) {
+        final Long mRowId = retrieveRowIdFromExtras(savedInstanceState);
+        final MeasureType field = retrieveMeasureFieldFromExtras(savedInstanceState);
+        this.measure = retrieveMeasureFromDatabase(mRowId, field);
+    }
+
+
+
+    private Long retrieveRowIdFromExtras(Bundle savedInstanceState) {
+        Long mRowId = savedInstanceState == null ? null : (Long) savedInstanceState.getSerializable(SqliteHelper.KEY_ROWID);
+        if (mRowId == null) {
+            final Bundle extras = getIntent().getExtras();
+            mRowId = extras != null ? extras.getLong(SqliteHelper.KEY_ROWID) : null;
+            Log.d(MeasureActivity.TAG, "MeasureEdit:retrieveRowIdFromExtras:" + mRowId);
+        }
+        return mRowId;
+    }
+
+
+
+    private MeasureType retrieveMeasureFieldFromExtras(Bundle savedInstanceState) {
+        MeasureType field = savedInstanceState == null ? null : (MeasureType) savedInstanceState.getSerializable(EDIT_TYPE);
+        if (field == null) {
+            final Bundle extras = getIntent().getExtras();
+            field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
+            Log.d(MeasureActivity.TAG, "MeasureEdit:retrieveMeasureFieldFromExtras:" + field);
+        }
+        return field;
+    }
+
+
+
+    private Measurement retrieveMeasureFromDatabase(Long mRowId, MeasureType field) {
+        final Measurement result;
+        final SqliteHelper mDbHelper = new SqliteHelper(this);
+        mDbHelper.open();
+        final Cursor cursor = mDbHelper.fetchById(mRowId);
+        if (cursor.getCount() != 0 && field!=null) {
+            result = field.createMeasurement(cursor);
+        } else {
+            Log.w(MeasureActivity.TAG,"MeasureEdit:retrieveMeasureFromDatabase:measure not found");
+            result = null;
+        }
+
+        cursor.close();
+        mDbHelper.close();
+        return result;
+    }
+
+    private void finishOnMissingMeasure() {
+        if(this.measure==null){
+            Log.w(MeasureActivity.TAG,"MeasureEdit:MeasureEdit:finishOnMissingMeasure: No measure found for editing");
+            setResult(MeasureActivity.RESULT_FAILURE);
+            finish();
+        } else {
+            Log.d(MeasureActivity.TAG,"MeasureEdit:finishOnMissingMeasure: Measure found. Continuing.");
+        }
+    }
+
+
+    private void saveMeasurement(Measurement toSave)  {
+        Log.d(MeasureActivity.TAG,"saveMeasurement "+toSave);
+        final SqliteHelper mDbHelper = new SqliteHelper(this);
+        mDbHelper.open();
+        mDbHelper.updateMeasure(toSave.getId(),toSave);
+        mDbHelper.close();
+    }
+
+    private void updateMeasureValueFromInput() throws MeasurementException {
+        Log.d(MeasureActivity.TAG,"updateMeasureValueFromInput");
+        final EditText valueEdit = retrieveMeasureValueEditView();
+        final String strValue = valueEdit.getText().toString();
+        this.measure.parseAndSetValue(strValue, UserPreferences.isMetric(this));
+    }
+
+
+    private EditText retrieveMeasureValueEditView() {
+        return (EditText) findViewById(R.id.input);
+    }
+
+
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.measure.getTimestamp());
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        this.measure.setTimestamp(calendar.getTime());
+        populateDateButton();
+    }
+
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(this.measure.getTimestamp());
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        this.measure.setTimestamp(calendar.getTime());
+        populateTimeButton();
     }
 
 

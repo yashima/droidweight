@@ -16,7 +16,11 @@
 package de.delusions.measure.ment;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -177,7 +181,8 @@ public class MeasureType implements Serializable {
     public Measurement createMeasurement(Cursor cursor) {
         final Date timestamp = SqliteHelper.getTimestamp(cursor);
         final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-        return new Measurement(value, this, true, timestamp);
+        final Long id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
+        return  new Measurement(id,value, this, true, timestamp);
     }
 
     public Measurement zero(Context ctx) {
@@ -192,7 +197,7 @@ public class MeasureType implements Serializable {
     public String toString() {
         final StringBuffer buffer = new StringBuffer();
         buffer.append(this.name).append("[").append(this.smallStep).append(",").append(this.bigStep).append(",").append(this.unit).append(",")
-                .append(this.enabled).append(",").append(this.androidId).append(",").append(this.labelId).append("]");
+        .append(this.enabled).append(",").append(this.androidId).append(",").append(this.labelId).append("]");
         return buffer.toString();
     }
 

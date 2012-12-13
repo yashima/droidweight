@@ -228,6 +228,7 @@ public class SqliteHelper {
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateMeasure(long rowId, Measurement measurement) {
+        Log.d(MeasureActivity.TAG,"SqliteHelper: updateMeasure "+rowId);
         final ContentValues args = new ContentValues();
         args.put(KEY_MEASURE_VALUE, measurement.getValue());
         args.put(KEY_DATE, measurement.getTimestamp().getTime());

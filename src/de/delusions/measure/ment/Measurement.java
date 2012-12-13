@@ -74,6 +74,14 @@ public class Measurement implements Serializable {
         parseAndSetValue(strValue, metric);
     }
 
+    public Measurement(Long id, float value, MeasureType mType, boolean metric, Date timestamp) {
+        this.id = id;
+        this.field = mType;
+        this.unit = mType.getUnit();
+        this.timestamp = timestamp;
+        this.value = value;
+    }
+
     public void parseAndSetValue(String strValue, boolean metric) throws MeasurementException {
         if (strValue == null || strValue.equals("")) {
             throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
@@ -178,7 +186,7 @@ public class Measurement implements Serializable {
     }
 
     public float getPercentDifference(Measurement measurement) {
-        return 100 - (100 * measurement.getValue() / this.value);
+        return 100 - 100 * measurement.getValue() / this.value;
     }
 
     public String prettyPrint(Context ctx) {
@@ -197,9 +205,10 @@ public class Measurement implements Serializable {
     public String toString() {
         final StringBuffer result = new StringBuffer();
         result.append("Measurement[");
+        result.append(this.id).append(":");
         result.append(this.field != null ? this.field.name() : "");
         result.append("=").append(this.getValue()).append(",");
-        result.append((getTimestamp() != null ? SimpleDateFormat.getDateInstance().format(getTimestamp()) : ""));
+        result.append(getTimestamp() != null ? SimpleDateFormat.getDateInstance().format(getTimestamp()) : "");
         result.append("]");
         return result.toString();
     }

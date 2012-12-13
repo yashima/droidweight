@@ -15,20 +15,6 @@
  */
 package de.delusions.measure.database;
 
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import android.content.Context;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CursorAdapter;
-import android.widget.ImageView;
-import android.widget.TextView;
 import de.delusions.measure.R;
 import de.delusions.measure.activities.bmi.StatisticsFactory;
 import de.delusions.measure.activities.prefs.UserPreferences;
@@ -37,8 +23,12 @@ import de.delusions.measure.ment.Measurement;
 
 public class MeasureCursorAdapter extends CursorAdapter {
 
+    public static final String HOUR_MINUTE = "HH:mm";
+    public static final String DAY_MONTH_YEAR = "dd/MM/yyyy";
+
+    //only ok because this app is not multithreaded!
     public static final SimpleDateFormat DATEFORMAT = new SimpleDateFormat(
-            "HH:mm, dd/MM/yyyy");
+            String.format("%s, %s", HOUR_MINUTE, DAY_MONTH_YEAR));
 
     private final Measurement height;
     private final Context ctx;

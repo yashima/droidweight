@@ -15,6 +15,7 @@
  */
 package de.delusions.measure;
 
+import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,6 +43,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
 
     public static final String TAG = "MeasureActivity";
     private static final int ACTIVITY_EDIT = 1;
+    public static final int RESULT_FAILURE = Activity.RESULT_FIRST_USER+1;
     private InputRecorder recorder;
     private SqliteHelper sqliteHelper;
     private Button set;
