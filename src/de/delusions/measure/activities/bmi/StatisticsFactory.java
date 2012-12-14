@@ -32,8 +32,9 @@ public class StatisticsFactory {
     private final Measurement last;
     private final Measurement goal;
     private final Measurement height;
+    private final Measurement waist;
 
-    public StatisticsFactory(SqliteHelper db, Context ctx) {
+    public StatisticsFactory(final SqliteHelper db, final Context ctx) {
         Cursor cursor = db.fetchFirst(MeasureType.WEIGHT);
         this.starting = MeasureType.WEIGHT.createMeasurement(cursor);
         cursor.close();
@@ -42,13 +43,13 @@ public class StatisticsFactory {
         cursor.close();
         this.goal = UserPreferences.getGoal(ctx);
         this.height = UserPreferences.getHeight(ctx);
-    }
-
-    public StatisticsFactory(Measurement starting, Measurement last, Measurement goal, Measurement height) {
-        this.starting = starting;
-        this.last = last;
-        this.goal = goal;
-        this.height = height;
+        if (UserPreferences.isEnabled(MeasureType.WAIST, ctx)) {
+            cursor = db.fetchLast(MeasureType.WAIST);
+            this.waist = MeasureType.WAIST.createMeasurement(cursor);
+            cursor.close();
+        } else {
+            this.waist = null;
+        }
     }
 
     public Measurement getStartingWeight() {
@@ -61,6 +62,10 @@ public class StatisticsFactory {
 
     public Measurement getLastWeight() {
         return this.last;
+    }
+
+    public Measurement getLastWaist() {
+        return this.waist;
     }
 
     public float calculateCurrentBmi() {
@@ -83,6 +88,7 @@ public class StatisticsFactory {
         return new Measurement(dailyLoss, Unit.KG);
     }
 
+    @Deprecated
     public Date calculateETA() {
         final Measurement averageLoss = calculateAverageDailyLoss();
         final Measurement togo = calculateTogo();
@@ -101,7 +107,6 @@ public class StatisticsFactory {
             now.roll(Calendar.DAY_OF_MONTH, days);
         }
         return now.getTime();
-
     }
 
     /**
@@ -111,20 +116,26 @@ public class StatisticsFactory {
      * @param heightInMeter
      * @return
      */
-    public static float calculateBmi(Measurement weightInKg, Measurement heightInCm) {
+    public static float calculateBmi(final Measurement weightInKg, final Measurement heightInCm) {
         if (weightInKg.getUnit() == Unit.KG && heightInCm.getUnit() == Unit.CM) {
             final float heightInMeter = heightInCm.getValue() / 100;
             return weightInKg.getValue() / (heightInMeter * heightInMeter);
         } else {
-            // should never happen is a bug!
             return -1;
         }
     }
 
-    public static Measurement calculateBmiWeight(int bmiValue, Measurement heightInCm) {
+    public static Measurement calculateBmiWeight(final int bmiValue, final Measurement heightInCm) {
         final float heightInMeter = heightInCm.getValue() / 100;
         final float result = heightInMeter * heightInMeter * bmiValue;
         final Measurement weight = new Measurement(result, Unit.KG);
         return weight;
+    }
+
+    /**
+     * @return
+     */
+    public float calculateWtHR() {
+        return this.waist.getValue() / this.height.getValue();
     }
 }

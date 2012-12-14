@@ -69,6 +69,9 @@
 <string name="stat_togo">To go</string>
 <string name="stat_eta">Target reached</string>
 <string name="stat_eta_never">Not soon</string>
+<string name="stat_wthr">Waist to height ratio</string>
+<string name="stat_bmi_value_label">%1$s</string>
+<string name="stat_bmi_calc_error_label">Set your height in the Preferences</string>
 
 
 <string name="obese">obese</string>

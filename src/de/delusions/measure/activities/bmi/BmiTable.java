@@ -27,8 +27,10 @@ import android.widget.Button;
 import de.delusions.measure.MeasureActivity;
 import de.delusions.measure.MeasureTabs;
 import de.delusions.measure.R;
+import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.components.MeasureDisplay;
 import de.delusions.measure.database.SqliteHelper;
+import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 
 public class BmiTable extends Activity {
@@ -37,19 +39,19 @@ public class BmiTable extends Activity {
     private static final int LOWER_BOUND = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(MeasureActivity.TAG,"onCreate BmiTable");
+        Log.i(MeasureActivity.TAG, "onCreate BmiTable");
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         setContentView(R.layout.activity_bmi);
 
-        fillData();
+        populateDataLabels();
 
         final Button calc = (Button) findViewById(R.id.calculator);
         calc.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 startCalculator();
             }
         });
@@ -58,10 +60,10 @@ public class BmiTable extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-        fillData();
+        populateDataLabels();
     }
 
-    private void fillData() {
+    private void populateDataLabels() {
         final SqliteHelper mDbHelper = new SqliteHelper(this);
         mDbHelper.open();
 
@@ -76,14 +78,19 @@ public class BmiTable extends Activity {
             setText(R.id.stat_goal, stats.getGoal());
             setText(R.id.stat_loss, stats.calculateLoss(), getResources().getString(R.string.stat_gain));
             setText(R.id.stat_togo, stats.calculateTogo());
-            // setText(R.id.stat_eta, stats.calculateETA());
             setTextBmi(R.id.stat_bmi, stats.calculateCurrentBmi());
+
+            if (UserPreferences.isEnabled(MeasureType.WAIST, this)) {
+                setText(R.id.stat_wthr, stats.calculateWtHR());
+            } else {
+                findViewById(R.id.stat_wthr).setVisibility(View.GONE);
+            }
         }
         mDbHelper.close();
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
         return MeasureTabs.basicMenu(this, item) || super.onMenuItemSelected(featureId, item);
     }
 
@@ -91,18 +98,24 @@ public class BmiTable extends Activity {
         startActivity(new Intent(this, BmiCalc.class));
     }
 
-    private void setText(int textId, Measurement measurement, String alternateLabel) {
+    private void setText(final int textId, final Measurement measurement, final String alternateLabel) {
         final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
         text.display(measurement, alternateLabel);
     }
 
-    private void setText(int textId, Measurement measurement) {
-        Log.d(MeasureActivity.TAG,"BmiTable.setText: "+measurement);
+    private void setText(final int textId, final Measurement measurement) {
+        Log.d(MeasureActivity.TAG, "BmiTable.setText: " + measurement);
         final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
         text.display(measurement);
     }
 
-    private void setTextBmi(int textId, float value) {
+    private void setText(final int textId, final float value) {
+        Log.d(MeasureActivity.TAG, "BmiTable.setText: " + value);
+        final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
+        text.display(value);
+    }
+
+    private void setTextBmi(final int textId, final float value) {
         final BMI bmi = BMI.getBmi(value, this);
         final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
         if (bmi != null) {
@@ -112,12 +125,7 @@ public class BmiTable extends Activity {
         }
     }
 
-    // private void setText(int textId, Date date) {
-    // final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
-    // text.display(date);
-    // }
-
-    private void setBMIText(BMI bmi) {
+    private void setBMIText(final BMI bmi) {
         final MeasureDisplay text = (MeasureDisplay) findViewById(bmi.getId());
         final int[] range = getResources().getIntArray(bmi.getRangeId());
         final StringBuffer result = new StringBuffer();

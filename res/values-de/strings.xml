@@ -74,6 +74,9 @@
 <string name="stat_togo">Noch abzunehmen</string>
 <string name="stat_eta">Zielerreichung</string>
 <string name="stat_eta_never">Nicht so bald</string>
+<string name="stat_wthr">Verhältnis Taille/Größe</string>
+<string name="stat_bmi_value_label">%1$s</string>
+<string name="stat_bmi_calc_error_label">Setze deine Größe in den Einstellungen</string>
 
 <string name="calc_weight_hint">Gewicht in </string>
 <string name="calc_height_hint">Größe in </string>
