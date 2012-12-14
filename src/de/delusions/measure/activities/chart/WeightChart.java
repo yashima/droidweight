@@ -22,14 +22,8 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.graphics.*;
 import android.graphics.Paint.Style;
-import android.graphics.Path;
-import android.graphics.PixelFormat;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
@@ -54,7 +48,7 @@ import de.delusions.measure.ment.Measurement;
 
 public class WeightChart extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final int TEXTSIZE = 16;
+    private static final int TEXTSIZE = 20;
     private static final int PADDING = 30;
     private static final int MIN_IMAGE_WIDTH = 400;
     private static final int MIN_IMAGE_HEIGHT = 400;
@@ -86,10 +80,10 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     private boolean showAll;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         try {
-            Log.i(MeasureActivity.TAG,"onCreate WeightChart");
+            Log.i(MeasureActivity.TAG, "onCreate WeightChart");
             getWindow().setFormat(PixelFormat.RGBA_8888);
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
             setContentView(R.layout.activity_chart);
@@ -101,16 +95,16 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
             initializeFields();
             refreshDataAndGraph();
 
-            addButton(R.id.months_1,MONTH);
-            addButton(R.id.months_3,MONTH_3);
-            addButton(R.id.months_6,MONTH_6);
-            addButton(R.id.week_2,WEEK_2);
-            addButton(R.id.year_1,YEAR_1);
+            addButton(R.id.months_1, MONTH);
+            addButton(R.id.months_3, MONTH_3);
+            addButton(R.id.months_6, MONTH_6);
+            addButton(R.id.week_2, WEEK_2);
+            addButton(R.id.year_1, YEAR_1);
             addDisplayAllButton();
             addToggleOtherValuesButton();
 
-        } catch (final IllegalStateException e){
-            Log.e(MeasureActivity.TAG,"WeightChart:onCreate:fails with",e);
+        } catch (final IllegalStateException e) {
+            Log.e(MeasureActivity.TAG, "WeightChart:onCreate:fails with", e);
             setResult(RESULT_OK);
             finish();
         }
@@ -130,7 +124,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         final ToggleButton showbutton = (ToggleButton) findViewById(R.id.showall);
         showbutton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 WeightChart.this.showAll = showbutton.isChecked();
                 refreshDataAndGraph();
             }
@@ -141,12 +135,12 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         final Button all = (Button) findViewById(R.id.all);
         all.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 final SqliteHelper db = new SqliteHelper(WeightChart.this);
                 db.open();
                 final Cursor cursor = db.fetchFirst(WeightChart.this.displayField);
                 final Measurement first = MeasureType.WEIGHT.createMeasurement(cursor);
-                WeightChart.this.days = new Long((System.currentTimeMillis()-first.getTimestamp().getTime())/(1000*60*60*24)).intValue();
+                WeightChart.this.days = new Long((System.currentTimeMillis() - first.getTimestamp().getTime()) / (1000 * 60 * 60 * 24)).intValue();
                 cursor.close();
                 db.close();
                 refreshDataAndGraph();
@@ -154,11 +148,11 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         });
     }
 
-    private void addButton(int rId,final int daysToDisplay) {
+    private void addButton(final int rId, final int daysToDisplay) {
         final Button button = (Button) findViewById(rId);
         button.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 WeightChart.this.days = daysToDisplay;
                 refreshDataAndGraph();
             }
@@ -179,14 +173,13 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(final Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         Log.d(MeasureActivity.TAG, "onConfigurationChanged");
         refreshGraph();
     }
 
-
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
         if (key.equals(PrefItem.DISPLAY_MEASURE.getKey())) {
             Log.d(MeasureActivity.TAG, "onSharedPreferenceChanged " + key);
             refreshDisplayField();
@@ -201,11 +194,11 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
         return MeasureTabs.basicMenu(this, item) || super.onMenuItemSelected(featureId, item);
     }
 
-    public Point calculatePoint(double x, double y) {
+    public Point calculatePoint(final double x, final double y) {
         return COORDS.calculatePoint(x, y, this.trackedValuePath.getCeiling(), this.trackedValuePath.getFloor());
     }
 
@@ -225,7 +218,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         final Bitmap charty = Bitmap.createBitmap(this.imageWidth, this.imageHeight, Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(charty);
         drawBackgroundAndGrid(canvas);
-    
+
         if (this.displayField == MeasureType.WEIGHT && !this.showAll) {
             drawBmiLines(canvas);
             drawGoalLine(canvas);
@@ -246,7 +239,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         image.setImageBitmap(charty);
     }
 
-    private Paint createGraphPaint(MeasureType type, int strokeWidth) {
+    private Paint createGraphPaint(final MeasureType type, final int strokeWidth) {
         final Paint paint = createPaint(type.getColor(), Paint.Style.STROKE);
         paint.setStrokeWidth(strokeWidth);
         return paint;
@@ -264,7 +257,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         }
     }
 
-    private void drawLegend(Canvas canvas) {
+    private void drawLegend(final Canvas canvas) {
         final float x = COORDS.getLeft() + 10;
         float y = COORDS.getTop() + 10 + TEXTSIZE;
         for (final MeasureType type : MeasureType.getEnabledTypes(this)) {
@@ -294,7 +287,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         }
     }
 
-    private void drawGoalLine(Canvas canvas) {
+    private void drawGoalLine(final Canvas canvas) {
         final String labelStr = "Goal";
         final float value = UserPreferences.getGoal(this).getValue(UserPreferences.isMetric(this));
         final Paint paint = createPaint(getResources().getColor(R.color.yourgoal), Paint.Style.STROKE);
@@ -313,22 +306,24 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         return bmiLine;
     }
 
-    private Point createStartPointForHorizontalLabel(Paint paint, String label, float value) {
+    private Point createStartPointForHorizontalLabel(final Paint paint, final String label, final float value) {
+        final int paddingRight = 5;
+        final int paddingBottom = 3;
         final int textWidth = Math.round(calculateTextWidth(paint, label));
         final Point lineEnd = calculatePoint(this.days, value);
         final Point result = new Point();
-        result.x = lineEnd.x - textWidth;
-        result.y = lineEnd.y - 2;
+        result.x = lineEnd.x - textWidth - paddingRight;
+        result.y = lineEnd.y - paddingBottom;
         return result;
     }
 
-    private String calculateMeasureLabel(int segment) {
+    private String calculateMeasureLabel(final int segment) {
         final int perSegment = (this.trackedValuePath.getCeiling() - this.trackedValuePath.getFloor()) / SEGMENTS;
         final int labelValue = segment * perSegment;
         return this.trackedValuePath.getCeiling() - labelValue + this.displayField.getUnit().retrieveUnitName(this);
     }
 
-    private String calculateDateLabel(int segment) {
+    private String calculateDateLabel(final int segment) {
         final Calendar cal = (Calendar) this.trackedValuePath.getStartingDate().clone();
         final int daysPerSegment = this.days / SEGMENTS;
         final int days = segment * daysPerSegment;
@@ -337,19 +332,20 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     }
 
     private void calculateImageDimensions() {
+
         final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         final int orientation = getWindowManager().getDefaultDisplay().getOrientation();
+        final int tabHostAndButtonsSpace = orientation == 0 ? 350 : 135;
         final int metricWidth = metrics.widthPixels - PADDING;
-        final int metricHeight = metrics.heightPixels - 350; // tabhost and buttons)
+        final int metricHeight = metrics.heightPixels - tabHostAndButtonsSpace;
         this.imageWidth = Math.max(MIN_IMAGE_WIDTH, metricWidth);
         this.imageHeight = Math.max(MIN_IMAGE_HEIGHT, metricHeight);
-        // final ImageView image = (ImageView) findViewById(R.id.testy_img);
         Log.d(MeasureActivity.TAG, "calculateImageDimensions " + " orientation:" + orientation + " width:" + this.imageWidth + " height:"
                 + this.imageHeight);
     }
 
-    public static void drawGridLine(Canvas canvas, final Paint paint, int segment, boolean vertical) {
+    public static void drawGridLine(final Canvas canvas, final Paint paint, final int segment, final boolean vertical) {
         final float startX = COORDS.getLeft() + (vertical ? segment * COORDS.getRight() / SEGMENTS : 0);
         final float startY = COORDS.getTop() + (vertical ? 0 : segment * COORDS.getBottom() / SEGMENTS);
         final float stopX = COORDS.getLeft() + (vertical ? segment * COORDS.getRight() / SEGMENTS : COORDS.getRight());
@@ -357,7 +353,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         canvas.drawLine(startX, startY, stopX, stopY, paint);
     }
 
-    public static void drawGridLabel(Canvas canvas, final Paint paint, int segment, boolean vertical, String label) {
+    public static void drawGridLabel(final Canvas canvas, final Paint paint, final int segment, final boolean vertical, final String label) {
         final float textSize = paint.getTextSize();
         final float textWidth = calculateTextWidth(paint, label);
         final float x = COORDS.getLeft() + (vertical ? segment * COORDS.getRight() / SEGMENTS : -textWidth - 2);
@@ -373,7 +369,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
 
     }
 
-    public static Paint createPaint(int color, Paint.Style style) {
+    public static Paint createPaint(final int color, final Paint.Style style) {
         final Paint paint = new Paint();
         paint.setTextSize(TEXTSIZE);
         paint.setStyle(style);
@@ -390,7 +386,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
      * 
      * @return
      */
-    public static int[] createCoords(int width, int height, Paint paint, String maxLabel) {
+    public static int[] createCoords(final int width, final int height, final Paint paint, final String maxLabel) {
         final int leftMargin = calculateTextWidth(paint, maxLabel);
         final int bottomMargin = calculateTextWidth(paint, "01/01");
         final int left = 2 + leftMargin;
@@ -401,7 +397,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         return result;
     }
 
-    public static int calculateTextWidth(final Paint paint, String label) {
+    public static int calculateTextWidth(final Paint paint, final String label) {
         final float[] widths = new float[label.length()];
         paint.getTextWidths(label, widths);
         float sum = 0;
