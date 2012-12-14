@@ -323,7 +323,7 @@ public class SqliteHelper {
     }
 
     public Cursor fetchByDate(Date dateAfter, MeasureType field) {
-        final String[] columns = { KEY_MEASURE_VALUE, KEY_DATE };
+        final String[] columns = { KEY_ROWID, KEY_MEASURE_VALUE, KEY_DATE };
         final String selection = "measure_date > ? and name=?";
         final String[] selectionArgs = { dateAfter.getTime() + "", field.name() };
         return this.mDb.query(WEIGHT_TABLE, columns, selection, selectionArgs, null, null, "measure_date ASC");

@@ -88,68 +88,56 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(MeasureActivity.TAG,"onCreate WeightChart");
-        getWindow().setFormat(PixelFormat.RGBA_8888);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
-        setContentView(R.layout.activity_chart);
+        try {
+            Log.i(MeasureActivity.TAG,"onCreate WeightChart");
+            getWindow().setFormat(PixelFormat.RGBA_8888);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
+            setContentView(R.layout.activity_chart);
 
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        prefs.registerOnSharedPreferenceChangeListener(this);
+            final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            prefs.registerOnSharedPreferenceChangeListener(this);
+            refreshDisplayField();
+            calculateImageDimensions();
+            initializeFields();
+            refreshDataAndGraph();
 
-        refreshDisplayField();
+            addButton(R.id.months_1,MONTH);
+            addButton(R.id.months_3,MONTH_3);
+            addButton(R.id.months_6,MONTH_6);
+            addButton(R.id.week_2,WEEK_2);
+            addButton(R.id.year_1,YEAR_1);
+            addDisplayAllButton();
+            addToggleOtherValuesButton();
 
-        calculateImageDimensions();
+        } catch (final IllegalStateException e){
+            Log.e(MeasureActivity.TAG,"WeightChart:onCreate:fails with",e);
+            setResult(RESULT_OK);
+            finish();
+        }
 
+    }
+
+    private void initializeFields() {
         this.trackedValuePath = new MeasurePath(this, this.displayField, this.days);
 
         final int[] drawSizes = createCoords(this.imageWidth - PADDING, this.imageHeight - PADDING, GRID, calculateMeasureLabel(0));
         COORDS = new ChartCoordinates(this.days, drawSizes);
 
         this.days = MONTH;
+    }
 
-        refresh();
-
-        final Button month1 = (Button) findViewById(R.id.months_1);
-        month1.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                WeightChart.this.days = MONTH;
-                refresh();
-            }
-        });
-
-        final Button month3 = (Button) findViewById(R.id.months_3);
-        month3.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                WeightChart.this.days = MONTH_3;
-                refresh();
-            }
-        });
-        final Button month6 = (Button) findViewById(R.id.months_6);
-        month6.setOnClickListener(new View.OnClickListener() {
+    private void addToggleOtherValuesButton() {
+        final ToggleButton showbutton = (ToggleButton) findViewById(R.id.showall);
+        showbutton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                WeightChart.this.days = MONTH_6;
-                refresh();
+                WeightChart.this.showAll = showbutton.isChecked();
+                refreshDataAndGraph();
             }
         });
-        final Button week2 = (Button) findViewById(R.id.week_2);
-        week2.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                WeightChart.this.days = WEEK_2;
-                refresh();
-            }
-        });
+    }
 
-        final Button year1 = (Button) findViewById(R.id.year_1);
-        year1.setOnClickListener(new View.OnClickListener() {
-
-            public void onClick(View view) {
-                WeightChart.this.days = YEAR_1;
-                refresh();
-            }
-        });
-
+    private void addDisplayAllButton() {
         final Button all = (Button) findViewById(R.id.all);
         all.setOnClickListener(new View.OnClickListener() {
 
@@ -161,19 +149,20 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
                 WeightChart.this.days = new Long((System.currentTimeMillis()-first.getTimestamp().getTime())/(1000*60*60*24)).intValue();
                 cursor.close();
                 db.close();
-                refresh();
+                refreshDataAndGraph();
             }
         });
+    }
 
-        final ToggleButton showbutton = (ToggleButton) findViewById(R.id.showall);
-        showbutton.setOnClickListener(new View.OnClickListener() {
+    private void addButton(int rId,final int daysToDisplay) {
+        final Button button = (Button) findViewById(rId);
+        button.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(View view) {
-                WeightChart.this.showAll = showbutton.isChecked();
-                refresh();
+                WeightChart.this.days = daysToDisplay;
+                refreshDataAndGraph();
             }
         });
-
     }
 
     private void refreshDisplayField() {
@@ -201,14 +190,14 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         if (key.equals(PrefItem.DISPLAY_MEASURE.getKey())) {
             Log.d(MeasureActivity.TAG, "onSharedPreferenceChanged " + key);
             refreshDisplayField();
-            refresh();
+            refreshDataAndGraph();
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        refresh();
+        refreshDataAndGraph();
     }
 
     @Override
@@ -216,15 +205,19 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         return MeasureTabs.basicMenu(this, item) || super.onMenuItemSelected(featureId, item);
     }
 
-    public void refresh() {
-        Log.d(MeasureActivity.TAG, "refreshing Graph");
-        COORDS.setDays(this.days);
-        this.trackedValuePath.refreshData(this.displayField, this.days);
+    public Point calculatePoint(double x, double y) {
+        return COORDS.calculatePoint(x, y, this.trackedValuePath.getCeiling(), this.trackedValuePath.getFloor());
+    }
+
+    public void refreshDataAndGraph() {
+        Log.d(MeasureActivity.TAG, "WeightChart:refreshDataAndGraph");
+        refreshPathData();
         refreshGraph();
     }
 
-    public Point calculatePoint(double x, double y) {
-        return COORDS.calculatePoint(x, y, this.trackedValuePath.getCeiling(), this.trackedValuePath.getFloor());
+    private void refreshPathData() {
+        COORDS.setDays(this.days);
+        this.trackedValuePath.refreshData(this.displayField, this.days);
     }
 
     private void refreshGraph() {
@@ -232,7 +225,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         final Bitmap charty = Bitmap.createBitmap(this.imageWidth, this.imageHeight, Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(charty);
         drawBackgroundAndGrid(canvas);
-
+    
         if (this.displayField == MeasureType.WEIGHT && !this.showAll) {
             drawBmiLines(canvas);
             drawGoalLine(canvas);

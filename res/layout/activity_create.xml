@@ -25,6 +25,27 @@
 <View android:layout_width="fill_parent" android:layout_height="1dp"
       android:background="@color/Grey3" android:layout_marginBottom="5dp"/>     
         
+<LinearLayout android:layout_width="180dp"
+        android:layout_height="wrap_content"             
+        android:orientation="horizontal">
+        
+    <Button android:id="@+id/entryTime"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/Grey1"                                             
+        android:background="@drawable/custom_button"
+        android:layout_weight=".40"/>  
+        
+    <Button android:id="@+id/entryDate"
+        android:layout_width="0dp"        
+        android:layout_height="wrap_content"
+        android:gravity="center"      
+        android:textColor="@color/Grey1"                                             
+        android:background="@drawable/custom_button"
+        android:layout_weight=".60"/>  
+</LinearLayout>
+
 <Spinner android:id="@+id/chooseType"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"        

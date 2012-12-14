@@ -18,6 +18,7 @@ package de.delusions.measure.ment;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import android.content.Context;
@@ -32,8 +33,18 @@ public class Measurement implements Serializable {
     private final Long id;
     private MeasureType field;
     private float value;
-    private final Unit unit;
+    private  Unit unit;
+
+
     private Date timestamp;
+
+    public Measurement(){
+        this.id=null;
+        this.unit = null;
+        this.value = 0;
+        this.field = null;
+        this.timestamp = new Date();
+    }
 
     /**
      * Only called by things that really were numbers in the first place. Do not try to parse value from string anywhere
@@ -147,6 +158,10 @@ public class Measurement implements Serializable {
         return this.value;
     }
 
+    public void setValue(float value,boolean metric) {
+        this.value = metric ? value : this.unit.convertToMetric(value);
+    }
+
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
@@ -161,6 +176,10 @@ public class Measurement implements Serializable {
 
     public Unit getUnit() {
         return this.unit;
+    }
+
+    public void setUnit(Unit unit){
+        this.unit = unit;
     }
 
     public void inc(boolean metric) {
@@ -226,6 +245,23 @@ public class Measurement implements Serializable {
 
     public static Measurement sum(Measurement a, Measurement b) {
         return new Measurement(a.getValue() + b.getValue(), a.getUnit());
+    }
+
+    public void updateTime(int hourOfDay, int minute) {
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(getTimestamp());
+        calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+        calendar.set(Calendar.MINUTE, minute);
+        setTimestamp(calendar.getTime());
+    }
+
+    public void updateDate(int year,int monthOfYear,int dayOfMonth){
+        final Calendar calendar = Calendar.getInstance();
+        calendar.setTime(getTimestamp());
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, monthOfYear);
+        calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        setTimestamp(calendar.getTime());
     }
 
 }

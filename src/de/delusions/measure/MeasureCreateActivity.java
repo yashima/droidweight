@@ -1,10 +1,11 @@
 package de.delusions.measure;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -12,23 +13,25 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import de.delusions.measure.activities.prefs.UserPreferences;
+import de.delusions.measure.components.DateTimeManager;
 import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 import de.delusions.measure.ment.MeasurementException;
 
-public class MeasureCreateActivity extends Activity {
+public class MeasureCreateActivity extends Activity implements OnDateSetListener,OnTimeSetListener{
     public static final String EDIT_TYPE = "type";
 
-    private SqliteHelper mDbHelper;
 
-    private MeasureType field;
-    private EditText input;
 
+
+    private Measurement measure;
 
     private int spinnerPosition = 0;
 
@@ -37,64 +40,56 @@ public class MeasureCreateActivity extends Activity {
         super.onCreate(savedInstanceState);
         Log.i(MeasureActivity.TAG,"onCreate MeasureCreateActivity");
         setContentView(R.layout.activity_create);
-
-        this.mDbHelper = new SqliteHelper(this);
-        this.mDbHelper.open();
-        this.input = (EditText) findViewById(R.id.input);
-
+        this.measure  = new Measurement();
         retrieveExtras(savedInstanceState);
-        setUnitLabel();
-        setTitle();
+
         createConfirmButton();
         manageFieldSpinner();
+        populateUI();
+        DateTimeManager.addShowDatePickerButtonOnClickListener(this.measure, this, this);
+        DateTimeManager.addShowTimePickerButtonOnClickListener(this.measure, this, this);
     }
 
 
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(EDIT_TYPE, this.field);
-    }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        this.mDbHelper.close();
+    private void populateUI(){
+        setUnitLabel();
+        setTitle();
+        DateTimeManager.populateDateButton(this.measure,this);
+        DateTimeManager.populateTimeButton(this.measure,this);
     }
 
     private void createConfirmButton() {
         final Button confirmButton = (Button) findViewById(R.id.ok);
         confirmButton.setOnClickListener(new View.OnClickListener() {
-
             public void onClick(View view) {
-                setResult(RESULT_OK);
-                try {
-                    saveMeasurement();
-                    finish();
-                } catch (final MeasurementException e) {
-                    e.createToast(MeasureCreateActivity.this, "confirmButton");
-                }
+                executeConfirmButtonOnClick();
             }
         });
     }
 
+    private void executeConfirmButtonOnClick() {
+        setResult(RESULT_OK);
+        try {
+            updateMeasureValueFromInput();
+            saveMeasurement(MeasureCreateActivity.this.measure);
+            finish();
+        } catch (final MeasurementException e) {
+            e.createToast(MeasureCreateActivity.this, "confirmButton");
+        }
+    }
+
     private void retrieveExtras(Bundle savedInstanceState) {
-        this.field = savedInstanceState == null ? null : (MeasureType) savedInstanceState.getSerializable(EDIT_TYPE);
-        if (this.field == null) {
+        MeasureType field = savedInstanceState == null ? null : (MeasureType) savedInstanceState.getSerializable(EDIT_TYPE);
+        if (field == null) {
             final Bundle extras = getIntent().getExtras();
-            this.field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
-            Log.d(MeasureActivity.TAG, "retrieveExtras " + this.field);
+            field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
+            Log.d(MeasureActivity.TAG, "retrieveExtras " + field);
+        }
+        if(field!=null){
+            this.measure.setField(field);
+            this.measure.setUnit(field.getUnit());
         }
     }
 
@@ -102,19 +97,10 @@ public class MeasureCreateActivity extends Activity {
         setTitle(getResources().getString(R.string.activity_createmeasure));
     }
 
-    public void setUnitLabel() {
+    private void setUnitLabel() {
         final TextView unit = (TextView) findViewById(R.id.unit);
-        unit.setText(this.field.getUnit().retrieveUnitName(this));
+        unit.setText(this.measure.getField().getUnit().retrieveUnitName(this));
     }
-
-    private void saveMeasurement() throws MeasurementException {
-        final String strValue = this.input.getText().toString();
-        final Measurement measurement = new Measurement(null, strValue, this.field, UserPreferences.isMetric(this), new Date());
-        measurement.setField(this.field);
-        measurement.setTimestamp(new Date());
-        this.mDbHelper.createMeasure(measurement);
-    }
-
 
     public void manageFieldSpinner() {
         final Spinner spinner = (Spinner) findViewById(R.id.chooseType);
@@ -132,9 +118,9 @@ public class MeasureCreateActivity extends Activity {
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
             public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-                MeasureCreateActivity.this.field = types.get(pos);
+                MeasureCreateActivity.this.measure.setField(types.get(pos));
                 setUnitLabel();
-                UserPreferences.setDisplayField(MeasureCreateActivity.this, MeasureCreateActivity.this.field);
+                UserPreferences.setDisplayField(MeasureCreateActivity.this,types.get(pos));
             }
 
 
@@ -154,11 +140,40 @@ public class MeasureCreateActivity extends Activity {
         boolean found = false;
         for (final MeasureType field : types) {
             spinnerLabels.add(getResources().getString(field.getLabelId()));
-            found = found || field.equals(MeasureCreateActivity.this.field);
+            found = found || field.equals(this.measure.getField());
             if (!found) {
                 this.spinnerPosition++;
             }
         }
         return spinnerLabels;
+    }
+
+    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        this.measure.updateDate(year, monthOfYear, dayOfMonth);
+        DateTimeManager.populateDateButton(this.measure,this);
+    }
+
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+        this.measure.updateTime(hourOfDay,minute);
+        DateTimeManager.populateTimeButton(this.measure,this);
+    }
+
+    private EditText retrieveMeasureValueEditView() {
+        return (EditText) findViewById(R.id.input);
+    }
+
+    private void saveMeasurement(Measurement toSave) {
+        Log.d(MeasureActivity.TAG, "saveMeasurement " + toSave);
+        final SqliteHelper mDbHelper = new SqliteHelper(this);
+        mDbHelper.open();
+        mDbHelper.createMeasure(this.measure);
+        mDbHelper.close();
+    }
+
+    private void updateMeasureValueFromInput() throws MeasurementException {
+        Log.d(MeasureActivity.TAG, "updateMeasureValueFromInput");
+        final EditText valueEdit = retrieveMeasureValueEditView();
+        final String strValue = valueEdit.getText().toString();
+        this.measure.parseAndSetValue(strValue, UserPreferences.isMetric(this));
     }
 }
