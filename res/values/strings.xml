@@ -19,7 +19,7 @@
 <string name="no">No</string>
 <string name="button_ok">Ok</string>
 <string name="button_change_date">Change Date</string>
-<!--string name="button_cancel">Cancel</string-->
+<string name="button_cancel">Cancel</string>
 <string name="button_go">Go</string>
 <string name="menu_add">Add Measure</string>
 <string name="menu_edit">Edit Measure</string>
@@ -73,6 +73,8 @@
 <string name="stat_bmi_value_label">%1$s</string>
 <string name="stat_bmi_calc_error_label">Set your height in the Preferences</string>
 
+<string name="calc_weight_hint">Weight in </string>
+<string name="calc_height_hint">Height in </string>
 
 <string name="obese">obese</string>
 <string name="overweight">overweight</string>

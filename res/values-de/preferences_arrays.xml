@@ -12,14 +12,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.-->
-<menu xmlns:android="http://schemas.android.com/apk/res/android"  
-	       android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
-<item android:id="@+id/context_menu_delete"
-	      android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:icon="@android:drawable/ic_menu_delete"
-          android:title="@string/menu_delete" />   
+<resources>
 
-</menu>
-
+<string-array name="units_values">
+<item>true</item>
+<item>false</item>
+</string-array>
+</resources>
