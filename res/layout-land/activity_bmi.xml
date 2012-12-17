@@ -35,6 +35,7 @@
     <de.delusions.measure.components.MeasureDisplay android:id="@+id/stat_goal"     delusions:label="@string/stat_goal"/>                                     
     <de.delusions.measure.components.MeasureDisplay android:id="@+id/stat_current"  delusions:label="@string/stat_current"/>                               
     <de.delusions.measure.components.MeasureDisplay android:id="@+id/stat_bmi"      delusions:label="@string/stat_bmi"/>
+    <de.delusions.measure.components.MeasureDisplay android:id="@+id/stat_wthr"      delusions:label="@string/stat_wthr"/>
     <de.delusions.measure.components.MeasureDisplay android:id="@+id/stat_loss"     delusions:label="@string/stat_loss"/>                                      
     <de.delusions.measure.components.MeasureDisplay android:id="@+id/stat_togo"     delusions:label="@string/stat_togo"/>   
     <!-- de.delusions.measure.components.MeasureDisplay android:id="@+id/stat_eta"      delusions:label="@string/stat_eta"/-->                                      
