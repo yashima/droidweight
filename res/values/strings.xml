@@ -17,44 +17,24 @@
 <string name="app_name">DroidWeight</string>
 <string name="yes">Yes</string>
 <string name="no">No</string>
-<string name="button_ok">Ok</string>
-<string name="button_change_date">Change Date</string>
-<string name="button_cancel">Cancel</string>
+
 <string name="button_go">Go</string>
-<string name="menu_add">Add Measure</string>
-<string name="menu_edit">Edit Measure</string>
 <string name="menu_prefs">Preferences</string>
 <string name="menu_showtype">Select Display</string>
 <string name="menu_create">Create Entry</string>
 <string name="menu_delete">Delete Measure</string>
-<string name="menu_bmi">BMI Table</string>
 <string name="menu_calc">BMI Calculator</string>
-<string name="menu_chart">Chart</string>
 <string name="menu_about">Visit Homepage</string>
 <string name="menu_deleteall">Clear database</string>
 <string name="activity_editmeasure">Edit </string>
 <string name="activity_createmeasure">Create new entry </string>
-<string name="activity_prefs">Preferences</string>
 <string name="no_measures">There are no measurements yet. Use Menu > Create Entry to record one.</string>
-<string name="label_female">Female</string>
-<string name="label_male">Male</string>
-<string name="label_metric">Metric</string>
-<string name="label_imperial">Imperial</string>
 <string name="label_weight">Weight</string>
 <string name="label_height">Height</string>
 <string name="label_bodyfat">Body Fat</string>
-<string name="label_chest">Chest</string>
-<string name="label_torso">Torso</string>
 <string name="label_waist">Waist</string>
-<string name="label_hips">Hips</string>
-<string name="label_left_arm">Left Arm</string>
-<string name="label_right_arm">Right Arm</string>
-<string name="label_left_thigh">Left Thigh</string>
-<string name="label_right_thigh">Right Thigh</string>
-<string name="label_date">Date</string>
 <string name="row_weight">Weight: </string>
 <string name="row_bmi">BMI: </string>
-<string name="row_sum">Sum: </string>
 <string name="hint_user_height">Enter your height</string>
 <string name="hint_user_weight">Enter your weight</string>
 
@@ -67,23 +47,15 @@
 <string name="stat_loss">Overall loss</string>
 <string name="stat_gain">Overall gain</string>
 <string name="stat_togo">To go</string>
-<string name="stat_eta">Target reached</string>
 <string name="stat_eta_never">Not soon</string>
 <string name="stat_wthr">Waist to height ratio</string>
-<string name="stat_bmi_value_label">%1$s</string>
-<string name="stat_bmi_calc_error_label">Set your height in the Preferences</string>
 
-<string name="calc_weight_hint">Weight in </string>
-<string name="calc_height_hint">Height in </string>
 
 <string name="obese">obese</string>
 <string name="overweight">overweight</string>
 <string name="normalweight">normal</string>
 <string name="underweight">underweight</string>
 
-<string name="error_calc_missing_value">Please enter numbers in both fields</string>
-<string name="error_input_missing_value">Value missing</string>
-<string name="error_wrong_number_value">Wrong value. Please enter a positive decimal number.</string>
 
 <string name="error_subzero">Negative numbers not allowed.</string>
 <string name="error_toolarge">Number is too large</string>
@@ -108,7 +80,7 @@
 <string name="chart_toggle_show">Show others</string>
 <string name="chart_toggle_hide">Hide others</string>
 
-<string name="init_welcome">Hello. You are just starting to use the tracker for the first time, please give it some information to work with</string>
+
 
 <string name="button_set_current">Set Current %1$s in %2$s</string>
 <string name="button_bmi_calculator">BMI Calculator</string>
@@ -122,7 +94,6 @@
 <string name="pref_units">Units</string>
 <string name="pref_fat">Body Fat</string>
 <string name="pref_waist">Waist Length</string>
-<string name="pref_measure">Measures</string>
 <string name="pref_notification">Time</string>
 <string name="pref_notificationenabled">Reminder</string>
 <string name="pref_createinput">Fast Input</string>
@@ -132,10 +103,8 @@
 <string name="pref_goal_summary_imperial">Your target weight in lb</string>
 <string name="pref_height_summary">Your height in cm</string>
 <string name="pref_height_summary_imperial">Your height in inches</string>
-<string name="pref_units_summary">Choose length and weight units</string>
 <string name="pref_fat_summary">Enable body fat tracking</string>
 <string name="pref_waist_summary">Enable waist length tracking</string>
-<string name="pref_measure_summary">Enable measure tracking</string>
 <string name="pref_notification_summary">Set time for daily reminder</string>
 <string name="pref_notificationenabled_summary">Enable daily reminder</string>
 <string name="pref_createinput_summary">Enter all tracked values at once</string>
@@ -149,15 +118,12 @@
 
 <string name="exporter_export">Export</string>
 <string name="exporter_import">Import</string>
-<string name="exporter_dialog_message">%1$sing database...</string>
+<string name="exporter_dialog_message">%1$sing database&#8230;</string>
 <string name="exporter_toast_success">%1$sed %2$s entries!</string>
 <string name="exporter_toast_fail">Nothing %1$sed!</string>
 
 <string name="dialog_message_deleteall">Deleting all entries! Are you sure?</string>
-<string name="dialog_title_edit">Edit</string>
-
 <string name="notification_ticker">Weight Reminder</string>
 <string name="notification_title">Droid Weight Reminder</string>
-<string name="notification_text">Do not forget to track your weight today!</string>
 
 </resources>

@@ -17,44 +17,26 @@
 <string name="app_name">DroidWeight</string>
 <string name="yes">Ja</string>
 <string name="no">Nein</string>
-<string name="button_ok">Ok</string>
-<string name="button_change_date">Datum ändern</string>
-<string name="button_cancel">Abbrechen</string>
 <string name="button_go">Los</string>
-<string name="menu_add">Messung hinzufügen</string>
-<string name="menu_edit">Messung editieren</string>
 <string name="menu_prefs">Einstellungen</string>
 <string name="menu_showtype">Anzeige wählen</string>
 <string name="menu_create">Neuer Eintrag</string>
 <string name="menu_delete">Messung löschen</string>
-<string name="menu_bmi">BMI Tabelle</string>
+
 <string name="menu_calc">BMI Rechner</string>
-<string name="menu_chart">Graph</string>
+
 <string name="menu_about">Zur Homepage</string>
 <string name="menu_deleteall">Datenbank löschen</string>
 <string name="activity_editmeasure">Ändern: </string>
 <string name="activity_createmeasure">Neuer Eintrag </string>
-<string name="activity_prefs">Einstellungen</string>
+
 <string name="no_measures">Es gibt noch keine Messungen. Benutze das Menu um eine einzugeben.</string>
-<string name="label_female">Weiblich</string>
-<string name="label_male">Männlich</string>
-<string name="label_metric">kg &amp; cm</string>
-<string name="label_imperial">lb &amp; in</string>
 <string name="label_weight">Gewicht</string>
 <string name="label_height">Größe</string>
 <string name="label_bodyfat">Körperfett</string>
-<string name="label_chest">Brust</string>
-<string name="label_torso">Oberkörper</string>
 <string name="label_waist">Taille</string>
-<string name="label_hips">Hüften</string>
-<string name="label_left_arm">Linker Arm</string>
-<string name="label_right_arm">Rechter Arm</string>
-<string name="label_left_thigh">Linkes Bein</string>
-<string name="label_right_thigh">Rechtes Bein</string>
-<string name="label_date">Datum</string>
 <string name="row_weight">Gewicht: </string>
 <string name="row_bmi">BMI: </string>
-<string name="row_sum">Summe: </string>
 <string name="hint_user_height">Gib deine Größe ein</string>
 <string name="hint_user_weight">Gib dein Gewicht ein</string>
 
@@ -72,18 +54,12 @@
 <string name="stat_loss">Abgenommen</string>
 <string name="stat_gain">Zugenommen</string>
 <string name="stat_togo">Noch abzunehmen</string>
-<string name="stat_eta">Zielerreichung</string>
 <string name="stat_eta_never">Nicht so bald</string>
 <string name="stat_wthr">Verhältnis Taille/Größe</string>
 <string name="stat_bmi_value_label">%1$s</string>
 <string name="stat_bmi_calc_error_label">Setze deine Größe in den Einstellungen</string>
 
-<string name="calc_weight_hint">Gewicht in </string>
-<string name="calc_height_hint">Größe in </string>
 
-<string name="error_calc_missing_value">Bitte gib Zahlen in beiden Feldern ein</string>
-<string name="error_input_missing_value">Wert fehlt</string>
-<string name="error_wrong_number_value">Falscher Wert. Bitte gib eine positive, durch Punkt getrennte, Dezimalzahl ein.</string>
 
 <string name="error_subzero">Negative Zahl? Heute nicht.</string>
 <string name="error_toolarge">Die Zahl ist zu gross</string>
@@ -108,7 +84,7 @@
 <string name="chart_toggle_show">Vergleichen an</string>
 <string name="chart_toggle_hide">Vergleichen aus</string>
 
-<string name="init_welcome">Hallo, da du die App das erste mal benutzt, gib mir doch ein paar Zahlen.</string>
+
 
 <string name="button_set_current">%1$s in %2$s setzen</string>
 <string name="button_bmi_calculator">BMI Rechner</string>
@@ -127,7 +103,6 @@
 <string name="pref_units">Einheiten</string>
 <string name="pref_fat">Körperfett</string>
 <string name="pref_waist">Taillenumfang</string>
-<string name="pref_measure">Masse</string>
 <string name="pref_notification">Benachrichtigung</string>
 <string name="pref_notificationenabled">Zeit</string>
 <string name="pref_createinput">Schnelle Eingabe</string>
@@ -137,10 +112,10 @@
 <string name="pref_goal_summary_imperial">Dein Zielgewicht in amerikanischen Pfund</string>
 <string name="pref_height_summary">Deine Größe in cm</string>
 <string name="pref_height_summary_imperial">Deine Größe in Inches</string>
-<string name="pref_units_summary">Längen- und Gewichtseinheiten</string>
+
 <string name="pref_fat_summary">Körperfett Eingabe anschalten</string>
 <string name="pref_waist_summary">Taillenumfang Eingabe anschalten</string>
-<string name="pref_measure_summary">Körpermasse Eingabe anschalten</string>
+
 <string name="pref_notification_summary">Zeit für Benachrichtigung setzen</string>
 <string name="pref_notificationenabled_summary">Benachrichtigung anschalten</string>
 <string name="pref_createinput_summary">Alle Werte auf einmal eingeben</string>
@@ -150,19 +125,19 @@
 <string name="pref_cat_tracking">Weitere Aufzeichnungen</string>
 <string name="pref_cat_reminder">Tägliche Erinnerung</string>
 
-<string name="choose_type_prompt">Mass wählen</string>
+<string name="choose_type_prompt">Maß wählen</string>
 
 <string name="exporter_export">Export</string>
 <string name="exporter_import">Import</string>
-<string name="exporter_dialog_message">%1$siere Datenbank...</string>
+<string name="exporter_dialog_message">%1$siere Datenbank&#8230;</string>
 <string name="exporter_toast_success">%1$s von %2$s Einträgen erfolgreich!</string>
 <string name="exporter_toast_fail">Nichts %1$siert!</string>
 
 <string name="dialog_message_deleteall">Wirklich alle Einträge löschen?</string>
-<string name="dialog_title_edit">Ändern</string>
+
 
 <string name="notification_ticker">DroidWeight Erinnerung</string>
 <string name="notification_title">DroidWeight Erinnerung</string>
-<string name="notification_text">Denk dran dich zu wiegen!</string>
+
 
 </resources>
