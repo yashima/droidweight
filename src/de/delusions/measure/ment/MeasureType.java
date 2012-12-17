@@ -16,11 +16,7 @@
 package de.delusions.measure.ment;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import android.app.Activity;
 import android.content.Context;
@@ -38,17 +34,17 @@ public class MeasureType implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public static final MeasureType WEIGHT = new MeasureType("WEIGHT", -1, R.string.label_weight, Unit.KG, new Float(999), new Float(0.1), new Float(
-            1), Color.CYAN, PrefItem.WEIGHT_TRACKING);
+    public static final MeasureType WEIGHT = new MeasureType("WEIGHT", -1, R.string.label_weight, Unit.KG, Float.valueOf(999), Float.valueOf(0.1f),
+            Float.valueOf(1), Color.CYAN, PrefItem.WEIGHT_TRACKING);
 
-    public static final MeasureType BODYFAT = new MeasureType("BODYFAT", -1, R.string.label_bodyfat, Unit.PERCENT, new Float(100), new Float(0.1),
-            new Float(1), Color.MAGENTA, PrefItem.FAT_TRACKING);
+    public static final MeasureType BODYFAT = new MeasureType("BODYFAT", -1, R.string.label_bodyfat, Unit.PERCENT, Float.valueOf(100),
+            Float.valueOf(0.1f), Float.valueOf(1), Color.MAGENTA, PrefItem.FAT_TRACKING);
 
-    public static final MeasureType WAIST = new MeasureType("WAIST", -1, R.string.label_waist, Unit.CM, new Float(300), new Float(1), new Float(5),
-            Color.GREEN, PrefItem.WAIST_TRACKING);
+    public static final MeasureType WAIST = new MeasureType("WAIST", -1, R.string.label_waist, Unit.CM, Float.valueOf(300), Float.valueOf(1),
+            Float.valueOf(5), Color.GREEN, PrefItem.WAIST_TRACKING);
 
-    public static final MeasureType HEIGHT = new MeasureType("HEIGHT", -1, R.string.label_height, Unit.CM, new Float(300), new Float(1),
-            new Float(5), Color.BLACK, PrefItem.HEIGHT_TRACKING);
+    public static final MeasureType HEIGHT = new MeasureType("HEIGHT", -1, R.string.label_height, Unit.CM, Float.valueOf(300), Float.valueOf(1),
+            Float.valueOf(5), Color.BLACK, PrefItem.HEIGHT_TRACKING);
 
     private static final Map<String, MeasureType> VALUES = new HashMap<String, MeasureType>();
     static {
@@ -72,7 +68,7 @@ public class MeasureType implements Serializable {
     private final int color;
     private PrefItem pref;
 
-    private MeasureType(Cursor cursor) {
+    private MeasureType(final Cursor cursor) {
         this.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
         this.labelId = -1;
         this.androidId = -1;
@@ -86,7 +82,8 @@ public class MeasureType implements Serializable {
         this.color = cursor.getInt(cursor.getColumnIndex(SqliteHelper.KEY_COLOR));
     }
 
-    private MeasureType(String name, int androidId, int labelId, Unit unit, Float maxValue, Float smallStep, Float bigStep, int color, PrefItem item) {
+    private MeasureType(final String name, final int androidId, final int labelId, final Unit unit, final Float maxValue, final Float smallStep,
+            final Float bigStep, final int color, final PrefItem item) {
         this.id = -1;
         this.androidId = androidId;
         this.unit = unit;
@@ -100,7 +97,7 @@ public class MeasureType implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         final boolean result;
         if (o == null) {
             result = false;
@@ -123,7 +120,7 @@ public class MeasureType implements Serializable {
      * 
      * @param cursor
      */
-    public void refresh(MeasureType mt) {
+    public void refresh(final MeasureType mt) {
         this.maxValue = mt.maxValue;
         this.smallStep = mt.smallStep;
         this.bigStep = mt.bigStep;
@@ -166,7 +163,7 @@ public class MeasureType implements Serializable {
         return this.unit;
     }
 
-    public String getLabel(Activity activity) {
+    public String getLabel(final Activity activity) {
         return this.labelId < 0 ? this.name : activity.getResources().getString(this.labelId);
     }
 
@@ -174,18 +171,18 @@ public class MeasureType implements Serializable {
         return this.labelId;
     }
 
-    public float getFloat(Cursor cursor) {
+    public float getFloat(final Cursor cursor) {
         return cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
     }
 
-    public Measurement createMeasurement(Cursor cursor) {
+    public Measurement createMeasurement(final Cursor cursor) {
         final Date timestamp = SqliteHelper.getTimestamp(cursor);
         final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
         final Long id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-        return  new Measurement(id,value, this, true, timestamp);
+        return new Measurement(id, value, this, true, timestamp);
     }
 
-    public Measurement zero(Context ctx) {
+    public Measurement zero(final Context ctx) {
         return new Measurement(0f, this, UserPreferences.isMetric(ctx), new Date());
     }
 
@@ -197,7 +194,7 @@ public class MeasureType implements Serializable {
     public String toString() {
         final StringBuffer buffer = new StringBuffer();
         buffer.append(this.name).append("[").append(this.smallStep).append(",").append(this.bigStep).append(",").append(this.unit).append(",")
-        .append(this.enabled).append(",").append(this.androidId).append(",").append(this.labelId).append("]");
+                .append(this.enabled).append(",").append(this.androidId).append(",").append(this.labelId).append("]");
         return buffer.toString();
     }
 
@@ -207,7 +204,7 @@ public class MeasureType implements Serializable {
         return types;
     }
 
-    public static List<MeasureType> getEnabledTypes(Context ctx) {
+    public static List<MeasureType> getEnabledTypes(final Context ctx) {
         final List<MeasureType> types = new ArrayList<MeasureType>();
         types.add(WEIGHT);
         if (UserPreferences.isEnabled(BODYFAT, ctx)) {
@@ -219,15 +216,15 @@ public class MeasureType implements Serializable {
         return types;
     }
 
-    public static MeasureType valueOf(String name) {
+    public static MeasureType valueOf(final String name) {
         return VALUES.get(name);
     }
 
-    public static void initializeTypeMap(Context ctx) {
+    public static void initializeTypeMap(final Context ctx) {
         refreshFromDatabase(ctx);
     }
 
-    private static void refreshFromDatabase(Context ctx) {
+    private static void refreshFromDatabase(final Context ctx) {
         final SqliteHelper db = new SqliteHelper(ctx);
         db.open();
         Cursor cursor = null;
@@ -256,7 +253,7 @@ public class MeasureType implements Serializable {
         db.close();
     }
 
-    public static void initializeDatabase(SqliteHelper db) {
+    public static void initializeDatabase(final SqliteHelper db) {
         Log.d(MeasureActivity.TAG, "initializeDatabase MeasureType");
         db.createType(WEIGHT);
         db.createType(BODYFAT);

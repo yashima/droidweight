@@ -45,8 +45,8 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/custom_bg2"
-    android:layout_margin="5px"
-    android:padding="10px"
+    android:layout_margin="5dp"
+    android:padding="10dp"
     android:stretchColumns="1">
 
     <TextView android:id="@+id/label"  style="@style/TextSmall" android:text="@string/bmi_header" android:gravity="center" />

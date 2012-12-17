@@ -15,12 +15,7 @@
  */
 package de.delusions.measure.activities.prefs;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import android.app.Activity;
 import android.content.Context;
@@ -53,9 +48,9 @@ public class UserPreferences extends PreferenceActivity {
     private static final String LOG_TAG = UserPreferences.class.getName();
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(MeasureActivity.TAG,"onCreate UserPreferences");
+        Log.i(MeasureActivity.TAG, "onCreate UserPreferences");
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         addPreferencesFromResource(R.xml.preferences);
@@ -69,7 +64,7 @@ public class UserPreferences extends PreferenceActivity {
 
         this.metricPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
+            public boolean onPreferenceChange(final Preference preference, final Object newValue) {
                 final Boolean metric = Boolean.parseBoolean(newValue.toString());
                 changeSummaries(metric);
                 return true;
@@ -79,7 +74,7 @@ public class UserPreferences extends PreferenceActivity {
         final Preference notificationEnabled = findPreference(PrefItem.NOTIFICATION_ENABLED.getKey());
         notificationEnabled.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
-            public boolean onPreferenceChange(Preference preference, Object newValue) {
+            public boolean onPreferenceChange(final Preference preference, final Object newValue) {
                 Log.d(LOG_TAG, "notification enabled changed");
                 final Boolean enabled = Boolean.parseBoolean(newValue.toString());
                 if (enabled) {
@@ -92,7 +87,7 @@ public class UserPreferences extends PreferenceActivity {
         });
     }
 
-    private void migratePreferencesToDefault(String filename) {
+    private void migratePreferencesToDefault(final String filename) {
         try {
             final SharedPreferences customSharedPrefs = getSharedPreferences(filename, Activity.MODE_PRIVATE);
             final SharedPreferences defaultSharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -105,7 +100,7 @@ public class UserPreferences extends PreferenceActivity {
                     } else if (item.getPrefClass() == String.class) {
                         defaultEditor.putString(item.getKey(), customSharedPrefs.getString(item.getKey(), ""));
                     } else if (item.getPrefClass() == Float.class) {
-                        defaultEditor.putFloat(item.getKey(), customSharedPrefs.getFloat(item.getKey(), new Float(-1)));
+                        defaultEditor.putFloat(item.getKey(), customSharedPrefs.getFloat(item.getKey(), Float.valueOf(-1)));
                     } else if (item.getPrefClass() == Boolean.class) {
                         defaultEditor.putBoolean(item.getKey(), customSharedPrefs.getBoolean(item.getKey(), false));
                     }
@@ -127,34 +122,34 @@ public class UserPreferences extends PreferenceActivity {
         changeSummaries(metric);
     }
 
-    private void changeSummaries(boolean toMetric) {
+    private void changeSummaries(final boolean toMetric) {
         this.goalPref.setSummary(toMetric ? R.string.pref_goal_summary : R.string.pref_goal_summary_imperial);
         this.heightPref.setSummary(toMetric ? R.string.pref_height_summary : R.string.pref_height_summary_imperial);
     }
 
-    public static float getUnitPreference(Context ctx, String key) {
+    public static float getUnitPreference(final Context ctx, final String key) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        final Float result = prefs.getFloat(key, new Float(0));
+        final Float result = prefs.getFloat(key, Float.valueOf(0));
         Log.d(LOG_TAG, "getUnitPreference " + result);
         return result;
     }
 
-    public static Measurement getGoal(Context ctx) {
+    public static Measurement getGoal(final Context ctx) {
         final float value = getUnitPreference(ctx, PrefItem.GOAL.getKey());
         return new Measurement(value, Unit.KG, true);
     }
 
-    public static Measurement getHeight(Context ctx) {
+    public static Measurement getHeight(final Context ctx) {
         final float value = getUnitPreference(ctx, PrefItem.HEIGHT.getKey());
         return new Measurement(value, Unit.CM, true);
     }
 
-    public static Boolean isMetric(Context ctx) {
+    public static Boolean isMetric(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return Boolean.parseBoolean(prefs.getString(PrefItem.METRIC.getKey(), "true"));
     }
 
-    public static Boolean isNotificationEnabled(Context ctx) {
+    public static Boolean isNotificationEnabled(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getBoolean(PrefItem.NOTIFICATION_ENABLED.getKey(), false);
     }
@@ -169,12 +164,12 @@ public class UserPreferences extends PreferenceActivity {
     // return prefs.getBoolean(PrefItem.WAIST_TRACKING.getKey(), false);
     // }
 
-    public static Boolean isFastInput(Context ctx) {
+    public static Boolean isFastInput(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getBoolean(PrefItem.FAST_INPUT.getKey(), false);
     }
 
-    public static Boolean isEnabled(MeasureType type, Context ctx) {
+    public static Boolean isEnabled(final MeasureType type, final Context ctx) {
         final PrefItem item = type.getPref();
         if (item == null) {
             Log.w(LOG_TAG, "isEnabled but item is null for " + type);
@@ -186,12 +181,12 @@ public class UserPreferences extends PreferenceActivity {
         }
     }
 
-    public static int getNotificationFrequency(Context ctx) {
+    public static int getNotificationFrequency(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getInt(PrefItem.FREQUENCY.getKey(), 1);
     }
 
-    public static Date getReminderStart(Context ctx) {
+    public static Date getReminderStart(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         final String timeStr = prefs.getString(PrefItem.NOTIFICATION.getKey(), TimeDialogPreference.DEFAULT_TIME);
         final int[] time = TimeDialogPreference.parseTime(timeStr);
@@ -205,7 +200,7 @@ public class UserPreferences extends PreferenceActivity {
         return cal.getTime();
     }
 
-    public static List<MeasureType> getTrackedTypes(Context ctx) {
+    public static List<MeasureType> getTrackedTypes(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         final List<MeasureType> result = new ArrayList<MeasureType>();
         for (final PrefItem item : PrefItem.values()) {
@@ -219,7 +214,7 @@ public class UserPreferences extends PreferenceActivity {
         return result;
     }
 
-    public static Map<MeasureType, Boolean> getTracking(Context ctx) {
+    public static Map<MeasureType, Boolean> getTracking(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         final Map<MeasureType, Boolean> result = new HashMap<MeasureType, Boolean>();
         for (final PrefItem item : PrefItem.values()) {
@@ -237,7 +232,7 @@ public class UserPreferences extends PreferenceActivity {
      * @param ctx
      * @param type
      */
-    public static void setDisplayField(Context ctx, MeasureType type) {
+    public static void setDisplayField(final Context ctx, final MeasureType type) {
         Log.d(LOG_TAG, "setDisplayField " + type);
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         final Editor editor = prefs.edit();
@@ -251,7 +246,7 @@ public class UserPreferences extends PreferenceActivity {
      * @param ctx
      * @return
      */
-    public static MeasureType getDisplayField(Context ctx) {
+    public static MeasureType getDisplayField(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return MeasureType.valueOf(prefs.getString(PrefItem.DISPLAY_MEASURE.getKey(), MeasureType.WEIGHT.name()));
     }

@@ -22,21 +22,21 @@
     <EditText 
         android:id="@+id/userHeight" 
         style="@style/MyNumberBox" 
-        android:layout_width="250px" 
+        android:layout_width="250dp" 
         android:layout_height="wrap_content" 
         android:hint="@string/hint_user_height"/>
     
     <EditText 
         android:id="@+id/userWeight" 
         style="@style/MyNumberBox" 
-        android:layout_width="250px" 
+        android:layout_width="250dp" 
         android:layout_height="wrap_content" 
         android:hint="@string/hint_user_weight"/>
      
     <Button 
         android:id="@+id/go" 
         android:text="@string/button_go" 
-        android:layout_width="250px" 
+        android:layout_width="250dp" 
         android:layout_height="wrap_content"
         android:textColor="@color/Grey1"
         android:background="@drawable/custom_button"/>
@@ -44,7 +44,7 @@
     <TextView 
         android:id="@+id/Result"  
         style="@style/TextMedium" 
-        android:layout_width="250px" 
+        android:layout_width="250dp" 
         android:layout_height="wrap_content" 
         android:gravity="center"/>
     

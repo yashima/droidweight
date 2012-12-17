@@ -23,39 +23,39 @@ import de.delusions.measure.activities.prefs.UserPreferences;
 
 public enum Unit {
 
-    CM(new Float(0.39), "cm", "in"),
+    CM(Float.valueOf(0.39f), "cm", "in"),
 
-    KG(new Float(2.2), "kg", "lb"),
+    KG(Float.valueOf(2.2f), "kg", "lb"),
 
-    PERCENT(new Float(1), "%", "%");
+    PERCENT(Float.valueOf(1), "%", "%");
 
     private final float toImperialMultiplier;
     private final String metricUnit;
     private final String imperialUnit;
 
-    Unit(float toImperialMultiplier, String metricUnit, String imperialUnit) {
+    Unit(final float toImperialMultiplier, final String metricUnit, final String imperialUnit) {
         this.toImperialMultiplier = toImperialMultiplier;
         this.metricUnit = metricUnit;
         this.imperialUnit = imperialUnit;
     }
 
-    public String formatMetric(Float metricNumber) {
+    public String formatMetric(final Float metricNumber) {
         return NumberFormat.getInstance(Locale.ENGLISH).format(metricNumber);
     }
 
-    public String formatImperial(Float metricNumber) {
+    public String formatImperial(final Float metricNumber) {
         return NumberFormat.getInstance(Locale.ENGLISH).format(convertToImperial(metricNumber));
     }
 
-    public Float convertToImperial(Float metricNumber) {
+    public Float convertToImperial(final Float metricNumber) {
         return metricNumber * this.toImperialMultiplier;
     }
 
-    public Float convertToMetric(Float imperialNumber) {
+    public Float convertToMetric(final Float imperialNumber) {
         return imperialNumber / this.toImperialMultiplier;
     }
 
-    public Float convertTo(Float number, boolean toMetric) {
+    public Float convertTo(final Float number, final boolean toMetric) {
         Float convertedValue;
         if (toMetric) {
             convertedValue = convertToMetric(number);
@@ -65,7 +65,7 @@ public enum Unit {
         return convertedValue;
     }
 
-    public String retrieveUnitName(Context context) {
+    public String retrieveUnitName(final Context context) {
         return UserPreferences.isMetric(context) ? this.metricUnit : this.imperialUnit;
     }
 }

@@ -26,7 +26,7 @@
 
 	<TableRow>
 		<TextView android:id="@+id/label_bmi" style="@style/TextSmall" android:text="@string/row_bmi" />          
-		<TextView android:id="@+id/bmi" style="@style/TextTiny" android:paddingRight="20px"  android:textStyle="bold"/>
+		<TextView android:id="@+id/bmi" style="@style/TextTiny" android:paddingRight="20dp"  android:textStyle="bold"/>
         <TextView android:id="@+id/date" style="@style/TextTiny" android:paddingRight="10dp"  android:textStyle="bold"/>	   	    
     </TableRow>
 </TableLayout>
