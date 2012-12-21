@@ -176,10 +176,15 @@ public class MeasureType implements Serializable {
     }
 
     public Measurement createMeasurement(final Cursor cursor) {
-        final Date timestamp = SqliteHelper.getTimestamp(cursor);
-        final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-        final Long id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-        return new Measurement(id, value, this, true, timestamp);
+        if (cursor.getCount() > 0 && !cursor.isAfterLast()) {
+            final Date timestamp = SqliteHelper.getTimestamp(cursor);
+            final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
+            final Long id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
+            return new Measurement(id, value, this, true, timestamp);
+        } else {
+            Log.d(MeasureActivity.TAG, "MeasureType:createMeasurement: Cursor Empty, no Measurement created");
+            return new Measurement();
+        }
     }
 
     public Measurement zero(final Context ctx) {

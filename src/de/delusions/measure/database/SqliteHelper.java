@@ -66,18 +66,18 @@ public class SqliteHelper {
 
     private static class DatabaseHelper extends SQLiteOpenHelper {
 
-        DatabaseHelper(Context context) {
+        DatabaseHelper(final Context context) {
             super(context, DATABASE_NAME, null, DATABASE_VERSION);
         }
 
         @Override
-        public void onCreate(SQLiteDatabase db) {
+        public void onCreate(final SQLiteDatabase db) {
             db.execSQL(WEIGHT_CREATE);
             db.execSQL(TRACKING_CREATE);
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
             if (db.isReadOnly() || db.isDbLockedByOtherThreads()) {
                 Log.w(MeasureActivity.TAG, "no database upgrade possible!");
             }
@@ -94,7 +94,7 @@ public class SqliteHelper {
 
     }
 
-    public static void initTypes(SQLiteDatabase db) {
+    public static void initTypes(final SQLiteDatabase db) {
         SqliteHelper.createType(db, MeasureType.WEIGHT);
         SqliteHelper.createType(db, MeasureType.HEIGHT);
         SqliteHelper.createType(db, MeasureType.BODYFAT);
@@ -107,7 +107,7 @@ public class SqliteHelper {
      * @param ctx
      *            the Context within which to work
      */
-    public SqliteHelper(Context ctx) {
+    public SqliteHelper(final Context ctx) {
         this.mCtx = ctx;
     }
 
@@ -166,7 +166,7 @@ public class SqliteHelper {
      * 
      * @return rowId or -1 if failed
      */
-    public long createMeasure(Measurement measurement) {
+    public long createMeasure(final Measurement measurement) {
         Log.d(MeasureActivity.TAG, "createMeasure " + measurement);
         final ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_MEASURE_VALUE, measurement.getValue());
@@ -175,7 +175,7 @@ public class SqliteHelper {
         return this.mDb.insert(WEIGHT_TABLE, null, initialValues);
     }
 
-    static long createType(SQLiteDatabase db, MeasureType type) {
+    static long createType(final SQLiteDatabase db, final MeasureType type) {
         Log.d(MeasureActivity.TAG, "createType " + type);
         final ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_NAME, type.name());
@@ -189,11 +189,11 @@ public class SqliteHelper {
         return db.insert(TRACKING_TABLE, null, initialValues);
     }
 
-    public long createType(MeasureType type) {
+    public long createType(final MeasureType type) {
         return createType(this.mDb, type);
     }
 
-    public boolean exists(Measurement measurement) {
+    public boolean exists(final Measurement measurement) {
         final boolean result;
         if (measurement.getId() != null) {
             final Cursor cursor = fetchById(measurement.getId());
@@ -204,7 +204,7 @@ public class SqliteHelper {
         return result;
     }
 
-    public boolean exists(MeasureType type) {
+    public boolean exists(final MeasureType type) {
         final boolean result;
         if (type.name() != null) {
             final Cursor cursor = fetchByName(type.name());
@@ -227,15 +227,15 @@ public class SqliteHelper {
      *            value to set measure date to
      * @return true if the note was successfully updated, false otherwise
      */
-    public boolean updateMeasure(long rowId, Measurement measurement) {
-        Log.d(MeasureActivity.TAG,"SqliteHelper: updateMeasure "+rowId);
+    public boolean updateMeasure(final long rowId, final Measurement measurement) {
+        Log.d(MeasureActivity.TAG, "SqliteHelper: updateMeasure " + rowId);
         final ContentValues args = new ContentValues();
         args.put(KEY_MEASURE_VALUE, measurement.getValue());
         args.put(KEY_DATE, measurement.getTimestamp().getTime());
         return this.mDb.update(WEIGHT_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
-    public boolean updateType(long rowId, MeasureType type) {
+    public boolean updateType(final long rowId, final MeasureType type) {
         final ContentValues args = new ContentValues();
         args.put(KEY_NAME, type.name());
         args.put(KEY_MAXVALUE, type.getMaxValue());
@@ -254,7 +254,7 @@ public class SqliteHelper {
      *            id of note to delete
      * @return true if deleted, false otherwise
      */
-    public boolean deleteNote(long rowId) {
+    public boolean deleteNote(final long rowId) {
         return this.mDb.delete(WEIGHT_TABLE, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
@@ -274,13 +274,13 @@ public class SqliteHelper {
      * 
      * @return Cursor over all measures
      */
-    public Cursor fetchAll(MeasureType fieldName) {
+    public Cursor fetchAll(final MeasureType fieldName) {
         Log.d(MeasureActivity.TAG, "fetchAllMeasures " + fieldName);
         final String[] selectionArgs = { fieldName.name() };
         return this.mDb.query(WEIGHT_TABLE, null, "name=?", selectionArgs, null, null, "measure_date DESC");
     }
 
-    public Cursor fetchByName(String name) {
+    public Cursor fetchByName(final String name) {
         Log.d(MeasureActivity.TAG, "fetchByName " + name);
         final String[] selectionArgs = { name };
         return this.mDb.query(TRACKING_TABLE, null, "name=?", selectionArgs, null, null, null);
@@ -313,7 +313,7 @@ public class SqliteHelper {
      * @throws SQLException
      *             if measure could not be found/retrieved
      */
-    public Cursor fetchById(long rowId) throws SQLException {
+    public Cursor fetchById(final long rowId) throws SQLException {
         final Cursor mCursor = this.mDb.query(true, WEIGHT_TABLE, null, KEY_ROWID + "=" + rowId, null, null, null, null, null);
         if (mCursor != null) {
             mCursor.moveToFirst();
@@ -322,7 +322,7 @@ public class SqliteHelper {
 
     }
 
-    public Cursor fetchByDate(Date dateAfter, MeasureType field) {
+    public Cursor fetchByDate(final Date dateAfter, final MeasureType field) {
         final String[] columns = { KEY_ROWID, KEY_MEASURE_VALUE, KEY_DATE };
         final String selection = "measure_date > ? and name=?";
         final String[] selectionArgs = { dateAfter.getTime() + "", field.name() };
@@ -338,7 +338,7 @@ public class SqliteHelper {
      * @return
      * @throws SQLException
      */
-    public Cursor fetchLast(MeasureType field) throws SQLException {
+    public Cursor fetchLast(final MeasureType field) throws SQLException {
         Log.d(MeasureActivity.TAG, "fetchLastMeasure");
         final String[] selectionArgs = { field.name() };
         final Cursor cursor = this.mDb.query(WEIGHT_TABLE, null, "name=?", selectionArgs, null, null, "measure_date DESC", "1");
@@ -354,16 +354,21 @@ public class SqliteHelper {
      * 
      * @return
      */
-    public Cursor fetchFirst(MeasureType field) {
+    public Cursor fetchFirst(final MeasureType field) {
         Log.d(MeasureActivity.TAG, "fetchFirstWeight");
         final String[] selectionArgs = { field.name() };
         final Cursor cursor = this.mDb.query(WEIGHT_TABLE, null, "name=?", selectionArgs, null, null, "measure_date ASC", "1");
         cursor.moveToLast();
+        Log.d(MeasureActivity.TAG, "fetchFirstWeight count=" + cursor.getCount());
         return cursor;
     }
 
-    public static Date getTimestamp(Cursor cursor) {
-        return new Date(cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE)));
+    public static Date getTimestamp(final Cursor cursor) {
+        if (cursor.getCount() > 0 && !cursor.isNull(cursor.getColumnIndex(SqliteHelper.KEY_DATE))) {
+            return new Date(cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE)));
+        } else {
+            return null;
+        }
     }
 
 }

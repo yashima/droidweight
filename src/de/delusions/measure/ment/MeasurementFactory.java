@@ -21,9 +21,10 @@ import android.content.Context;
 import android.database.Cursor;
 import de.delusions.measure.database.SqliteHelper;
 
+//not in use
 public class MeasurementFactory {
 
-    public static Measurement retrieveCurrentWeight(Context ctx) {
+    public static Measurement retrieveCurrentWeight(final Context ctx) {
         final SqliteHelper db = new SqliteHelper(ctx);
         db.open();
         final Cursor c = db.fetchLast(MeasureType.WEIGHT);
@@ -33,7 +34,7 @@ public class MeasurementFactory {
         return result;
     }
 
-    public static Measurement createMeasurement(Cursor cursor, MeasureType field) {
+    public static Measurement createMeasurement(final Cursor cursor, final MeasureType field) {
         final Date timestamp = SqliteHelper.getTimestamp(cursor);
         final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
         return new Measurement(value, field, true, timestamp);

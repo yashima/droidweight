@@ -33,13 +33,12 @@ public class Measurement implements Serializable {
     private final Long id;
     private MeasureType field;
     private float value;
-    private  Unit unit;
-
+    private Unit unit;
 
     private Date timestamp;
 
-    public Measurement(){
-        this.id=null;
+    public Measurement() {
+        this.id = null;
         this.unit = null;
         this.value = 0;
         this.field = null;
@@ -53,11 +52,11 @@ public class Measurement implements Serializable {
      * @param value
      * @param unit
      */
-    public Measurement(float value, Unit unit) {
+    public Measurement(final float value, final Unit unit) {
         this(value, unit, true);
     }
 
-    public Measurement(float value, Unit unit, boolean metric) {
+    public Measurement(final float value, final Unit unit, final boolean metric) {
         this.value = metric ? value : unit.convertToMetric(value);
         this.unit = unit;
         this.timestamp = null;
@@ -77,7 +76,8 @@ public class Measurement implements Serializable {
      * 
      * @throws MeasurementException
      */
-    public Measurement(Long id, String strValue, MeasureType mType, boolean metric, Date timestamp) throws MeasurementException {
+    public Measurement(final Long id, final String strValue, final MeasureType mType, final boolean metric, final Date timestamp)
+            throws MeasurementException {
         this.id = id;
         this.field = mType;
         this.unit = mType.getUnit();
@@ -85,7 +85,7 @@ public class Measurement implements Serializable {
         parseAndSetValue(strValue, metric);
     }
 
-    public Measurement(Long id, float value, MeasureType mType, boolean metric, Date timestamp) {
+    public Measurement(final Long id, final float value, final MeasureType mType, final boolean metric, final Date timestamp) {
         this.id = id;
         this.field = mType;
         this.unit = mType.getUnit();
@@ -93,7 +93,7 @@ public class Measurement implements Serializable {
         this.value = value;
     }
 
-    public void parseAndSetValue(String strValue, boolean metric) throws MeasurementException {
+    public void parseAndSetValue(final String strValue, final boolean metric) throws MeasurementException {
         if (strValue == null || strValue.equals("")) {
             throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
         }
@@ -112,7 +112,7 @@ public class Measurement implements Serializable {
         }
     }
 
-    public Measurement(Cursor cursor) throws MeasurementException {
+    public Measurement(final Cursor cursor) throws MeasurementException {
         if (cursor != null && cursor.getCount() > 0) {
             final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
             this.timestamp = new Date(dateLong);
@@ -134,7 +134,7 @@ public class Measurement implements Serializable {
      * @param metric
      * @param timestamp
      */
-    public Measurement(float value, MeasureType field, boolean metric, Date timestamp) {
+    public Measurement(final float value, final MeasureType field, final boolean metric, final Date timestamp) {
         this.field = field;
         this.unit = field.getUnit();
         this.value = metric ? value : this.unit.convertToMetric(value);
@@ -150,7 +150,7 @@ public class Measurement implements Serializable {
         return this.field;
     }
 
-    public void setField(MeasureType field) {
+    public void setField(final MeasureType field) {
         this.field = field;
     }
 
@@ -158,11 +158,11 @@ public class Measurement implements Serializable {
         return this.value;
     }
 
-    public void setValue(float value,boolean metric) {
+    public void setValue(final float value, final boolean metric) {
         this.value = metric ? value : this.unit.convertToMetric(value);
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(final Date timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -170,7 +170,7 @@ public class Measurement implements Serializable {
         return this.timestamp;
     }
 
-    public float getValue(boolean metric) {
+    public float getValue(final boolean metric) {
         return metric ? this.value : this.unit.convertToImperial(this.value);
     }
 
@@ -178,45 +178,45 @@ public class Measurement implements Serializable {
         return this.unit;
     }
 
-    public void setUnit(Unit unit){
+    public void setUnit(final Unit unit) {
         this.unit = unit;
     }
 
-    public void inc(boolean metric) {
+    public void inc(final boolean metric) {
         this.inc(metric, 1);
     }
 
-    public void dec(boolean metric) {
+    public void dec(final boolean metric) {
         this.dec(metric, 1);
     }
 
-    public void inc(boolean metric, float incBy) {
+    public void inc(final boolean metric, final float incBy) {
         this.value = this.value + (metric ? incBy : this.unit.convertToMetric(incBy));
     }
 
-    public void dec(boolean metric, float decBy) {
+    public void dec(final boolean metric, final float decBy) {
         this.value = this.value - (metric ? decBy : this.unit.convertToMetric(decBy));
     }
 
-    public void add(Measurement measurement) {
+    public void add(final Measurement measurement) {
         if (this.unit == measurement.unit) {
             this.value += measurement.value;
         }
     }
 
-    public float getPercentDifference(Measurement measurement) {
+    public float getPercentDifference(final Measurement measurement) {
         return 100 - 100 * measurement.getValue() / this.value;
     }
 
-    public String prettyPrint(Context ctx) {
+    public String prettyPrint(final Context ctx) {
         return prettyPrint(UserPreferences.isMetric(ctx));
     }
 
-    public String prettyPrint(boolean metric) {
+    public String prettyPrint(final boolean metric) {
         return metric ? this.unit.formatMetric(this.value) : this.unit.formatImperial(this.value);
     }
 
-    public String prettyPrintWithUnit(Context ctx) {
+    public String prettyPrintWithUnit(final Context ctx) {
         return prettyPrint(ctx) + " " + this.unit.retrieveUnitName(ctx);
     }
 
@@ -232,22 +232,22 @@ public class Measurement implements Serializable {
         return result.toString();
     }
 
-    public static Float parseValue(String strValue) throws ParseException {
+    public static Float parseValue(final String strValue) throws ParseException {
         final Float result = Float.parseFloat(strValue);
         // final Number number = NumberFormat.getInstance().parse(strValue);
         // return number.floatValue();
         return result;
     }
 
-    public static Measurement difference(Measurement a, Measurement b) {
+    public static Measurement difference(final Measurement a, final Measurement b) {
         return new Measurement(a.getValue() - b.getValue(), a.getUnit());
     }
 
-    public static Measurement sum(Measurement a, Measurement b) {
+    public static Measurement sum(final Measurement a, final Measurement b) {
         return new Measurement(a.getValue() + b.getValue(), a.getUnit());
     }
 
-    public void updateTime(int hourOfDay, int minute) {
+    public void updateTime(final int hourOfDay, final int minute) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(getTimestamp());
         calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -255,7 +255,7 @@ public class Measurement implements Serializable {
         setTimestamp(calendar.getTime());
     }
 
-    public void updateDate(int year,int monthOfYear,int dayOfMonth){
+    public void updateDate(final int year, final int monthOfYear, final int dayOfMonth) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(getTimestamp());
         calendar.set(Calendar.YEAR, year);
