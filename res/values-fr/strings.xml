@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2012 Philippe Arnone
+
+   Licensed under the Apache License, Version 2.0 (the "License");
+   you may not use this file except in compliance with the License.
+   You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.-->
+<resources>
+    
+<string name="app_name">DroidWeight</string>
+<string name="yes">Oui</string>
+<string name="no">Non</string>
+<!-- <string name="button_ok">Ok</string> -->
+<!--string name="button_cancel">Cancel</string-->
+<string name="button_go">Ok</string>
+<!-- <string name="menu_add">Ajouter Mesure</string> -->
+<!-- <string name="menu_edit">Editer Mesure</string> -->
+<string name="menu_prefs">Préférences</string>
+<string name="menu_showtype">Sélection Affichage</string>
+<string name="menu_create">Créer une Entrée</string>
+<string name="menu_delete">Supprimer Mesure</string>
+<!-- <string name="menu_bmi">Table IMC</string> -->
+<string name="menu_calc">Calculateur IMC</string>
+<!-- <string name="menu_chart">Graphique</string> -->
+<string name="menu_about">Visiter la Homepage</string>
+<string name="menu_deleteall">Effacer la base de données</string>
+<string name="activity_editmeasure">Edition </string>
+<string name="activity_createmeasure">Créer une nouvelle entrée</string>
+<!-- <string name="activity_prefs">Préférences</string> -->
+<string name="no_measures">Il n\'y a pas de mesure. Utiliser Menu > Créer une Entrée pour en enregistrer.</string>
+<!-- <string name="label_female">Femme</string> -->
+<!-- <string name="label_male">Homme</string> -->
+<!-- <string name="label_metric">Métrique</string> -->
+<!-- <string name="label_imperial">Impérial</string> -->
+<string name="label_weight">Poids</string>
+<string name="label_height">Taille</string>
+<string name="label_bodyfat">Masse grasse</string>
+<!-- <string name="label_chest">Tour de poitrine</string> -->
+<!-- <string name="label_torso">Tour de torse</string> -->
+<string name="label_waist">Tour de taille</string>
+<!-- <string name="label_hips">Hips</string> -->
+<!-- <string name="label_left_arm">Tour de bras gauche</string> -->
+<!-- <string name="label_right_arm">Tour de bras droit</string> -->
+<!-- <string name="label_left_thigh">Tour de cuisse gauche</string> -->
+<!-- <string name="label_right_thigh">Tour de cuisse droit</string> -->
+<!-- <string name="label_date">Date</string> -->
+<string name="row_weight">Poids: </string>
+<string name="row_bmi">IMC: </string>
+<!-- <string name="row_sum">Résumé: </string> -->
+<string name="hint_user_height">Saisir votre poids</string>
+<string name="hint_user_weight">Saisir votre taille</string>
+
+<string name="bmi_header">Table d\'IMC</string>
+<string name="stat_header">Statistiques</string>
+<string name="stat_starting">Poids de départ</string>
+<string name="stat_goal">Poids cible</string>
+<string name="stat_current">Poids actuel</string>
+<string name="stat_bmi">IMC</string>
+<string name="stat_loss">Perte totale</string>
+<string name="stat_gain">Gain total</string>
+<string name="stat_togo">Reste</string>
+<!-- <string name="stat_eta">Cible atteinte</string> -->
+<string name="stat_eta_never">Not soon</string>
+<string name="stat_wthr">WtHR</string>
+
+
+<string name="obese">obèse</string>
+<string name="overweight">surpoids</string>
+<string name="normalweight">normal</string>
+<string name="underweight">sous poids</string>
+
+<!-- <string name="error_calc_missing_value">Merci de saisir un nombre dans les 2 champs</string> -->
+<!-- <string name="error_input_missing_value">La valeur est manquante</string> -->
+<!-- <string name="error_wrong_number_value">Mauvaise valeur. Merci de saisir un nombre décimal positif.</string> -->
+
+<string name="error_subzero">Les nombres négatifs ne sont pas autorisés.</string>
+<string name="error_toolarge">Le nombre est trop grand</string>
+<string name="error_noinput">Merci de saisir un nombre positif.</string>
+<string name="error_nonumber">Veuillez saisir un nombre</string>
+<string name="error_parseerror">Impossible de reconnaitre le chiffre</string>
+<string name="error_unknown">Erreur inconnue</string>
+<string name="error_exportfilecreate">Impossible de créer le fichier d\'export: %1$s</string>
+<string name="error_nosdcard">L\'export ne peut être exécuté. Pas de carte SD</string>
+<string name="error_fileexists">Fichier d\'export existant: %1$s</string>
+<string name="error_filemissing">Fichier d\'import non trouvé: %1$s</string>
+<string name="error_parse_date">La date ne peut être parsée . Format nécessaire: %1%s</string>
+<string name="error_readfile">Erreur de lecture du fichier</string>
+
+<string name="chart_title">Historique de poids</string>
+<string name="chart_week2">2 semaines</string>
+<string name="chart_month6">6 mois</string>
+<string name="chart_month3">3 mois</string>
+<string name="chart_month1">1 mois</string>
+<string name="chart_year1">1 année</string>
+<string name="chart_all">Tous</string>
+<string name="chart_toggle_show">Afficher autres</string>
+<string name="chart_toggle_hide">Cacher autres</string>
+
+<!-- <string name="init_welcome">Bonjour. Vous utilisez le tracker pour la première fois, merci de saisir quelques informations</string> -->
+
+<string name="button_set_current">Enregistrer le %1$s en %2$s</string>
+<string name="button_bmi_calculator">Calculateur IMC</string>
+
+<string name="tab_weight">Suivi</string>
+<string name="tab_stats">Statistiques</string>
+<string name="tab_graph">Historique</string>
+
+<string name="pref_goal">Objectif</string>
+<string name="pref_height">Taille</string>
+<string name="pref_units">Unité</string>
+<string name="pref_fat">Masse grasse</string>
+<string name="pref_waist">Tour de taille</string>
+<!-- <string name="pref_measure">Mesures</string> -->
+<string name="pref_notification">Temps</string>
+<string name="pref_notificationenabled">Rappel</string>
+<string name="pref_createinput">Saisie rapide</string>
+<string name="pref_frequency">Fréquence</string>
+
+<string name="pref_goal_summary">Votre cible en kg</string>
+<string name="pref_goal_summary_imperial">Votre cible en pd</string>
+<string name="pref_height_summary">Votre taille en cm</string>
+<string name="pref_height_summary_imperial">Votre taille en pouces</string>
+<!-- <string name="pref_units_summary">Choisissez l\'unités pour le poids et la taille</string> -->
+<string name="pref_fat_summary">Activer le suivi de la masse graisseuse</string>
+<string name="pref_waist_summary">Activer le suivi du tour de taille</string>
+<!-- <string name="pref_measure_summary">Activer le suivi des mesures</string> -->
+<string name="pref_notification_summary">Définir l\'heure pour le rappel</string>
+<string name="pref_notificationenabled_summary">Activer le rappel quotidien</string>
+<string name="pref_createinput_summary">Saisir toutes les données du suivi en une fois</string>
+<string name="pref_frequency_summary">Nombre de jour entre les rappels</string>
+
+<string name="pref_cat_basic">Paramètres basiques</string>
+<string name="pref_cat_tracking">Paramètres de suivi</string>
+<string name="pref_cat_reminder">Paramètres de rappel</string>
+
+<string name="choose_type_prompt">Choisir une mesure</string>
+
+<string name="exporter_export">Exporter</string>
+<string name="exporter_import">Importer</string>
+<string name="exporter_dialog_message">%1$sing database...</string>
+<string name="exporter_toast_success">%1$sed %2$s entries!</string>
+<string name="exporter_toast_fail">Rien %1$sed!</string>
+
+<string name="dialog_message_deleteall">Effacer toutes les données! Etes-vous sur?</string>
+<!-- <string name="dialog_title_edit">Editer</string> -->
+
+<string name="notification_ticker">Rappel poids</string>
+<string name="notification_title">Rappel Droid Weight</string>
+<!-- <string name="notification_text">N\'oubliez pas de saisir votre poids pour aujourd\'hui</string> -->
+
+</resources>
