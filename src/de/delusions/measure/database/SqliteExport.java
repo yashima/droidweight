@@ -50,11 +50,10 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
     private final File exportFile;
     private final String modeStr;
 
-    public SqliteExport(Activity a, boolean export) throws MeasurementException {
+    public SqliteExport(final Activity a, final boolean export) throws MeasurementException {
         this.a = a;
         this.export = export;
         this.db = new SqliteHelper(a);
-        this.db.open();
         this.dialog = new ProgressDialog(a);
         this.metric = UserPreferences.isMetric(a);
         this.exportFile = openExportFile(export);
@@ -62,7 +61,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
     }
 
     @Override
-    protected Integer doInBackground(Boolean... export) {
+    protected Integer doInBackground(final Boolean... export) {
         try {
             if (this.export) {
                 return exportMeasurements();
@@ -159,7 +158,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
         return result;
     }
 
-    private String createLine(Measurement measurement) {
+    private String createLine(final Measurement measurement) {
         final StringBuffer line = new StringBuffer();
         line.append(measurement.getValue(this.metric)).append("|");
         line.append(measurement.getField().name()).append("|");
@@ -169,7 +168,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
         return line.toString();
     }
 
-    private Measurement readLine(String line) throws MeasurementException {
+    private Measurement readLine(final String line) throws MeasurementException {
         if (!line.equals(EXPORT_FILE_HEADER)) {
             Log.d(MeasureActivity.TAG, "parsing " + line);
             final String[] parts = line.split("\\|");
@@ -190,7 +189,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
         }
     }
 
-    private File openExportFile(boolean create) throws MeasurementException {
+    private File openExportFile(final boolean create) throws MeasurementException {
         final File sdPath = getSDPath();
         final File exportFile = new File(sdPath, EXPORT_FILE_NAME);
         if (create) {

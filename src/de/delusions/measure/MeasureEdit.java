@@ -17,20 +17,14 @@ package de.delusions.measure;
 
 import java.util.Calendar;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
+import android.app.*;
 import android.app.DatePickerDialog.OnDateSetListener;
-import android.app.TimePickerDialog;
 import android.app.TimePickerDialog.OnTimeSetListener;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.TimePicker;
+import android.widget.*;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.components.DateTimeManager;
 import de.delusions.measure.database.SqliteHelper;
@@ -45,7 +39,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     private Measurement measure;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(MeasureActivity.TAG, "onCreate MeasureEdit");
         setContentView(R.layout.activity_edit);
@@ -58,14 +52,14 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putLong(SqliteHelper.KEY_ROWID, this.measure.getId());
         outState.putSerializable(EDIT_TYPE, this.measure.getField());
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         retrieveMeasureFromExtras(savedInstanceState);
         populateUI();
@@ -74,7 +68,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     private void addShowDatePickerButtonOnClickListener() {
         final Button showDatePickerButton = (Button) findViewById(R.id.entryDate);
         showDatePickerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 executeShowDatePickerButtonOnClick();
             }
         });
@@ -83,7 +77,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     private void addShowTimePickerButtonOnClickListener() {
         final Button showDatePickerButton = (Button) findViewById(R.id.entryTime);
         showDatePickerButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 executeShowTimePickerButtonOnClick();
             }
         });
@@ -92,7 +86,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     private void addConfirmButtonOnClickListener() {
         final Button confirmButton = (Button) findViewById(R.id.ok);
         confirmButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 executeConfirmButtonOnClick();
             }
         });
@@ -135,8 +129,8 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
             populateValueEdit();
             populateUnitLabel();
             populateTitle();
-            DateTimeManager.populateDateButton(this.measure,this);
-            DateTimeManager.populateTimeButton(this.measure,this);
+            DateTimeManager.populateDateButton(this.measure, this);
+            DateTimeManager.populateTimeButton(this.measure, this);
         }
     }
 
@@ -155,15 +149,13 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
         valueEdit.setText(this.measure.prettyPrint(this));
     }
 
-
-
-    private void retrieveMeasureFromExtras(Bundle savedInstanceState) {
+    private void retrieveMeasureFromExtras(final Bundle savedInstanceState) {
         final Long mRowId = retrieveRowIdFromExtras(savedInstanceState);
         final MeasureType field = retrieveMeasureFieldFromExtras(savedInstanceState);
         this.measure = retrieveMeasureFromDatabase(mRowId, field);
     }
 
-    private Long retrieveRowIdFromExtras(Bundle savedInstanceState) {
+    private Long retrieveRowIdFromExtras(final Bundle savedInstanceState) {
         Long mRowId = savedInstanceState == null ? null : (Long) savedInstanceState.getSerializable(SqliteHelper.KEY_ROWID);
         if (mRowId == null) {
             final Bundle extras = getIntent().getExtras();
@@ -173,7 +165,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
         return mRowId;
     }
 
-    private MeasureType retrieveMeasureFieldFromExtras(Bundle savedInstanceState) {
+    private MeasureType retrieveMeasureFieldFromExtras(final Bundle savedInstanceState) {
         MeasureType field = savedInstanceState == null ? null : (MeasureType) savedInstanceState.getSerializable(EDIT_TYPE);
         if (field == null) {
             final Bundle extras = getIntent().getExtras();
@@ -183,10 +175,9 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
         return field;
     }
 
-    private Measurement retrieveMeasureFromDatabase(Long mRowId, MeasureType field) {
+    private Measurement retrieveMeasureFromDatabase(final Long mRowId, final MeasureType field) {
         final Measurement result;
         final SqliteHelper mDbHelper = new SqliteHelper(this);
-        mDbHelper.open();
         final Cursor cursor = mDbHelper.fetchById(mRowId);
         if (cursor.getCount() != 0 && field != null) {
             result = field.createMeasurement(cursor);
@@ -210,10 +201,9 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
         }
     }
 
-    private void saveMeasurement(Measurement toSave) {
+    private void saveMeasurement(final Measurement toSave) {
         Log.d(MeasureActivity.TAG, "saveMeasurement " + toSave);
         final SqliteHelper mDbHelper = new SqliteHelper(this);
-        mDbHelper.open();
         mDbHelper.updateMeasure(toSave.getId(), toSave);
         mDbHelper.close();
     }
@@ -229,16 +219,14 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
         return (EditText) findViewById(R.id.input);
     }
 
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+    public void onDateSet(final DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
         this.measure.updateDate(year, monthOfYear, dayOfMonth);
-        DateTimeManager.populateDateButton(this.measure,this);
+        DateTimeManager.populateDateButton(this.measure, this);
     }
 
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        this.measure.updateTime(hourOfDay,minute);
-        DateTimeManager.populateTimeButton(this.measure,this);
+    public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
+        this.measure.updateTime(hourOfDay, minute);
+        DateTimeManager.populateTimeButton(this.measure, this);
     }
-
-
 
 }

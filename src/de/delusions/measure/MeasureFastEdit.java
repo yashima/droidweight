@@ -69,7 +69,6 @@ public class MeasureFastEdit extends Activity {
 
             public void onClick(final View view) {
                 final SqliteHelper db = new SqliteHelper(MeasureFastEdit.this);
-                db.open();
                 setResult(RESULT_OK);
                 try {
                     saveMeasurements(db);

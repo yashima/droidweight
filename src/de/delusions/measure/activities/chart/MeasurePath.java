@@ -40,12 +40,12 @@ public class MeasurePath extends Path {
     private int upperValue;
     private List<Measurement> measures;
 
-    public MeasurePath(Context ctx, MeasureType type, int days) {
+    public MeasurePath(final Context ctx, final MeasureType type, final int days) {
         this.ctx = ctx;
         refreshData(type, days);
     }
 
-    public void refreshData(MeasureType type, int days) {
+    public void refreshData(final MeasureType type, final int days) {
         rewind();
         final boolean metric = UserPreferences.isMetric(this.ctx);
         this.type = type;
@@ -54,7 +54,7 @@ public class MeasurePath extends Path {
         calculateBoundaries(this.measures, metric);
     }
 
-    public void fillPath(ChartCoordinates coords) {
+    public void fillPath(final ChartCoordinates coords) {
         final boolean metric = UserPreferences.isMetric(this.ctx);
         Point lastPoint = null;
         for (final Measurement measure : this.measures) {
@@ -78,7 +78,7 @@ public class MeasurePath extends Path {
         return (measure.getTimestamp().getTime() - this.startingDate.getTimeInMillis()) / (24 * 60 * 60 * 1000);
     }
 
-    private void calculateBoundaries(List<Measurement> measures, boolean metric) {
+    private void calculateBoundaries(final List<Measurement> measures, final boolean metric) {
         float min;
         if (this.type == MeasureType.WEIGHT) {
             min = UserPreferences.getGoal(this.ctx).getValue(metric) - 1;
@@ -96,10 +96,9 @@ public class MeasurePath extends Path {
         Log.d(MeasureActivity.TAG, "upper= " + this.upperValue);
     }
 
-    private List<Measurement> retrieveDataForDays(Context ctx) {
+    private List<Measurement> retrieveDataForDays(final Context ctx) {
         final List<Measurement> result = new ArrayList<Measurement>();
         final SqliteHelper sqliteHelper = new SqliteHelper(ctx);
-        sqliteHelper.open();
         final Cursor cursor = sqliteHelper.fetchByDate(this.startingDate.getTime(), this.type);
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -113,7 +112,7 @@ public class MeasurePath extends Path {
         return result;
     }
 
-    private Calendar calculateStartingDate(int days) {
+    private Calendar calculateStartingDate(final int days) {
         final Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR, 0);
         cal.set(Calendar.MINUTE, 0);

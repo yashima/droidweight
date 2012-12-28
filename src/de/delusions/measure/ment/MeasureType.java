@@ -231,7 +231,6 @@ public class MeasureType implements Serializable {
 
     private static void refreshFromDatabase(final Context ctx) {
         final SqliteHelper db = new SqliteHelper(ctx);
-        db.open();
         Cursor cursor = null;
         try {
             cursor = db.fetchTypes();

@@ -23,11 +23,8 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.ContextMenu;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.Button;
 import android.widget.ListView;
@@ -43,25 +40,21 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
 
     public static final String TAG = "MeasureActivity";
     private static final int ACTIVITY_EDIT = 1;
-    public static final int RESULT_FAILURE = Activity.RESULT_FIRST_USER+1;
+    public static final int RESULT_FAILURE = Activity.RESULT_FIRST_USER + 1;
     private InputRecorder recorder;
-    private SqliteHelper sqliteHelper;
+
     private Button set;
     private MeasureType field;
+
+    private SqliteHelper valuesDb;
     private Cursor valuesCursor;
 
     /** Called when the activity is first created. */
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(MeasureActivity.TAG,"onCreate MeasureActivity");
+        Log.i(MeasureActivity.TAG, "onCreate MeasureActivity");
         setContentView(R.layout.activity_weight);
-
-        if (this.sqliteHelper != null) {
-            Log.d(TAG, "sqliteHelper exists in onCreate() ain't that fishy");
-        }
-        this.sqliteHelper = new SqliteHelper(this);
-        this.sqliteHelper.open();
 
         this.field = UserPreferences.getDisplayField(this);
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -73,7 +66,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
 
         this.set.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 createEntry();
             }
         });
@@ -89,18 +82,18 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.layout.context_menu, menu);
     }
 
     @Override
-    public boolean onContextItemSelected(MenuItem item) {
+    public boolean onContextItemSelected(final MenuItem item) {
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
         case R.id.context_menu_delete:
-            this.sqliteHelper.deleteNote(info.id);
+            deleteEntry(info);
             refreshListView();
             return true;
         }
@@ -108,18 +101,18 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     }
 
     @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
+    protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
         super.onListItemClick(l, v, position, id);
         editItem(id);
     }
 
     @Override
-    public boolean onMenuItemSelected(int featureId, MenuItem item) {
+    public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
         return MeasureTabs.basicMenu(this, item) || super.onMenuItemSelected(featureId, item);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         refreshListView();
     }
@@ -132,32 +125,38 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        Log.d(TAG, "onPause");
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy");
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-        this.sqliteHelper.close();
+
+        if (this.valuesCursor != null && !this.valuesCursor.isClosed()) {
+            this.valuesCursor.close();
+            this.valuesDb.close();
+        }
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
     }
 
     private void createEntry() {
         Log.d(TAG, "creating new entry for " + this.recorder.getCurrent());
-        this.sqliteHelper.createMeasure(this.recorder.getCurrent());
+        final SqliteHelper db = new SqliteHelper(this);
+        db.createMeasure(this.recorder.getCurrent());
+        db.close();
         refreshListView();
     }
 
-    private void editItem(long rowId) {
+    protected void deleteEntry(final AdapterContextMenuInfo info) {
+        final SqliteHelper db = new SqliteHelper(this);
+        db.deleteNote(info.id);
+        db.close();
+    }
+
+    private void editItem(final long rowId) {
         final Intent i = new Intent(this, MeasureEdit.class);
         i.putExtra(SqliteHelper.KEY_ROWID, rowId);
         i.putExtra(MeasureEdit.EDIT_TYPE, this.field);
@@ -165,26 +164,26 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     }
 
     public boolean refreshListView() {
-        final boolean result;
-        if (this.valuesCursor != null && !this.valuesCursor.isClosed()) {
-            this.valuesCursor.requery();
-        } else {
-            this.valuesCursor = this.sqliteHelper.fetchAll(this.field);
-            startManagingCursor(this.valuesCursor);
+        if (this.valuesCursor == null || this.valuesCursor.isClosed()) {
+            this.valuesDb = new SqliteHelper(this);
+            this.valuesCursor = this.valuesDb.fetchAll(this.field);
             final MeasureCursorAdapter measures = new MeasureCursorAdapter(this, this.valuesCursor, this.field);
             setListAdapter(measures);
+        } else {
+            this.valuesCursor.requery();
         }
-        refreshInputRecorder(this.valuesCursor);
-        result = true;
-        return result;
+        refreshInputRecorder(this.valuesCursor.getCount() != 0);
+        return true;
     }
 
-    private void refreshInputRecorder(final Cursor cursor) {
+    private void refreshInputRecorder(final boolean entriesExist) {
         final Measurement lastMeasure;
-        if (cursor.getCount() != 0) {
-            final Cursor lastCursor = this.sqliteHelper.fetchLast(this.field);
+        if (entriesExist) {
+            final SqliteHelper db = new SqliteHelper(this);
+            final Cursor lastCursor = db.fetchLast(this.field);
             lastMeasure = this.field.createMeasurement(lastCursor);
             lastCursor.close();
+            db.close();
         } else {
             lastMeasure = new Measurement(0, this.field, true, null);
         }
@@ -192,13 +191,12 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
         this.recorder.setCurrent(lastMeasure);
     }
 
-
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+    public void onSharedPreferenceChanged(final SharedPreferences sharedPreferences, final String key) {
         if (key.equals(PrefItem.DISPLAY_MEASURE.getKey())) {
             Log.d(TAG, "onSharedPreferenceChanged " + key);
             this.field = UserPreferences.getDisplayField(this);
             setButtonText();
-            this.valuesCursor.close();
+            // this.valuesCursor.close();
             refreshListView();
         }
     }

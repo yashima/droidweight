@@ -26,13 +26,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.TimePicker;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.components.DateTimeManager;
 import de.delusions.measure.database.SqliteHelper;
@@ -40,22 +33,19 @@ import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 import de.delusions.measure.ment.MeasurementException;
 
-public class MeasureCreateActivity extends Activity implements OnDateSetListener,OnTimeSetListener{
+public class MeasureCreateActivity extends Activity implements OnDateSetListener, OnTimeSetListener {
     public static final String EDIT_TYPE = "type";
-
-
-
 
     private Measurement measure;
 
     private int spinnerPosition = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(MeasureActivity.TAG,"onCreate MeasureCreateActivity");
+        Log.i(MeasureActivity.TAG, "onCreate MeasureCreateActivity");
         setContentView(R.layout.activity_create);
-        this.measure  = new Measurement();
+        this.measure = new Measurement();
         retrieveExtras(savedInstanceState);
 
         createConfirmButton();
@@ -65,20 +55,17 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
         DateTimeManager.addShowTimePickerButtonOnClickListener(this.measure, this, this);
     }
 
-
-
-
-    private void populateUI(){
+    private void populateUI() {
         setUnitLabel();
         setTitle();
-        DateTimeManager.populateDateButton(this.measure,this);
-        DateTimeManager.populateTimeButton(this.measure,this);
+        DateTimeManager.populateDateButton(this.measure, this);
+        DateTimeManager.populateTimeButton(this.measure, this);
     }
 
     private void createConfirmButton() {
         final Button confirmButton = (Button) findViewById(R.id.ok);
         confirmButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 executeConfirmButtonOnClick();
             }
         });
@@ -95,14 +82,14 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
         }
     }
 
-    private void retrieveExtras(Bundle savedInstanceState) {
+    private void retrieveExtras(final Bundle savedInstanceState) {
         MeasureType field = savedInstanceState == null ? null : (MeasureType) savedInstanceState.getSerializable(EDIT_TYPE);
         if (field == null) {
             final Bundle extras = getIntent().getExtras();
             field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
             Log.d(MeasureActivity.TAG, "retrieveExtras " + field);
         }
-        if(field!=null){
+        if (field != null) {
             this.measure.setField(field);
             this.measure.setUnit(field.getUnit());
         }
@@ -132,14 +119,13 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
         spinner.setSelection(this.spinnerPosition);
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 
-            public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+            public void onItemSelected(final AdapterView<?> parent, final View view, final int pos, final long id) {
                 MeasureCreateActivity.this.measure.setField(types.get(pos));
                 setUnitLabel();
-                UserPreferences.setDisplayField(MeasureCreateActivity.this,types.get(pos));
+                UserPreferences.setDisplayField(MeasureCreateActivity.this, types.get(pos));
             }
 
-
-            public void onNothingSelected(AdapterView<?> parent) {
+            public void onNothingSelected(final AdapterView<?> parent) {
                 // Do nothing.
             }
         });
@@ -163,24 +149,23 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
         return spinnerLabels;
     }
 
-    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+    public void onDateSet(final DatePicker view, final int year, final int monthOfYear, final int dayOfMonth) {
         this.measure.updateDate(year, monthOfYear, dayOfMonth);
-        DateTimeManager.populateDateButton(this.measure,this);
+        DateTimeManager.populateDateButton(this.measure, this);
     }
 
-    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        this.measure.updateTime(hourOfDay,minute);
-        DateTimeManager.populateTimeButton(this.measure,this);
+    public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
+        this.measure.updateTime(hourOfDay, minute);
+        DateTimeManager.populateTimeButton(this.measure, this);
     }
 
     private EditText retrieveMeasureValueEditView() {
         return (EditText) findViewById(R.id.input);
     }
 
-    private void saveMeasurement(Measurement toSave) {
+    private void saveMeasurement(final Measurement toSave) {
         Log.d(MeasureActivity.TAG, "saveMeasurement " + toSave);
         final SqliteHelper mDbHelper = new SqliteHelper(this);
-        mDbHelper.open();
         mDbHelper.createMeasure(this.measure);
         mDbHelper.close();
     }

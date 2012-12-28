@@ -29,9 +29,8 @@ public class SqliteManagement {
         builder.setCancelable(false);
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
-            public void onClick(DialogInterface dialog, int id) {
+            public void onClick(final DialogInterface dialog, final int id) {
                 final SqliteHelper db = new SqliteHelper(a);
-                db.open();
                 db.deleteAll();
                 db.close();
                 if (a instanceof MeasureActivity) {
@@ -41,7 +40,7 @@ public class SqliteManagement {
         });
         builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
 
-            public void onClick(DialogInterface dialog, int id) {
+            public void onClick(final DialogInterface dialog, final int id) {
                 dialog.cancel();
             }
         });

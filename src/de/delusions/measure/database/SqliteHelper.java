@@ -109,6 +109,7 @@ public class SqliteHelper {
      */
     public SqliteHelper(final Context ctx) {
         this.mCtx = ctx;
+        open();
     }
 
     /**
@@ -119,7 +120,7 @@ public class SqliteHelper {
      * @throws SQLException
      *             if the database could be neither opened or created
      */
-    public SqliteHelper open() throws SQLException {
+    private SqliteHelper open() throws SQLException {
         Log.d(MeasureActivity.TAG, "open database");
         try {
             if (this.mDbHelper == null) {

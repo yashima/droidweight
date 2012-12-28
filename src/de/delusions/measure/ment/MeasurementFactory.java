@@ -26,7 +26,6 @@ public class MeasurementFactory {
 
     public static Measurement retrieveCurrentWeight(final Context ctx) {
         final SqliteHelper db = new SqliteHelper(ctx);
-        db.open();
         final Cursor c = db.fetchLast(MeasureType.WEIGHT);
         final Measurement result = createMeasurement(c, MeasureType.WEIGHT);
         c.close();

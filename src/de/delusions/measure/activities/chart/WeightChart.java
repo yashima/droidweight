@@ -137,7 +137,6 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
 
             public void onClick(final View view) {
                 final SqliteHelper db = new SqliteHelper(WeightChart.this);
-                db.open();
                 final Cursor cursor = db.fetchFirst(WeightChart.this.displayField);
                 final Measurement first = MeasureType.WEIGHT.createMeasurement(cursor);
                 WeightChart.this.days = new Long((System.currentTimeMillis() - first.getTimestamp().getTime()) / (1000 * 60 * 60 * 24)).intValue();

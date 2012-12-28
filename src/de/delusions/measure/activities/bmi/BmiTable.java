@@ -65,7 +65,6 @@ public class BmiTable extends Activity {
 
     private void populateDataLabels() {
         final SqliteHelper mDbHelper = new SqliteHelper(this);
-        mDbHelper.open();
 
         if (!mDbHelper.isEmptyWeight()) {
             final StatisticsFactory stats = new StatisticsFactory(mDbHelper, this);
