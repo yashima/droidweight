@@ -48,19 +48,24 @@
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
 				<Button android:id="@+id/months_3" android:text="@string/chart_month3"
-					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
+				</LinearLayout>
+	       <LinearLayout android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:orientation="horizontal"
+                android:layout_gravity="center">
 				<Button android:id="@+id/months_1" android:text="@string/chart_month1"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
 					android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
 				<Button android:id="@+id/week_2" android:text="@string/chart_week2"
 					android:layout_width="wrap_content" android:layout_height="wrap_content"
-					android:textColor="@color/Grey1" android:background="@drawable/custom_button" />			    
-			</LinearLayout>
-			<ToggleButton android:id="@+id/showall" android:textOn="@string/chart_toggle_hide"
-			        android:textOff="@string/chart_toggle_show"
+					android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
+				<ToggleButton android:id="@+id/showall" android:textOn="@string/chart_toggle_hide"
+                    android:textOff="@string/chart_toggle_show"
                     android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:textColor="@color/Grey1" android:background="@drawable/custom_button" />
+                    android:textColor="@color/Grey1" android:background="@drawable/custom_button" />			    
+			</LinearLayout>
+			
 		</LinearLayout>
 	</ScrollView>
 
