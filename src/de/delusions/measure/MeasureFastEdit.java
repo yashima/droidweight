@@ -34,18 +34,15 @@ import de.delusions.measure.ment.MeasurementException;
 
 public class MeasureFastEdit extends Activity {
 
-    private SqliteHelper db;
     private final List<InputRecorder> recorders = new ArrayList<InputRecorder>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(MeasureActivity.TAG, "onCreate MeasureFastEdit");
         setContentView(R.layout.activity_fastinput);
         setTitle(getResources().getString(R.string.activity_createmeasure));
         Log.d(MeasureActivity.TAG, "onCreate MeasureFastEdit 2");
-        this.db = new SqliteHelper(this);
-        this.db.open();
 
         final LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         final LinearLayout inputlayout = (LinearLayout) findViewById(R.id.inputlayout);
@@ -64,37 +61,39 @@ public class MeasureFastEdit extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        this.db.close();
     }
 
     private void createConfirmButton() {
         final Button confirmButton = (Button) findViewById(R.id.ok);
         confirmButton.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
+                final SqliteHelper db = new SqliteHelper(MeasureFastEdit.this);
+                db.open();
                 setResult(RESULT_OK);
                 try {
-                    saveMeasurements();
+                    saveMeasurements(db);
                     finish();
                 } catch (final MeasurementException e) {
                     e.createToast(MeasureFastEdit.this, "confirmButton");
                 } finally {
-                    MeasureFastEdit.this.db.close();
+                    db.close();
                 }
             }
 
         });
     }
 
-    private void saveMeasurements() throws MeasurementException {
+    private void saveMeasurements(final SqliteHelper db) throws MeasurementException {
         for (final InputRecorder input : this.recorders) {
             final Measurement measurement = input.getCurrent();
-            this.db.createMeasure(measurement);
+            db.createMeasure(measurement);
         }
     }
 
     private Measurement populateInput(final MeasureType type) {
-        final Cursor cursor = this.db.fetchLast(type);
+        final SqliteHelper db = new SqliteHelper(MeasureFastEdit.this);
+        final Cursor cursor = db.fetchLast(type);
         Measurement measurement;
         if (cursor != null && cursor.getCount() > 0) {
             try {
@@ -109,6 +108,7 @@ public class MeasureFastEdit extends Activity {
         }
         Log.d(MeasureActivity.TAG, "populate input with " + measurement);
         cursor.close();
+        db.close();
         return measurement;
     }
 }
