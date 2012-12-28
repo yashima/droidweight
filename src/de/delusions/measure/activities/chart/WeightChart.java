@@ -335,7 +335,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
         final DisplayMetrics metrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(metrics);
         final int orientation = getWindowManager().getDefaultDisplay().getOrientation();
-        final int tabHostAndButtonsSpace = orientation == 0 ? 350 : 135;
+        final int tabHostAndButtonsSpace = orientation == 0 ? 400 : 135;
         final int metricWidth = metrics.widthPixels - PADDING;
         final int metricHeight = metrics.heightPixels - tabHostAndButtonsSpace;
         this.imageWidth = Math.max(MIN_IMAGE_WIDTH, metricWidth);
