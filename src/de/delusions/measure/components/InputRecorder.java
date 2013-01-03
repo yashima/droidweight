@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -44,7 +45,7 @@ public class InputRecorder extends RelativeLayout {
     private Measurement currentMeasure;
     private final Context context;
 
-    public InputRecorder(final Context context, AttributeSet attr) {
+    public InputRecorder(final Context context, final AttributeSet attr) {
         super(context, attr);
 
         this.context = context;
@@ -59,7 +60,7 @@ public class InputRecorder extends RelativeLayout {
 
         this.current.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View v) {
+            public void onClick(final View v) {
                 Log.d(MeasureActivity.TAG, "test clicky");
                 editCurrent().show();
             }
@@ -67,34 +68,34 @@ public class InputRecorder extends RelativeLayout {
 
         this.plus.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 changeMeasure(true, true);
             }
         });
 
         this.plusplus.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 changeMeasure(true, false);
             }
         });
 
         this.minus.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 changeMeasure(false, true);
             }
         });
 
         this.minusminus.setOnClickListener(new View.OnClickListener() {
 
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 changeMeasure(false, false);
             }
         });
     }
 
-    private void changeMeasure(boolean inc, boolean small) {
+    private void changeMeasure(final boolean inc, final boolean small) {
         final Float step = small ? this.currentMeasure.getField().getSmallStep() : this.currentMeasure.getField().getBigStep();
         if (inc) {
             this.currentMeasure.inc(isMetric(), step);
@@ -109,10 +110,15 @@ public class InputRecorder extends RelativeLayout {
     }
 
     public void rewriteText() {
+        if (this.currentMeasure.getValue() < 100) {
+            this.current.setTextSize(TypedValue.COMPLEX_UNIT_SP, 30);
+        } else {
+            this.current.setTextSize(TypedValue.COMPLEX_UNIT_SP, 22);
+        }
         this.current.setText(this.currentMeasure.prettyPrint(getContext()));
     }
 
-    public void setCurrent(Measurement measurement) {
+    public void setCurrent(final Measurement measurement) {
         this.currentMeasure = measurement;
         final TextView labelView = (TextView) findViewById(R.id.label);
         final TextView unitView = (TextView) findViewById(R.id.unit);
@@ -133,7 +139,7 @@ public class InputRecorder extends RelativeLayout {
                 .setTitle(this.currentMeasure.getField().getLabelId()).setView(textEntryView)
                 .setPositiveButton(R.string.button_go, new DialogInterface.OnClickListener() {
 
-                    public void onClick(DialogInterface dialog, int whichButton) {
+                    public void onClick(final DialogInterface dialog, final int whichButton) {
                         final EditText input = (EditText) textEntryView.findViewById(R.id.dialoginput);
                         final String strValue = input.getText().toString();
                         try {
