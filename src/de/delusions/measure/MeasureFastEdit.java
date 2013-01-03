@@ -98,6 +98,7 @@ public class MeasureFastEdit extends Activity {
             try {
                 cursor.moveToFirst();
                 measurement = new Measurement(cursor);
+                measurement.setUnit(type.getUnit());
             } catch (final MeasurementException e) {
                 e.createToast(this, "failed to create from cursor in fastinput");
                 measurement = type.zero(this);

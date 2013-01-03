@@ -39,9 +39,9 @@ public class Measurement implements Serializable {
 
     public Measurement() {
         this.id = null;
-        this.unit = null;
+        this.unit = Unit.KG;
         this.value = 0;
-        this.field = null;
+        this.field = MeasureType.WEIGHT;
         this.timestamp = new Date();
     }
 
