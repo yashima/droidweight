@@ -186,7 +186,9 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
             lastCursor.close();
             db.close();
         } else {
-            lastMeasure = new Measurement(0, this.field, true, null);
+            lastMeasure = new Measurement();
+            lastMeasure.setField(this.field);
+            lastMeasure.setUnit(this.field.getUnit());
         }
         Log.d(TAG, "refreshInputRecorder " + lastMeasure);
         this.recorder.setCurrent(lastMeasure);

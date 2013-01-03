@@ -15,8 +15,6 @@
  */
 package de.delusions.measure.components;
 
-import java.util.Date;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -46,7 +44,7 @@ public class LabeledInput extends TableRow {
     private Measurement current;
     private final Context ctx;
 
-    public LabeledInput(Context context, AttributeSet attr) {
+    public LabeledInput(final Context context, final AttributeSet attr) {
         super(context, attr);
 
         // setOrientation(HORIZONTAL);
@@ -80,7 +78,7 @@ public class LabeledInput extends TableRow {
         if (buttons) {
             this.plus.setOnClickListener(new View.OnClickListener() {
 
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     LabeledInput.this.current.inc(metric);
                     LabeledInput.this.rewriteText();
                 }
@@ -88,7 +86,7 @@ public class LabeledInput extends TableRow {
 
             this.minus.setOnClickListener(new View.OnClickListener() {
 
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     LabeledInput.this.current.dec(metric);
                     LabeledInput.this.rewriteText();
                 }
@@ -100,7 +98,7 @@ public class LabeledInput extends TableRow {
 
     }
 
-    public void setCurrent(Measurement measurement) {
+    public void setCurrent(final Measurement measurement) {
         this.current = measurement;
         rewriteText();
     }
@@ -114,7 +112,10 @@ public class LabeledInput extends TableRow {
     public Measurement getCurrent() throws MeasurementException {
         final String strValue = this.input.getText().toString();
         Log.d(MeasureActivity.TAG, "input=" + strValue);
-        this.current = new Measurement(null, strValue, this.mType, UserPreferences.isMetric(this.ctx), new Date());
+        this.current = new Measurement();
+        this.current.setField(this.mType);
+        this.current.setUnit(this.mType.getUnit());
+        this.current.parseAndSetValue(strValue, UserPreferences.isMetric(this.ctx));
         return this.current;
     }
 }

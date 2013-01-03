@@ -44,6 +44,7 @@ public class SqliteHelper {
     public static final String KEY_LICENSE = "key";
     public static final String KEY_ENABLED = "enabled";
     public static final String KEY_COLOR = "color";
+    public static final String KEY_COMMENT = "comment";
 
     private DatabaseHelper mDbHelper;
     private SQLiteDatabase mDb;
@@ -53,14 +54,14 @@ public class SqliteHelper {
      * Database creation sql statement
      */
     private static final String WEIGHT_CREATE = "create table weightTable (_id integer primary key autoincrement, " + "weight real not null, "
-            + "measure_date datetime default current_timestamp, name text default 'WEIGHT');";
+            + "measure_date datetime default current_timestamp,comment text, name text default 'WEIGHT');";
 
     private static final String TRACKING_CREATE = "create table trackingTable(_id integer primary key autoincrement, enabled integer default 0,name text unique, unit text, maxValue real default 999, smallStep real default 1, bigStep real default 5, key integer, color integer);";
 
     private static final String DATABASE_NAME = "data";
     private static final String WEIGHT_TABLE = "weightTable";
     private static final String TRACKING_TABLE = "trackingTable";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 11;
 
     private final Context mCtx;
 
@@ -89,6 +90,9 @@ public class SqliteHelper {
             if (oldVersion < 10) {
                 db.execSQL(TRACKING_CREATE);
                 initTypes(db);
+            }
+            if (oldVersion < 11) {
+                db.execSQL("alter table weightTable add column comment text");
             }
         }
 

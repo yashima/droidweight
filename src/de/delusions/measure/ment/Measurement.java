@@ -30,67 +30,15 @@ public class Measurement implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Long id;
-    private MeasureType field;
-    private float value;
-    private Unit unit;
-
-    private Date timestamp;
+    private Long id;
+    private MeasureType field = null;
+    private float value = 0;
+    private Unit unit = null;
+    private String comment;
+    private Date timestamp = new Date();
 
     public Measurement() {
         this.id = null;
-        this.unit = Unit.KG;
-        this.value = 0;
-        this.field = MeasureType.WEIGHT;
-        this.timestamp = new Date();
-    }
-
-    /**
-     * Only called by things that really were numbers in the first place. Do not try to parse value from string anywhere
-     * else, just use the constructor with the string!
-     * 
-     * @param value
-     * @param unit
-     */
-    public Measurement(final float value, final Unit unit) {
-        this(value, unit, true);
-    }
-
-    public Measurement(final float value, final Unit unit, final boolean metric) {
-        this.value = metric ? value : unit.convertToMetric(value);
-        this.unit = unit;
-        this.timestamp = null;
-        this.id = null;
-    }
-
-    /**
-     * This is the only method that processes user input therefore a few checks are done if the input is valid.
-     * 
-     * @param id
-     *            TODO
-     * @param strValue
-     * @param metric
-     * @param timestamp
-     *            TODO
-     * @param unit
-     * 
-     * @throws MeasurementException
-     */
-    public Measurement(final Long id, final String strValue, final MeasureType mType, final boolean metric, final Date timestamp)
-            throws MeasurementException {
-        this.id = id;
-        this.field = mType;
-        this.unit = mType.getUnit();
-        this.timestamp = timestamp;
-        parseAndSetValue(strValue, metric);
-    }
-
-    public Measurement(final Long id, final float value, final MeasureType mType, final boolean metric, final Date timestamp) {
-        this.id = id;
-        this.field = mType;
-        this.unit = mType.getUnit();
-        this.timestamp = timestamp;
-        this.value = value;
     }
 
     public void parseAndSetValue(final String strValue, final boolean metric) throws MeasurementException {
@@ -112,38 +60,12 @@ public class Measurement implements Serializable {
         }
     }
 
-    public Measurement(final Cursor cursor) throws MeasurementException {
-        if (cursor != null && cursor.getCount() > 0) {
-            final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
-            this.timestamp = new Date(dateLong);
-            this.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-            this.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
-            this.unit = this.field.getUnit();
-            this.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-        } else {
-            throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
-        }
-    }
-
-    /**
-     * Called by MeasureField when reading from a Cursor (aka database). Number is not parsed from String as number is
-     * stored in database!
-     * 
-     * @param value
-     * @param field
-     * @param metric
-     * @param timestamp
-     */
-    public Measurement(final float value, final MeasureType field, final boolean metric, final Date timestamp) {
-        this.field = field;
-        this.unit = field.getUnit();
-        this.value = metric ? value : this.unit.convertToMetric(value);
-        this.timestamp = timestamp;
-        this.id = null;
-    }
-
     public Long getId() {
         return this.id;
+    }
+
+    public void setId(final long id) {
+        this.id = id;
     }
 
     public MeasureType getField() {
@@ -160,6 +82,14 @@ public class Measurement implements Serializable {
 
     public void setValue(final float value, final boolean metric) {
         this.value = metric ? value : this.unit.convertToMetric(value);
+    }
+
+    public String getComment() {
+        return this.comment;
+    }
+
+    public void setComment(final String comment) {
+        this.comment = comment;
     }
 
     public void setTimestamp(final Date timestamp) {
@@ -198,6 +128,32 @@ public class Measurement implements Serializable {
         this.value = this.value - (metric ? decBy : this.unit.convertToMetric(decBy));
     }
 
+    // public Measurement(final Cursor cursor) throws MeasurementException {
+    // if (cursor != null && cursor.getCount() > 0) {
+    // final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
+    // this.timestamp = new Date(dateLong);
+    // this.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
+    // this.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
+    // this.unit = this.field.getUnit();
+    // this.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
+    // } else {
+    // throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
+    // }
+    // }
+
+    // public Measurement(final Cursor cursor) throws MeasurementException {
+    // if (cursor != null && cursor.getCount() > 0) {
+    // final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
+    // this.timestamp = new Date(dateLong);
+    // this.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
+    // this.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
+    // this.unit = this.field.getUnit();
+    // this.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
+    // } else {
+    // throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
+    // }
+    // }
+
     public void add(final Measurement measurement) {
         if (this.unit == measurement.unit) {
             this.value += measurement.value;
@@ -232,21 +188,6 @@ public class Measurement implements Serializable {
         return result.toString();
     }
 
-    public static Float parseValue(final String strValue) throws ParseException {
-        final Float result = Float.parseFloat(strValue);
-        // final Number number = NumberFormat.getInstance().parse(strValue);
-        // return number.floatValue();
-        return result;
-    }
-
-    public static Measurement difference(final Measurement a, final Measurement b) {
-        return new Measurement(a.getValue() - b.getValue(), a.getUnit());
-    }
-
-    public static Measurement sum(final Measurement a, final Measurement b) {
-        return new Measurement(a.getValue() + b.getValue(), a.getUnit());
-    }
-
     public void updateTime(final int hourOfDay, final int minute) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(getTimestamp());
@@ -262,6 +203,42 @@ public class Measurement implements Serializable {
         calendar.set(Calendar.MONTH, monthOfYear);
         calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
         setTimestamp(calendar.getTime());
+    }
+
+    public static Float parseValue(final String strValue) throws ParseException {
+        final Float result = Float.parseFloat(strValue);
+        // final Number number = NumberFormat.getInstance().parse(strValue);
+        // return number.floatValue();
+        return result;
+    }
+
+    public static Measurement difference(final Measurement a, final Measurement b) {
+        final Measurement measurement = new Measurement();
+        measurement.setUnit(a.getUnit());
+        measurement.setValue(a.getValue() - b.getValue(), true);
+        return measurement;
+    }
+
+    public static Measurement sum(final Measurement a, final Measurement b) {
+        final Measurement measurement = new Measurement();
+        measurement.setUnit(a.getUnit());
+        measurement.setValue(a.getValue() + b.getValue(), true);
+        return measurement;
+    }
+
+    public static Measurement create(final Cursor cursor) throws MeasurementException {
+        final Measurement measurement = new Measurement();
+        if (cursor != null && cursor.getCount() > 0) {
+            final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
+            measurement.timestamp = new Date(dateLong);
+            measurement.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
+            measurement.unit = measurement.field.getUnit();
+            measurement.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
+            measurement.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
+        } else {
+            throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
+        }
+        return measurement;
     }
 
 }

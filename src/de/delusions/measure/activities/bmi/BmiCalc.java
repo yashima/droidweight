@@ -39,7 +39,7 @@ public class BmiCalc extends Activity {
     private Measurement height;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         getWindow().setFormat(PixelFormat.RGBA_8888);
@@ -54,8 +54,7 @@ public class BmiCalc extends Activity {
         final Button goButton = (Button) findViewById(R.id.go);
         goButton.setOnClickListener(new View.OnClickListener() {
 
-
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 BmiCalc.this.weight = tryGetValue(BmiCalc.this.weightField, MeasureType.WEIGHT);
                 BmiCalc.this.height = tryGetValue(BmiCalc.this.heightField, MeasureType.HEIGHT);
                 tryCalculateBmi();
@@ -84,11 +83,14 @@ public class BmiCalc extends Activity {
         }
     }
 
-    private Measurement tryGetValue(EditText text, MeasureType type) {
+    private Measurement tryGetValue(final EditText text, final MeasureType type) {
         Measurement result;
         final String input = text.getText().toString();
         try {
-            result = new Measurement(null, input, type, isMetric(), null);
+            result = new Measurement();
+            result.setField(type);
+            result.setUnit(type.getUnit());
+            result.parseAndSetValue(input, isMetric());
         } catch (final MeasurementException e) {
             e.createToast(this, "tryGetValue");
             result = null;

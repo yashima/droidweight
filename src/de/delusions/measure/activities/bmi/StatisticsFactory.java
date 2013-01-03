@@ -85,7 +85,10 @@ public class StatisticsFactory {
         final long time = this.last.getTimestamp().getTime() - this.starting.getTimestamp().getTime();
         final long days = time / (24 * 60 * 60 * 1000);
         final float dailyLoss = days > 0 ? loss.getValue() / days : loss.getValue();
-        return new Measurement(dailyLoss, Unit.KG);
+        final Measurement measurement = new Measurement();
+        measurement.setValue(dailyLoss, true);
+        measurement.setUnit(Unit.KG);
+        return measurement;
     }
 
     @Deprecated
@@ -128,8 +131,10 @@ public class StatisticsFactory {
     public static Measurement calculateBmiWeight(final int bmiValue, final Measurement heightInCm) {
         final float heightInMeter = heightInCm.getValue() / 100;
         final float result = heightInMeter * heightInMeter * bmiValue;
-        final Measurement weight = new Measurement(result, Unit.KG);
-        return weight;
+        final Measurement measurement = new Measurement();
+        measurement.setValue(result, true);
+        measurement.setUnit(Unit.KG);
+        return measurement;
     }
 
     /**

@@ -136,12 +136,18 @@ public class UserPreferences extends PreferenceActivity {
 
     public static Measurement getGoal(final Context ctx) {
         final float value = getUnitPreference(ctx, PrefItem.GOAL.getKey());
-        return new Measurement(value, Unit.KG, true);
+        final Measurement measurement = new Measurement();
+        measurement.setUnit(Unit.KG);
+        measurement.setValue(value, true);
+        return measurement;
     }
 
     public static Measurement getHeight(final Context ctx) {
         final float value = getUnitPreference(ctx, PrefItem.HEIGHT.getKey());
-        return new Measurement(value, Unit.CM, true);
+        final Measurement measurement = new Measurement();
+        measurement.setUnit(Unit.CM);
+        measurement.setValue(value, true);
+        return measurement;
     }
 
     public static Boolean isMetric(final Context ctx) {
@@ -167,6 +173,11 @@ public class UserPreferences extends PreferenceActivity {
     public static Boolean isFastInput(final Context ctx) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
         return prefs.getBoolean(PrefItem.FAST_INPUT.getKey(), false);
+    }
+
+    public static Boolean isCommentEnabled(final Context ctx) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+        return prefs.getBoolean(PrefItem.COMMENTS.getKey(), false);
     }
 
     public static Boolean isEnabled(final MeasureType type, final Context ctx) {

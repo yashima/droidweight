@@ -38,7 +38,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
 
     private final static String EXPORT_DIR = "droidweight";
     private final static String EXPORT_FILE_NAME = "data.csv";
-    private final static String EXPORT_FILE_HEADER = "value|type|date|metric|id";
+    private final static String EXPORT_FILE_HEADER = "value|type|date|metric|id|comment";
     private final static String DATE_STRING = "yyyy-MM-dd hh:mm:ss";
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_STRING);
 
@@ -109,7 +109,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
             if (cursor.getCount() > 0) {
                 while (!cursor.isLast()) {
                     cursor.moveToNext();
-                    final Measurement measurement = new Measurement(cursor);
+                    final Measurement measurement = Measurement.create(cursor);
                     writer.append(createLine(measurement));
                     numberOfMeasures++;
                 }
@@ -164,7 +164,9 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
         line.append(measurement.getField().name()).append("|");
         line.append(DATE_FORMAT.format(measurement.getTimestamp())).append("|");
         line.append(this.metric).append("|");
-        line.append(measurement.getId()).append("\n");
+        line.append(measurement.getId());
+        line.append(measurement.getComment());
+        line.append("\n");
         return line.toString();
     }
 
@@ -182,7 +184,13 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
                 throw new MeasurementException(MeasurementException.ErrorId.PARSEERROR_DATE, DATE_STRING);
             }
             final Long id = parts.length > 4 ? Long.parseLong(parts[4]) : null;
-            return new Measurement(id, value, type, metric, date);
+            final Measurement measurement = new Measurement();
+            measurement.setId(id);
+            measurement.setField(type);
+            measurement.setUnit(type.getUnit());
+            measurement.setTimestamp(date);
+            measurement.parseAndSetValue(value, metric);
+            return measurement;
         } else {
             Log.d(MeasureActivity.TAG, "ignoring header");
             return null;
