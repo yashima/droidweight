@@ -68,6 +68,7 @@ public class MeasureCursorAdapter extends CursorAdapter {
         displayDate(view, date);
         displayBMI(view, measurement);
         displayPercentChange(view, percent);
+        displayComment(context, view, measurement);
 
     }
 
@@ -142,6 +143,16 @@ public class MeasureCursorAdapter extends CursorAdapter {
             t3.setText(NumberFormat.getInstance(Locale.ENGLISH).format(StatisticsFactory.calculateBmi(measurement, this.height)));
         } else {
             view.findViewById(R.id.label_bmi).setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void displayComment(final Context context, final View view, final Measurement measurement) {
+        if (UserPreferences.isCommentEnabled(context) && measurement.getComment() != null) {
+            final TextView commentView = (TextView) view.findViewById(R.id.comment);
+            commentView.setText(measurement.getComment());
+        } else {
+            final View commentRowView = view.findViewById(R.id.comment_row);
+            commentRowView.setVisibility(View.GONE);
         }
     }
 

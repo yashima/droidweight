@@ -176,6 +176,7 @@ public class SqliteHelper {
         final ContentValues initialValues = new ContentValues();
         initialValues.put(KEY_MEASURE_VALUE, measurement.getValue());
         initialValues.put(KEY_NAME, measurement.getField().name());
+        initialValues.put(KEY_COMMENT, measurement.getComment());
         initialValues.put(KEY_DATE, measurement.getTimestamp() != null ? measurement.getTimestamp().getTime() : System.currentTimeMillis());
         return this.mDb.insert(WEIGHT_TABLE, null, initialValues);
     }
@@ -237,6 +238,7 @@ public class SqliteHelper {
         final ContentValues args = new ContentValues();
         args.put(KEY_MEASURE_VALUE, measurement.getValue());
         args.put(KEY_DATE, measurement.getTimestamp().getTime());
+        args.put(KEY_COMMENT, measurement.getComment());
         return this.mDb.update(WEIGHT_TABLE, args, KEY_ROWID + "=" + rowId, null) > 0;
     }
 
@@ -328,7 +330,7 @@ public class SqliteHelper {
     }
 
     public Cursor fetchByDate(final Date dateAfter, final MeasureType field) {
-        final String[] columns = { KEY_ROWID, KEY_MEASURE_VALUE, KEY_DATE };
+        final String[] columns = { KEY_ROWID, KEY_MEASURE_VALUE, KEY_DATE, KEY_COMMENT };
         final String selection = "measure_date > ? and name=?";
         final String[] selectionArgs = { dateAfter.getTime() + "", field.name() };
         return this.mDb.query(WEIGHT_TABLE, columns, selection, selectionArgs, null, null, "measure_date ASC");

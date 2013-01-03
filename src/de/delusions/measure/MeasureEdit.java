@@ -129,6 +129,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
             populateValueEdit();
             populateUnitLabel();
             populateTitle();
+            populateComment();
             DateTimeManager.populateDateButton(this.measure, this);
             DateTimeManager.populateTimeButton(this.measure, this);
         }
@@ -147,6 +148,11 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     private void populateValueEdit() {
         final EditText valueEdit = retrieveMeasureValueEditView();
         valueEdit.setText(this.measure.prettyPrint(this));
+    }
+
+    private void populateComment() {
+        final EditText commentEdit = (EditText) findViewById(R.id.comment);
+        commentEdit.setText(this.measure.getComment());
     }
 
     private void retrieveMeasureFromExtras(final Bundle savedInstanceState) {
@@ -213,6 +219,8 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
         final EditText valueEdit = retrieveMeasureValueEditView();
         final String strValue = valueEdit.getText().toString();
         this.measure.parseAndSetValue(strValue, UserPreferences.isMetric(this));
+        final EditText commentEdit = (EditText) findViewById(R.id.comment);
+        this.measure.setComment(commentEdit.getText().toString());
     }
 
     private EditText retrieveMeasureValueEditView() {

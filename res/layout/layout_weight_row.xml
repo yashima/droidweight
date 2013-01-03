@@ -29,4 +29,8 @@
 		<TextView android:id="@+id/bmi" style="@style/TextTiny" android:paddingRight="20dp"  android:textStyle="bold"/>
         <TextView android:id="@+id/date" style="@style/TextTiny" android:paddingRight="10dp"  android:textStyle="bold"/>	   	    
     </TableRow>
+    <TableRow android:id="@+id/comment_row">
+    	<TextView android:id="@+id/label_comment" style="@style/TextSmall" android:text="@string/label_comment" />          
+        <TextView android:id="@+id/comment" style="@style/TextSmall" android:paddingRight="20dp"  android:textStyle="bold"/>
+    </TableRow>
 </TableLayout>

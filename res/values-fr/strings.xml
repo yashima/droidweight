@@ -42,6 +42,7 @@
 <string name="label_weight">Poids</string>
 <string name="label_height">Taille</string>
 <string name="label_bodyfat">Masse grasse</string>
+<string name="label_comment">Commentaire</string>
 <!-- <string name="label_chest">Tour de poitrine</string> -->
 <!-- <string name="label_torso">Tour de torse</string> -->
 <string name="label_waist">Tour de taille</string>

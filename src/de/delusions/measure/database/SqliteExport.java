@@ -164,7 +164,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
         line.append(measurement.getField().name()).append("|");
         line.append(DATE_FORMAT.format(measurement.getTimestamp())).append("|");
         line.append(this.metric).append("|");
-        line.append(measurement.getId());
+        line.append(measurement.getId()).append("|");
         line.append(measurement.getComment());
         line.append("\n");
         return line.toString();
@@ -184,12 +184,16 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
                 throw new MeasurementException(MeasurementException.ErrorId.PARSEERROR_DATE, DATE_STRING);
             }
             final Long id = parts.length > 4 ? Long.parseLong(parts[4]) : null;
+
+            final String comment = parts.length > 5 ? parts[5] : null;
+
             final Measurement measurement = new Measurement();
             measurement.setId(id);
             measurement.setField(type);
             measurement.setUnit(type.getUnit());
             measurement.setTimestamp(date);
             measurement.parseAndSetValue(value, metric);
+            measurement.setComment(comment);
             return measurement;
         } else {
             Log.d(MeasureActivity.TAG, "ignoring header");

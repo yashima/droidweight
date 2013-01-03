@@ -35,6 +35,7 @@
 <string name="label_height">Größe</string>
 <string name="label_bodyfat">Körperfett</string>
 <string name="label_waist">Taille</string>
+<string name="label_comment">Kommentar</string>
 <string name="row_weight">Gewicht: </string>
 <string name="row_bmi">BMI: </string>
 <string name="hint_user_height">Gib deine Größe ein</string>

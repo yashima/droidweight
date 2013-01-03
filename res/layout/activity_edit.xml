@@ -59,6 +59,12 @@
         style="@style/TextLarge"/>
 </LinearLayout>
 
+<EditText android:id="@+id/comment"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/label_comment"/>
+   
+
 <Button android:id="@+id/ok" android:text="@string/button_go" 
         android:layout_width="fill_parent"
         android:layout_height="50dp"     

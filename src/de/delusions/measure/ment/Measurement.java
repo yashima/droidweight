@@ -128,32 +128,6 @@ public class Measurement implements Serializable {
         this.value = this.value - (metric ? decBy : this.unit.convertToMetric(decBy));
     }
 
-    // public Measurement(final Cursor cursor) throws MeasurementException {
-    // if (cursor != null && cursor.getCount() > 0) {
-    // final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
-    // this.timestamp = new Date(dateLong);
-    // this.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-    // this.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
-    // this.unit = this.field.getUnit();
-    // this.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-    // } else {
-    // throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
-    // }
-    // }
-
-    // public Measurement(final Cursor cursor) throws MeasurementException {
-    // if (cursor != null && cursor.getCount() > 0) {
-    // final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
-    // this.timestamp = new Date(dateLong);
-    // this.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-    // this.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
-    // this.unit = this.field.getUnit();
-    // this.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-    // } else {
-    // throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
-    // }
-    // }
-
     public void add(final Measurement measurement) {
         if (this.unit == measurement.unit) {
             this.value += measurement.value;
@@ -184,6 +158,8 @@ public class Measurement implements Serializable {
         result.append(this.field != null ? this.field.name() : "");
         result.append("=").append(this.getValue()).append(",");
         result.append(getTimestamp() != null ? SimpleDateFormat.getDateInstance().format(getTimestamp()) : "");
+        result.append(",");
+        result.append(this.comment);
         result.append("]");
         return result.toString();
     }
@@ -206,10 +182,7 @@ public class Measurement implements Serializable {
     }
 
     public static Float parseValue(final String strValue) throws ParseException {
-        final Float result = Float.parseFloat(strValue);
-        // final Number number = NumberFormat.getInstance().parse(strValue);
-        // return number.floatValue();
-        return result;
+        return Float.parseFloat(strValue);
     }
 
     public static Measurement difference(final Measurement a, final Measurement b) {
@@ -235,6 +208,7 @@ public class Measurement implements Serializable {
             measurement.unit = measurement.field.getUnit();
             measurement.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
             measurement.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
+            measurement.comment = cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_COMMENT));
         } else {
             throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
         }

@@ -33,6 +33,7 @@
 <string name="label_height">Height</string>
 <string name="label_bodyfat">Body Fat</string>
 <string name="label_waist">Waist</string>
+<string name="label_comment">Comment</string>
 <string name="row_weight">Weight: </string>
 <string name="row_bmi">BMI: </string>
 <string name="hint_user_height">Enter your height</string>

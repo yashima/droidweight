@@ -16,7 +16,10 @@
 package de.delusions.measure.ment;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import android.app.Activity;
 import android.content.Context;
@@ -176,17 +179,25 @@ public class MeasureType implements Serializable {
     }
 
     public Measurement createMeasurement(final Cursor cursor) {
-        final Measurement measurement = new Measurement();
+
         if (cursor.getCount() > 0 && !cursor.isAfterLast()) {
-            final Date timestamp = SqliteHelper.getTimestamp(cursor);
-            final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-            final Long id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-            measurement.setId(id);
-            measurement.setField(this);
-            measurement.setUnit(getUnit());
-            measurement.setValue(value, true);
-            measurement.setTimestamp(timestamp);
-            return measurement;
+            try {
+                return Measurement.create(cursor);
+            } catch (final MeasurementException e) {
+                // TODO fix this
+                return new Measurement();
+            }
+            // final Date timestamp = SqliteHelper.getTimestamp(cursor);
+            // final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
+            // final String comment = cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_COMMENT));
+            // final Long id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
+            // measurement.setId(id);
+            // measurement.setField(this);
+            // measurement.setUnit(getUnit());
+            // measurement.setValue(value, true);
+            // measurement.setTimestamp(timestamp);
+            // measurement.setComment(comment);
+            // return measurement;
         } else {
             Log.d(MeasureActivity.TAG, "MeasureType:createMeasurement: Cursor Empty, no Measurement created");
             return new Measurement();
