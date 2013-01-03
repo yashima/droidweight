@@ -140,6 +140,9 @@
 <string name="pref_cat_tracking">Paramètres de suivi</string>
 <string name="pref_cat_reminder">Paramètres de rappel</string>
 
+<string name="pref_measure_comment">Commentaire</string>
+<string name="pref_measure_comment_summary">Permettre des commentaires pour les mesures</string> 
+
 <string name="choose_type_prompt">Choisir une mesure</string>
 
 <string name="exporter_export">Exporter</string>

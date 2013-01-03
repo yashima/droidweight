@@ -51,7 +51,11 @@
     android:summary="@string/pref_waist_summary" />  
  <CheckBoxPreference android:key="user.fastinput"    
     android:title="@string/pref_createinput"
-    android:summary="@string/pref_createinput_summary" />      
+    android:summary="@string/pref_createinput_summary" /> 
+ <CheckBoxPreference android:key="user.comment"    
+    android:title="@string/pref_measure_comment"
+    android:summary="@string/pref_measure_comment_summary" />    
+ 
 </PreferenceCategory>
 
 <PreferenceCategory android:title="@string/pref_cat_reminder" android:summary="Daily Reminder Settings">

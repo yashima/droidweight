@@ -41,6 +41,8 @@ public enum PrefItem {
 
     FREQUENCY("user.notification.frequency", null, Integer.class, null),
 
+    COMMENTS("user.comment", null, Boolean.class, null),
+
     DISPLAY_MEASURE("user.display", null, String.class, null);
 
     String key;
@@ -48,7 +50,7 @@ public enum PrefItem {
     Class<?> prefClass;
     MeasureType trackingType;
 
-    private PrefItem(String key, Unit unit, Class<?> prefClass, MeasureType trackingType) {
+    private PrefItem(final String key, final Unit unit, final Class<?> prefClass, final MeasureType trackingType) {
         this.key = key;
         this.unit = unit;
         this.prefClass = prefClass;

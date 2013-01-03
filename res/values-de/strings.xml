@@ -125,6 +125,9 @@
 <string name="pref_cat_tracking">Weitere Aufzeichnungen</string>
 <string name="pref_cat_reminder">Tägliche Erinnerung</string>
 
+<string name="pref_measure_comment">Kommentare</string>
+<string name="pref_measure_comment_summary">Kommentare zu Werten anschalten</string> 
+
 <string name="choose_type_prompt">Maß wählen</string>
 
 <string name="exporter_export">Export</string>

@@ -109,7 +109,9 @@
 <string name="pref_notificationenabled_summary">Enable daily reminder</string>
 <string name="pref_createinput_summary">Enter all tracked values at once</string>
 <string name="pref_frequency_summary">Days between reminders</string>
- 
+<string name="pref_measure_comment">Comments</string>
+<string name="pref_measure_comment_summary">Enable comments on measures</string> 
+
 <string name="pref_cat_basic">Basic Settings</string>
 <string name="pref_cat_tracking">Tracking Settings</string>
 <string name="pref_cat_reminder">Reminder Settings</string>
