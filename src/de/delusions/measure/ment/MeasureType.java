@@ -187,17 +187,7 @@ public class MeasureType implements Serializable {
                 // TODO fix this
                 return new Measurement();
             }
-            // final Date timestamp = SqliteHelper.getTimestamp(cursor);
-            // final Float value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-            // final String comment = cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_COMMENT));
-            // final Long id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-            // measurement.setId(id);
-            // measurement.setField(this);
-            // measurement.setUnit(getUnit());
-            // measurement.setValue(value, true);
-            // measurement.setTimestamp(timestamp);
-            // measurement.setComment(comment);
-            // return measurement;
+
         } else {
             Log.d(MeasureActivity.TAG, "MeasureType:createMeasurement: Cursor Empty, no Measurement created");
             return new Measurement();
