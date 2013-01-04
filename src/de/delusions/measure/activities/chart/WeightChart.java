@@ -72,7 +72,7 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
     private static Paint BACKGROUND = createPaint(Color.WHITE, Paint.Style.FILL);
     private static Paint GRID = createPaint(Color.GRAY, Paint.Style.STROKE);
 
-    private int days;
+    private int days = MONTH;
     private int imageWidth;
     private int imageHeight;
     private MeasureType displayField;
@@ -92,7 +92,6 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
             prefs.registerOnSharedPreferenceChangeListener(this);
             refreshDisplayField();
             calculateImageDimensions();
-            initializeFields();
             refreshDataAndGraph();
 
             addButton(R.id.months_1, MONTH);
@@ -113,11 +112,8 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
 
     private void initializeFields() {
         this.trackedValuePath = new MeasurePath(this, this.displayField, this.days);
-
         final int[] drawSizes = createCoords(this.imageWidth - PADDING, this.imageHeight - PADDING, GRID, calculateMeasureLabel(0));
         COORDS = new ChartCoordinates(this.days, drawSizes);
-
-        this.days = MONTH;
     }
 
     private void addToggleOtherValuesButton() {
@@ -203,6 +199,9 @@ public class WeightChart extends Activity implements SharedPreferences.OnSharedP
 
     public void refreshDataAndGraph() {
         Log.d(MeasureActivity.TAG, "WeightChart:refreshDataAndGraph");
+        if (COORDS == null) {
+            initializeFields();
+        }
         refreshPathData();
         refreshGraph();
     }

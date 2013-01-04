@@ -100,6 +100,7 @@ public class MeasurePath extends Path {
         final List<Measurement> result = new ArrayList<Measurement>();
         final SqliteHelper sqliteHelper = new SqliteHelper(ctx);
         final Cursor cursor = sqliteHelper.fetchByDate(this.startingDate.getTime(), this.type);
+        Log.d(MeasureActivity.TAG, "retrieveDataForDays:count=" + cursor.getCount());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             final Measurement measurement = this.type.createMeasurement(cursor);
