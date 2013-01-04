@@ -202,25 +202,14 @@ public class Measurement implements Serializable {
     }
 
     public static Measurement create(final Cursor cursor) throws MeasurementException {
-        Log.d(TAG, "create from cursor");
         final Measurement measurement = new Measurement();
         if (isUsable(cursor)) {
-            for (int i = 0; i < cursor.getColumnCount(); i++) {
-                Log.d(TAG, i + ":" + cursor.getString(i));
-            }
-            measurement.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
-            measurement.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-            if (cursor.getColumnIndex(SqliteHelper.KEY_DATE) > 0) {
-                final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
-                measurement.timestamp = new Date(dateLong);
-            }
-            if (cursor.getColumnIndex(SqliteHelper.KEY_NAME) > 0) {
-                measurement.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
-                measurement.unit = measurement.field.getUnit();
-            }
-            if (cursor.getColumnIndex(SqliteHelper.KEY_COMMENT) > 0) {
-                measurement.comment = cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_COMMENT));
-            }
+            measurement.id = getLongValue(cursor, SqliteHelper.KEY_ROWID);
+            measurement.value = getFloatValue(cursor, SqliteHelper.KEY_MEASURE_VALUE);
+            measurement.timestamp = new Date(getLongValue(cursor, SqliteHelper.KEY_DATE));
+            measurement.field = MeasureType.valueOf(getStringValue(cursor, SqliteHelper.KEY_NAME));
+            measurement.unit = measurement.field.getUnit();
+            measurement.comment = getStringValue(cursor, SqliteHelper.KEY_COMMENT);
         } else {
             Log.e(TAG, "failed to create measure from cursor");
             throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
@@ -228,7 +217,35 @@ public class Measurement implements Serializable {
         return measurement;
     }
 
+    protected static boolean hasColumn(final Cursor cursor, final String columName) {
+        return cursor.getColumnIndex(columName) > 0;
+    }
+
     private static boolean isUsable(final Cursor cursor) {
         return cursor != null && cursor.getCount() > 0 && !cursor.isAfterLast() && !cursor.isBeforeFirst();
+    }
+
+    private static String getStringValue(final Cursor cursor, final String columnName) {
+        if (hasColumn(cursor, columnName)) {
+            return cursor.getString(cursor.getColumnIndex(columnName));
+        } else {
+            return null;
+        }
+    }
+
+    private static Long getLongValue(final Cursor cursor, final String columnName) {
+        if (hasColumn(cursor, columnName)) {
+            return cursor.getLong(cursor.getColumnIndex(columnName));
+        } else {
+            return null;
+        }
+    }
+
+    private static Float getFloatValue(final Cursor cursor, final String columnName) {
+        if (hasColumn(cursor, columnName)) {
+            return cursor.getFloat(cursor.getColumnIndex(columnName));
+        } else {
+            return null;
+        }
     }
 }
