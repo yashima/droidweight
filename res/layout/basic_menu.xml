@@ -31,6 +31,7 @@
           android:icon="@android:drawable/ic_menu_preferences"
           android:title="@string/menu_prefs" />  
     <item android:id="@+id/basic_menu_export"
+    	  android:showAsAction="ifRoom|withText"
     	  android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:icon="@android:drawable/ic_menu_save"
