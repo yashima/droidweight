@@ -175,5 +175,7 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
         final EditText valueEdit = retrieveMeasureValueEditView();
         final String strValue = valueEdit.getText().toString();
         this.measure.parseAndSetValue(strValue, UserPreferences.isMetric(this));
+        final EditText commentEdit = (EditText) findViewById(R.id.comment);
+        this.measure.setComment(commentEdit.getText().toString());
     }
 }
