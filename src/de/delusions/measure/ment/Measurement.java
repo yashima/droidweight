@@ -23,11 +23,13 @@ import java.util.Date;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.SqliteHelper;
 
 public class Measurement implements Serializable {
 
+    private static final String TAG = "Measurement";
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -200,19 +202,33 @@ public class Measurement implements Serializable {
     }
 
     public static Measurement create(final Cursor cursor) throws MeasurementException {
+        Log.d(TAG, "create from cursor");
         final Measurement measurement = new Measurement();
-        if (cursor != null && cursor.getCount() > 0) {
-            final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
-            measurement.timestamp = new Date(dateLong);
-            measurement.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
-            measurement.unit = measurement.field.getUnit();
+        if (isUsable(cursor)) {
+            for (int i = 0; i < cursor.getColumnCount(); i++) {
+                Log.d(TAG, i + ":" + cursor.getString(i));
+            }
             measurement.id = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_ROWID));
             measurement.value = cursor.getFloat(cursor.getColumnIndex(SqliteHelper.KEY_MEASURE_VALUE));
-            measurement.comment = cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_COMMENT));
+            if (cursor.getColumnIndex(SqliteHelper.KEY_DATE) > 0) {
+                final long dateLong = cursor.getLong(cursor.getColumnIndex(SqliteHelper.KEY_DATE));
+                measurement.timestamp = new Date(dateLong);
+            }
+            if (cursor.getColumnIndex(SqliteHelper.KEY_NAME) > 0) {
+                measurement.field = MeasureType.valueOf(cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_NAME)));
+                measurement.unit = measurement.field.getUnit();
+            }
+            if (cursor.getColumnIndex(SqliteHelper.KEY_COMMENT) > 0) {
+                measurement.comment = cursor.getString(cursor.getColumnIndex(SqliteHelper.KEY_COMMENT));
+            }
         } else {
+            Log.e(TAG, "failed to create measure from cursor");
             throw new MeasurementException(MeasurementException.ErrorId.NOINPUT);
         }
         return measurement;
     }
 
+    private static boolean isUsable(final Cursor cursor) {
+        return cursor != null && cursor.getCount() > 0 && !cursor.isAfterLast() && !cursor.isBeforeFirst();
+    }
 }
