@@ -54,7 +54,7 @@ public class Measurement implements Serializable {
         } catch (final NumberFormatException e) {
             throw new MeasurementException(MeasurementException.ErrorId.PARSEERROR);
         }
-        this.value = metric ? this.value : this.unit.convertToMetric(this.value);
+        this.value = metric ? this.value : getUnit().convertToMetric(this.value);
         if (this.value < 0) {
             throw new MeasurementException(MeasurementException.ErrorId.SUBZERO);
         } else if (this.value > this.field.getMaxValue()) {
@@ -83,7 +83,7 @@ public class Measurement implements Serializable {
     }
 
     public void setValue(final float value, final boolean metric) {
-        this.value = metric ? value : this.unit.convertToMetric(value);
+        this.value = metric ? value : getUnit().convertToMetric(value);
     }
 
     public String getComment() {
@@ -103,7 +103,7 @@ public class Measurement implements Serializable {
     }
 
     public float getValue(final boolean metric) {
-        return metric ? this.value : this.unit.convertToImperial(this.value);
+        return metric ? this.value : getUnit().convertToImperial(this.value);
     }
 
     public Unit getUnit() {
@@ -123,15 +123,15 @@ public class Measurement implements Serializable {
     }
 
     public void inc(final boolean metric, final float incBy) {
-        this.value = this.value + (metric ? incBy : this.unit.convertToMetric(incBy));
+        this.value = this.value + (metric ? incBy : getUnit().convertToMetric(incBy));
     }
 
     public void dec(final boolean metric, final float decBy) {
-        this.value = this.value - (metric ? decBy : this.unit.convertToMetric(decBy));
+        this.value = this.value - (metric ? decBy : getUnit().convertToMetric(decBy));
     }
 
     public void add(final Measurement measurement) {
-        if (this.unit == measurement.unit) {
+        if (getUnit() == measurement.getUnit()) {
             this.value += measurement.value;
         }
     }
@@ -145,11 +145,11 @@ public class Measurement implements Serializable {
     }
 
     public String prettyPrint(final boolean metric) {
-        return metric ? this.unit.formatMetric(this.value) : this.unit.formatImperial(this.value);
+        return metric ? getUnit().formatMetric(this.value) : getUnit().formatImperial(this.value);
     }
 
     public String prettyPrintWithUnit(final Context ctx) {
-        return prettyPrint(ctx) + " " + this.unit.retrieveUnitName(ctx);
+        return prettyPrint(ctx) + " " + getUnit().retrieveUnitName(ctx);
     }
 
     @Override
