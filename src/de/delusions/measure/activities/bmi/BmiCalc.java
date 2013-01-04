@@ -89,7 +89,6 @@ public class BmiCalc extends Activity {
         try {
             result = new Measurement();
             result.setField(type);
-            result.setUnit(type.getUnit());
             result.parseAndSetValue(input, isMetric());
         } catch (final MeasurementException e) {
             e.createToast(this, "tryGetValue");

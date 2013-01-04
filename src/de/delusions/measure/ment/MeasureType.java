@@ -207,7 +207,6 @@ public class MeasureType implements Serializable {
     public Measurement zero(final Context ctx) {
         final Measurement measurement = new Measurement();
         measurement.setField(this);
-        measurement.setUnit(getUnit());
         measurement.setValue(0f, UserPreferences.isMetric(ctx));
         return measurement;
     }

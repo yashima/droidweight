@@ -114,7 +114,6 @@ public class LabeledInput extends TableRow {
         Log.d(MeasureActivity.TAG, "input=" + strValue);
         this.current = new Measurement();
         this.current.setField(this.mType);
-        this.current.setUnit(this.mType.getUnit());
         this.current.parseAndSetValue(strValue, UserPreferences.isMetric(this.ctx));
         return this.current;
     }

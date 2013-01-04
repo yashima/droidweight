@@ -107,7 +107,7 @@ public class Measurement implements Serializable {
     }
 
     public Unit getUnit() {
-        return this.unit;
+        return this.field == null ? this.unit : this.field.getUnit();
     }
 
     public void setUnit(final Unit unit) {
@@ -208,7 +208,6 @@ public class Measurement implements Serializable {
             measurement.value = getFloatValue(cursor, SqliteHelper.KEY_MEASURE_VALUE);
             measurement.timestamp = new Date(getLongValue(cursor, SqliteHelper.KEY_DATE));
             measurement.field = MeasureType.valueOf(getStringValue(cursor, SqliteHelper.KEY_NAME));
-            measurement.unit = measurement.field.getUnit();
             measurement.comment = getStringValue(cursor, SqliteHelper.KEY_COMMENT);
         } else {
             Log.e(TAG, "failed to create measure from cursor");

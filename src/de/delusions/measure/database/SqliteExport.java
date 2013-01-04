@@ -190,7 +190,6 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
             final Measurement measurement = new Measurement();
             measurement.setId(id);
             measurement.setField(type);
-            measurement.setUnit(type.getUnit());
             measurement.setTimestamp(date);
             measurement.parseAndSetValue(value, metric);
             measurement.setComment(comment);

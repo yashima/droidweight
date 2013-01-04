@@ -88,10 +88,8 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
             final Bundle extras = getIntent().getExtras();
             field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
             Log.d(MeasureActivity.TAG, "retrieveExtras " + field);
-        }
-        if (field != null) {
+        } else {
             this.measure.setField(field);
-            this.measure.setUnit(field.getUnit());
         }
     }
 

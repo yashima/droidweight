@@ -182,13 +182,11 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
             final SqliteHelper db = new SqliteHelper(this);
             final Cursor lastCursor = db.fetchLast(this.field);
             lastMeasure = this.field.createMeasurement(lastCursor);
-            lastMeasure.setUnit(this.field.getUnit());
             lastCursor.close();
             db.close();
         } else {
             lastMeasure = new Measurement();
             lastMeasure.setField(this.field);
-            lastMeasure.setUnit(this.field.getUnit());
         }
         Log.d(TAG, "refreshInputRecorder " + lastMeasure);
         this.recorder.setCurrent(lastMeasure);
