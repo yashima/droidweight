@@ -122,8 +122,10 @@ public class InputRecorder extends RelativeLayout {
         this.currentMeasure = measurement;
         final TextView labelView = (TextView) findViewById(R.id.label);
         final TextView unitView = (TextView) findViewById(R.id.unit);
-        unitView.setText(this.currentMeasure.getUnit().retrieveUnitName(this.context));
-        labelView.setText(this.currentMeasure.getField().getLabelId());
+        if (this.currentMeasure != null) {
+            unitView.setText(this.currentMeasure.getUnit().retrieveUnitName(this.context));
+            labelView.setText(this.currentMeasure.getField().getLabelId());
+        }
         rewriteText();
     }
 
