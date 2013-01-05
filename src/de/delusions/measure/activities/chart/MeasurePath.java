@@ -18,6 +18,7 @@ package de.delusions.measure.activities.chart;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
@@ -25,13 +26,14 @@ import android.database.Cursor;
 import android.graphics.Path;
 import android.graphics.Point;
 import android.util.Log;
-import de.delusions.measure.MeasureActivity;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 
 public class MeasurePath extends Path {
+
+    private static final String TAG = "MeasurePath";
 
     private final Context ctx;
     private MeasureType type;
@@ -61,7 +63,7 @@ public class MeasurePath extends Path {
             final float x = calculateDaysOnXAxis(measure);
             final float y = measure.getValue(metric);
             final Point point = coords.calculatePoint(x, y, this.upperValue, this.lowerValue);
-            Log.d(MeasureActivity.TAG, "fillPath " + x + " " + y + " -> " + point);
+            Log.d(TAG, "fillPath " + x + " " + y + " -> " + point);
 
             if (lastPoint == null) {
                 moveTo(point.x, point.y);
@@ -80,8 +82,9 @@ public class MeasurePath extends Path {
 
     private void calculateBoundaries(final List<Measurement> measures, final boolean metric) {
         float min;
-        if (this.type == MeasureType.WEIGHT) {
-            min = UserPreferences.getGoal(this.ctx).getValue(metric) - 1;
+        final float goal = UserPreferences.getGoal(this.ctx).getValue(metric);
+        if (this.type == MeasureType.WEIGHT && goal > 1) {
+            min = goal - 1;
         } else {
             min = measures.size() > 0 ? measures.get(0).getValue() : 20;
         }
@@ -92,19 +95,22 @@ public class MeasurePath extends Path {
         }
         this.lowerValue = (int) Math.floor(min / 10) * 10;
         this.upperValue = (int) Math.ceil(max / 10) * 10;
-        Log.d(MeasureActivity.TAG, "lower= " + this.lowerValue);
-        Log.d(MeasureActivity.TAG, "upper= " + this.upperValue);
+        Log.d(TAG, "lower= " + this.lowerValue);
+        Log.d(TAG, "upper= " + this.upperValue);
+        if (this.upperValue < this.lowerValue) {
+            Log.e(TAG, "ceiling below floor on path!!!");
+        }
     }
 
     private List<Measurement> retrieveDataForDays(final Context ctx) {
         final List<Measurement> result = new ArrayList<Measurement>();
         final SqliteHelper sqliteHelper = new SqliteHelper(ctx);
         final Cursor cursor = sqliteHelper.fetchByDate(this.startingDate.getTime(), this.type);
-        Log.d(MeasureActivity.TAG, "retrieveDataForDays:count=" + cursor.getCount());
+        Log.d(TAG, "retrieveDataForDays:count=" + cursor.getCount());
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
             final Measurement measurement = this.type.createMeasurement(cursor);
-            Log.d(MeasureActivity.TAG, "retrieveWeightForDays:adding " + measurement);
+            Log.d(TAG, "retrieveWeightForDays:adding " + measurement);
             result.add(measurement);
             cursor.moveToNext();
         }
@@ -119,7 +125,7 @@ public class MeasurePath extends Path {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.add(Calendar.DAY_OF_MONTH, -days);
-        Log.d(MeasureActivity.TAG, "calendar date set " + SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));
+        Log.d(TAG, "calendar date set " + SimpleDateFormat.getDateTimeInstance().format(cal.getTime()));
         return cal;
     }
 
@@ -135,4 +141,18 @@ public class MeasurePath extends Path {
         return this.startingDate;
     }
 
+    public int labelVerticalMeasureValue(final int segment, final int segments) {
+        final int perSegment = (getCeiling() - getFloor()) / segments;
+        final int labelValue = segment * perSegment;
+        final int displayed = getCeiling() - labelValue;
+        return displayed;
+    }
+
+    public Date labelHorizontalDate(final int days, final int segment, final int segments) {
+        final Calendar cal = (Calendar) getStartingDate().clone();
+        final int daysPerSegment = days / segments;
+        final int daysDifference = segment * daysPerSegment;
+        cal.add(Calendar.DAY_OF_MONTH, daysDifference);
+        return cal.getTime();
+    }
 }

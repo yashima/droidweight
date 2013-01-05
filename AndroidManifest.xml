@@ -14,7 +14,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name="de.delusions.measure.MeasureActivity" />
-		<activity android:name="de.delusions.measure.activities.chart.WeightChart"
+		<activity android:name="de.delusions.measure.activities.chart.WeightChartActivity"
 			android:configChanges="orientation" />
 		<activity android:name="de.delusions.measure.MeasureEdit"
 			android:theme="@android:style/Theme.Dialog" />
