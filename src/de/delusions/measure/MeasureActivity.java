@@ -31,7 +31,6 @@ import android.widget.ListView;
 import de.delusions.measure.activities.prefs.PrefItem;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.components.InputRecorder;
-import de.delusions.measure.database.MeasureCursorAdapter;
 import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
@@ -39,7 +38,8 @@ import de.delusions.measure.ment.Measurement;
 public class MeasureActivity extends ListActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     public static final String TAG = "MeasureActivity";
-    private static final int ACTIVITY_EDIT = 1;
+    public static final int ACTIVITY_EDIT = 1;
+    public static final int ACTIVITY_PREVIOUS_COMMENT = 2;
     public static final int RESULT_FAILURE = Activity.RESULT_FIRST_USER + 1;
     private InputRecorder recorder;
 
@@ -93,8 +93,11 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
         final AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
         switch (item.getItemId()) {
         case R.id.context_menu_delete:
-            deleteEntry(info);
+            deleteEntry(info.id);
             refreshListView();
+            return true;
+        case R.id.context_menu_previous_comment:
+            addPreviousComment(info.id);
             return true;
         }
         return super.onContextItemSelected(item);
@@ -150,9 +153,9 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
         refreshListView();
     }
 
-    protected void deleteEntry(final AdapterContextMenuInfo info) {
+    private void deleteEntry(final long rowId) {
         final SqliteHelper db = new SqliteHelper(this);
-        db.deleteNote(info.id);
+        db.deleteNote(rowId);
         db.close();
     }
 
@@ -161,6 +164,13 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
         i.putExtra(SqliteHelper.KEY_ROWID, rowId);
         i.putExtra(MeasureEdit.EDIT_TYPE, this.field);
         startActivityForResult(i, ACTIVITY_EDIT);
+    }
+
+    private void addPreviousComment(final long rowId) {
+        final Intent i = new Intent(this, PreviousCommentActivity.class);
+        i.putExtra(SqliteHelper.KEY_ROWID, rowId);
+        i.putExtra(MeasureEdit.EDIT_TYPE, this.field);
+        startActivityForResult(i, ACTIVITY_PREVIOUS_COMMENT);
     }
 
     public boolean refreshListView() {

@@ -13,7 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.
  */
-package de.delusions.measure.database;
+package de.delusions.measure;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -32,6 +32,7 @@ import android.widget.TextView;
 import de.delusions.measure.R;
 import de.delusions.measure.activities.bmi.StatisticsFactory;
 import de.delusions.measure.activities.prefs.UserPreferences;
+import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 
@@ -147,7 +148,7 @@ public class MeasureCursorAdapter extends CursorAdapter {
     }
 
     private void displayComment(final Context context, final View view, final Measurement measurement) {
-        if (UserPreferences.isCommentEnabled(context) && measurement.getComment() != null) {
+        if (UserPreferences.isCommentEnabled(context) && measurement.getComment() != null && !measurement.getComment().equals("")) {
             final TextView commentView = (TextView) view.findViewById(R.id.comment);
             commentView.setText(measurement.getComment());
         } else {

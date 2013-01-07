@@ -12,8 +12,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import de.delusions.measure.MeasureActivity;
+import de.delusions.measure.MeasureCursorAdapter;
 import de.delusions.measure.R;
-import de.delusions.measure.database.MeasureCursorAdapter;
 import de.delusions.measure.ment.Measurement;
 
 public class DateTimeManager {

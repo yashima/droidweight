@@ -31,10 +31,12 @@
 <!-- <string name="menu_chart">Graphique</string> -->
 <string name="menu_about">Visiter la Homepage</string>
 <string name="menu_deleteall">Effacer la base de données</string>
+<string name="menu_previous_comment">Ajouter commentaire précédent</string>
 <string name="activity_editmeasure">Edition </string>
 <string name="activity_createmeasure">Créer une nouvelle entrée</string>
 <!-- <string name="activity_prefs">Préférences</string> -->
 <string name="no_measures">Il n\'y a pas de mesure. Utiliser Menu > Créer une Entrée pour en enregistrer.</string>
+<string name="no_comments">Il n\'y a pas de commentaire.</string>
 <!-- <string name="label_female">Femme</string> -->
 <!-- <string name="label_male">Homme</string> -->
 <!-- <string name="label_metric">Métrique</string> -->

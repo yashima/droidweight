@@ -27,10 +27,12 @@
 
 <string name="menu_about">Zur Homepage</string>
 <string name="menu_deleteall">Datenbank löschen</string>
+<string name="menu_previous_comment">Vorherigen Kommentar hinzufügen</string>
 <string name="activity_editmeasure">Ändern: </string>
 <string name="activity_createmeasure">Neuer Eintrag </string>
 
 <string name="no_measures">Es gibt noch keine Messungen. Benutze das Menu um eine einzugeben.</string>
+<string name="no_comments">Es gibt noch keine Kommentare</string>
 <string name="label_weight">Gewicht</string>
 <string name="label_height">Größe</string>
 <string name="label_bodyfat">Körperfett</string>

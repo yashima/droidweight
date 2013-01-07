@@ -118,8 +118,8 @@ public class InputRecorder extends RelativeLayout {
         this.current.setText(this.currentMeasure.prettyPrint(getContext()));
     }
 
-    public void setCurrent(final Measurement measurement) {
-        this.currentMeasure = measurement;
+    public void setCurrent(final Measurement copyFrom) {
+        this.currentMeasure = Measurement.create(copyFrom);
         final TextView labelView = (TextView) findViewById(R.id.label);
         final TextView unitView = (TextView) findViewById(R.id.unit);
         if (this.currentMeasure != null) {

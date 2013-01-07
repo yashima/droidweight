@@ -12,18 +12,16 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.-->
-<menu xmlns:android="http://schemas.android.com/apk/res/android"  
-	       android:layout_width="wrap_content"
-          android:layout_height="wrap_content">
-<item android:id="@+id/context_menu_previous_comment"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"          
-          android:title="@string/menu_previous_comment" />             
-	
-<item android:id="@+id/context_menu_delete"
-	      android:layout_width="wrap_content"
-          android:layout_height="wrap_content"          
-          android:title="@string/menu_delete" />   
-
-</menu>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      style="@style/MyBasicLayout">   
+             
+    <ListView android:id="@+id/android:list"
+          android:layout_width="fill_parent"
+          android:layout_height="fill_parent"/>
+    <TextView android:id="@+id/android:empty"
+          android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:text="@string/no_comments"/>
+            
+ </LinearLayout>
 

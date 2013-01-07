@@ -329,11 +329,17 @@ public class SqliteHelper {
 
     }
 
-    public Cursor fetchByDate(final Date dateAfter, final MeasureType field) {
+    public Cursor fetchValuesOnlyByDate(final Date dateAfter, final MeasureType field) {
         final String[] columns = { KEY_ROWID, KEY_MEASURE_VALUE, KEY_DATE };
         final String selection = "measure_date > ? and name=?";
         final String[] selectionArgs = { dateAfter.getTime() + "", field.name() };
         return this.mDb.query(WEIGHT_TABLE, null, selection, selectionArgs, null, null, "measure_date ASC");
+    }
+
+    public Cursor fetchCommentsOnly() {
+        final String[] columns = { KEY_ROWID, KEY_COMMENT };
+        final String selection = "comment is not null";
+        return this.mDb.query(true, WEIGHT_TABLE, columns, selection, null, KEY_COMMENT, null, null, null);
     }
 
     /**
