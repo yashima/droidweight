@@ -235,7 +235,7 @@ public class Measurement implements Serializable {
         if (hasColumn(cursor, columnName)) {
             return cursor.getString(cursor.getColumnIndex(columnName));
         } else {
-            Log.w(TAG, "Column not found " + columnName);
+            // Log.w(TAG, "Column not found " + columnName);
             return null;
         }
     }
@@ -244,7 +244,7 @@ public class Measurement implements Serializable {
         if (hasColumn(cursor, columnName)) {
             return cursor.getLong(cursor.getColumnIndex(columnName));
         } else {
-            Log.w(TAG, "Column not found " + columnName);
+            // Log.w(TAG, "Column not found " + columnName);
             return null;
         }
     }
@@ -253,7 +253,7 @@ public class Measurement implements Serializable {
         if (hasColumn(cursor, columnName)) {
             return cursor.getFloat(cursor.getColumnIndex(columnName));
         } else {
-            Log.w(TAG, "Column not found " + columnName);
+            // Log.w(TAG, "Column not found " + columnName);
             return null;
         }
     }

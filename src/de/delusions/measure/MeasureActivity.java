@@ -174,14 +174,13 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     }
 
     public boolean refreshListView() {
-        if (this.valuesCursor == null || this.valuesCursor.isClosed()) {
-            this.valuesDb = new SqliteHelper(this);
-            this.valuesCursor = this.valuesDb.fetchAll(this.field);
-            final MeasureCursorAdapter measures = new MeasureCursorAdapter(this, this.valuesCursor, this.field);
-            setListAdapter(measures);
-        } else {
-            this.valuesCursor.requery();
+        if (this.valuesCursor != null && !this.valuesCursor.isClosed()) {
+            this.valuesCursor.close();
         }
+        this.valuesDb = new SqliteHelper(this);
+        this.valuesCursor = this.valuesDb.fetchAll(this.field);
+        final MeasureCursorAdapter measures = new MeasureCursorAdapter(this, this.valuesCursor, this.field);
+        setListAdapter(measures);
         refreshInputRecorder(this.valuesCursor.getCount() != 0);
         return true;
     }
