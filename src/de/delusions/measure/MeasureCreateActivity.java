@@ -24,6 +24,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.*;
 import android.widget.AdapterView.OnItemSelectedListener;
 import de.delusions.measure.activities.prefs.UserPreferences;
@@ -45,7 +46,9 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
         super.onCreate(savedInstanceState);
         Log.i(MeasureActivity.TAG, "onCreate MeasureCreateActivity");
         setContentView(R.layout.activity_create);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         this.measure = new Measurement();
+        this.measure.setField(UserPreferences.getDisplayField(this));
         retrieveExtras(savedInstanceState);
 
         createConfirmButton();
@@ -53,6 +56,7 @@ public class MeasureCreateActivity extends Activity implements OnDateSetListener
         populateUI();
         DateTimeManager.addShowDatePickerButtonOnClickListener(this.measure, this, this);
         DateTimeManager.addShowTimePickerButtonOnClickListener(this.measure, this, this);
+        findViewById(R.id.input).requestFocus();
     }
 
     private void populateUI() {

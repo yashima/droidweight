@@ -23,6 +23,7 @@ import android.app.TimePickerDialog.OnTimeSetListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.*;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.components.DateTimeManager;
@@ -43,6 +44,7 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
         setContentView(R.layout.activity_edit);
         retrieveMeasureFromExtras(savedInstanceState);
         finishOnMissingMeasure();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         populateUI();
         addConfirmButtonOnClickListener();
         DateTimeManager.addShowDatePickerButtonOnClickListener(this.measure, this, this);
@@ -156,44 +158,6 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     private void retrieveMeasureFromExtras(final Bundle savedInstanceState) {
         this.measure = new MeasureIntentHelper(this, getIntent(), savedInstanceState).retrieveMeasure();
     }
-
-    // private Long retrieveRowIdFromExtras(final Bundle savedInstanceState) {
-    // Long mRowId = savedInstanceState == null ? null : (Long)
-    // savedInstanceState.getSerializable(SqliteHelper.KEY_ROWID);
-    // if (mRowId == null) {
-    // final Bundle extras = getIntent().getExtras();
-    // mRowId = extras != null ? extras.getLong(SqliteHelper.KEY_ROWID) : null;
-    // Log.d(MeasureActivity.TAG, "MeasureEdit:retrieveRowIdFromExtras:" + mRowId);
-    // }
-    // return mRowId;
-    // }
-    //
-    // private MeasureType retrieveMeasureFieldFromExtras(final Bundle savedInstanceState) {
-    // MeasureType field = savedInstanceState == null ? null : (MeasureType)
-    // savedInstanceState.getSerializable(EDIT_TYPE);
-    // if (field == null) {
-    // final Bundle extras = getIntent().getExtras();
-    // field = extras != null ? (MeasureType) extras.getSerializable(EDIT_TYPE) : null;
-    // Log.d(MeasureActivity.TAG, "MeasureEdit:retrieveMeasureFieldFromExtras:" + field);
-    // }
-    // return field;
-    // }
-    //
-    // private Measurement retrieveMeasureFromDatabase(final Long mRowId, final MeasureType field) {
-    // final Measurement result;
-    // final SqliteHelper mDbHelper = new SqliteHelper(this);
-    // final Cursor cursor = mDbHelper.fetchById(mRowId);
-    // if (cursor.getCount() != 0 && field != null) {
-    // result = field.createMeasurement(cursor);
-    // } else {
-    // Log.w(MeasureActivity.TAG, "MeasureEdit:retrieveMeasureFromDatabase:measure not found");
-    // result = null;
-    // }
-    //
-    // cursor.close();
-    // mDbHelper.close();
-    // return result;
-    // }
 
     private void finishOnMissingMeasure() {
         if (this.measure == null) {
