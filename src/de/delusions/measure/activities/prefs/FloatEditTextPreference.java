@@ -19,6 +19,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.EditTextPreference;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import de.delusions.measure.R;
 import de.delusions.measure.ment.Unit;
@@ -27,11 +28,11 @@ public class FloatEditTextPreference extends EditTextPreference {
 
     private Unit unit;
 
-    public FloatEditTextPreference(Context context) {
+    public FloatEditTextPreference(final Context context) {
         super(context);
     }
 
-    public FloatEditTextPreference(Context context, AttributeSet attrs) {
+    public FloatEditTextPreference(final Context context, final AttributeSet attrs) {
         super(context, attrs);
         final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.MeasureInput);
         final String unitStr = a.getString(R.styleable.MeasureInput_unit);
@@ -39,7 +40,7 @@ public class FloatEditTextPreference extends EditTextPreference {
     }
 
     @Override
-    protected String getPersistedString(String defaultReturnValue) {
+    protected String getPersistedString(final String defaultReturnValue) {
         final Float storedValue = getPersistedFloat(-1);
         Float returnValue;
         if (UserPreferences.isMetric(getContext())) {
@@ -51,19 +52,24 @@ public class FloatEditTextPreference extends EditTextPreference {
     }
 
     @Override
-    protected boolean persistString(String value) {
-        final Float floatValue = Float.parseFloat(value);
-        final Float storeValue;
-        if (UserPreferences.isMetric(getContext())) {
-            storeValue = floatValue;
-        } else {
-            storeValue = this.unit.convertToMetric(floatValue);
+    protected boolean persistString(final String value) {
+        try {
+            final Float floatValue = Float.parseFloat(value);
+            final Float storeValue;
+            if (UserPreferences.isMetric(getContext())) {
+                storeValue = floatValue;
+            } else {
+                storeValue = this.unit.convertToMetric(floatValue);
+            }
+            return persistFloat(storeValue);
+        } catch (final NumberFormatException e) {
+            Log.e("FloatEditTextPreference", "could not be parsed as float: " + value);
+            return false;
         }
-        return persistFloat(storeValue);
     }
 
     @Override
-    protected void onBindDialogView(View view) {
+    protected void onBindDialogView(final View view) {
         super.onBindDialogView(view);
         getEditText().setText(getPersistedString(""));
     }
