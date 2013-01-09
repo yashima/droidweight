@@ -45,7 +45,7 @@ public class UserPreferences extends PreferenceActivity {
     Preference goalPref;
     Preference heightPref;
 
-    private static final String LOG_TAG = UserPreferences.class.getName();
+    private static final String LOG_TAG = UserPreferences.class.getSimpleName();
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {

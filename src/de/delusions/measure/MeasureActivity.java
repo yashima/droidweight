@@ -176,6 +176,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     public boolean refreshListView() {
         if (this.valuesCursor != null && !this.valuesCursor.isClosed()) {
             this.valuesCursor.close();
+            this.valuesDb.close();
         }
         this.valuesDb = new SqliteHelper(this);
         this.valuesCursor = this.valuesDb.fetchAll(this.field);
@@ -206,7 +207,6 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
             Log.d(TAG, "onSharedPreferenceChanged " + key);
             this.field = UserPreferences.getDisplayField(this);
             setButtonText();
-            // this.valuesCursor.close();
             refreshListView();
         }
     }
