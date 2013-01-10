@@ -236,7 +236,7 @@ public class MeasureType implements Serializable {
     }
 
     public static void initializeTypeMap(final Context ctx) {
-        refreshFromDatabase(ctx);
+        // refreshFromDatabase(ctx);
     }
 
     private static void refreshFromDatabase(final Context ctx) {

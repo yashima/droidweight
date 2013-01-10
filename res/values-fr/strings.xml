@@ -95,6 +95,7 @@
 <string name="error_filemissing">Fichier d\'import non trouvé: %1$s</string>
 <string name="error_parse_date">La date ne peut être parsée . Format nécessaire: %1%s</string>
 <string name="error_readfile">Erreur de lecture du fichier</string>
+<string name="error_database">Error d\'ouvrir la base de données: %1%s</string>
 
 <string name="chart_title">Historique de poids</string>
 <string name="chart_week2">2 semaines</string>

@@ -21,7 +21,7 @@ import android.widget.Toast;
 import de.delusions.measure.MeasureActivity;
 import de.delusions.measure.R;
 
-public class MeasurementException extends Exception {
+public class MeasurementException extends RuntimeException {
 
     public enum ErrorId {
         SUBZERO(R.string.error_subzero),
@@ -35,11 +35,12 @@ public class MeasurementException extends Exception {
         EXPORT_FILEEXISTS(R.string.error_fileexists),
         EXPORT_FILEMISSING(R.string.error_filemissing),
         EXPORT_READFILE(R.string.error_readfile),
+        DATABASE_ERROR(R.string.error_database),
         UNKNOWN(R.string.error_unknown);
 
         int messageId;
 
-        private ErrorId(int messageId) {
+        private ErrorId(final int messageId) {
             this.messageId = messageId;
         }
 
@@ -50,12 +51,12 @@ public class MeasurementException extends Exception {
 
     private final ErrorId id;
 
-    public MeasurementException(ErrorId id) {
+    public MeasurementException(final ErrorId id) {
         super();
         this.id = id;
     }
 
-    public MeasurementException(ErrorId id, String string) {
+    public MeasurementException(final ErrorId id, final String string) {
         super(string);
         this.id = id;
     }
@@ -66,7 +67,7 @@ public class MeasurementException extends Exception {
         return this.id;
     }
 
-    public void createToast(Context ctx, String logMsg) {
+    public void createToast(final Context ctx, final String logMsg) {
         if (Log.isLoggable(MeasureActivity.TAG, Log.DEBUG)) {
             Log.e(MeasureActivity.TAG, logMsg + "|" + this.id, this);
         } else {

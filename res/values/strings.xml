@@ -72,6 +72,7 @@
 <string name="error_filemissing">Import file not found: %1$s</string>
 <string name="error_parse_date">Date could not be parsed. Format needed: %1%s</string>
 <string name="error_readfile">File reading failure</string>
+<string name="error_database">Database could not be opened: %1%s</string>
 
 <string name="chart_title">Weight History</string>
 <string name="chart_week2">2 weeks</string>
