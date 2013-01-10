@@ -54,8 +54,8 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i(MeasureActivity.TAG, "onCreate MeasureActivity");
-        setContentView(R.layout.activity_weight);
 
+        setContentView(R.layout.activity_weight);
         this.field = UserPreferences.getDisplayField(this);
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
@@ -97,7 +97,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
             refreshListView();
             return true;
         case R.id.context_menu_previous_comment:
-            addPreviousComment(info.id);
+            startActivityForResult(PreviousCommentActivity.createIntent(this, info.id), ACTIVITY_PREVIOUS_COMMENT);
             return true;
         }
         return super.onContextItemSelected(item);
@@ -106,7 +106,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     @Override
     protected void onListItemClick(final ListView l, final View v, final int position, final long id) {
         super.onListItemClick(l, v, position, id);
-        editItem(id);
+        startActivityForResult(MeasureEdit.createIntent(this, id), ACTIVITY_EDIT);
     }
 
     @Override
@@ -157,20 +157,6 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
         final SqliteHelper db = new SqliteHelper(this);
         db.deleteNote(rowId);
         db.close();
-    }
-
-    private void editItem(final long rowId) {
-        final Intent i = new Intent(this, MeasureEdit.class);
-        i.putExtra(SqliteHelper.KEY_ROWID, rowId);
-        i.putExtra(MeasureEdit.EDIT_TYPE, this.field);
-        startActivityForResult(i, ACTIVITY_EDIT);
-    }
-
-    private void addPreviousComment(final long rowId) {
-        final Intent i = new Intent(this, PreviousCommentActivity.class);
-        i.putExtra(SqliteHelper.KEY_ROWID, rowId);
-        i.putExtra(MeasureEdit.EDIT_TYPE, this.field);
-        startActivityForResult(i, ACTIVITY_PREVIOUS_COMMENT);
     }
 
     public boolean refreshListView() {

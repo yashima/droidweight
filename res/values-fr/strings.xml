@@ -161,4 +161,6 @@
 <string name="notification_title">Rappel Droid Weight</string>
 <!-- <string name="notification_text">N\'oubliez pas de saisir votre poids pour aujourd\'hui</string> -->
 
+<string name="crash_report">Droidweight s\'est planté. Mets le report du faute à:</string>
+
 </resources>

@@ -42,8 +42,9 @@ import de.delusions.measure.ment.MeasurementException;
 public class MeasureTabs extends TabActivity {
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_tabhost);
 
         MeasureType.initializeTypeMap(this);
@@ -66,17 +67,18 @@ public class MeasureTabs extends TabActivity {
         tabHost.addTab(spec);
 
         tabHost.setCurrentTab(0);
+
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         super.onCreateOptionsMenu(menu);
         final MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.layout.basic_menu, menu);
         return true;
     }
 
-    public static boolean basicMenu(Activity a, MenuItem item) {
+    public static boolean basicMenu(final Activity a, final MenuItem item) {
         final Intent i;
         switch (item.getItemId()) {
         case R.id.basic_menu_settings:
@@ -119,7 +121,7 @@ public class MeasureTabs extends TabActivity {
         return false;
     }
 
-    public static Intent createMeasureIntent(Context ctx, MeasureType type) {
+    public static Intent createMeasureIntent(final Context ctx, final MeasureType type) {
         final Intent i;
         i = new Intent(ctx, MeasureCreateActivity.class);
         i.putExtra(MeasureEdit.EDIT_TYPE, type);
@@ -137,7 +139,7 @@ public class MeasureTabs extends TabActivity {
         builder.setTitle(R.string.menu_showtype);
         builder.setSingleChoiceItems(items, -1, new DialogInterface.OnClickListener() {
 
-            public void onClick(DialogInterface dialog, int item) {
+            public void onClick(final DialogInterface dialog, final int item) {
                 UserPreferences.setDisplayField(a, tracked.get(item));
                 dialog.dismiss();
             }

@@ -6,13 +6,15 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />	
 	<application android:icon="@drawable/icon2"
 		android:label="@string/app_name" android:allowBackup="true" >
-		<activity android:name=".MeasureTabs" android:label="@string/app_name"
+		<activity android:name="de.delusions.measure.ErrorMailerActivity" android:label="@string/app_name"
 			android:theme="@android:style/Theme.NoTitleBar">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity android:name=".MeasureTabs" android:label="@string/app_name"
+            android:theme="@android:style/Theme.NoTitleBar"/>        
 		<activity android:name="de.delusions.measure.MeasureActivity" />
 		<activity android:name="de.delusions.measure.PreviousCommentActivity"/>
 		<activity android:name="de.delusions.measure.activities.chart.WeightChartActivity"

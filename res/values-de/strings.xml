@@ -145,5 +145,6 @@
 <string name="notification_ticker">DroidWeight Erinnerung</string>
 <string name="notification_title">DroidWeight Erinnerung</string>
 
+<string name="crash_report">Droidweight war abgestürzt. Sende Fehlerreport an (email):</string>
 
 </resources>
