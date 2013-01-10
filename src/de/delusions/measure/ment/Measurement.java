@@ -40,7 +40,7 @@ public class Measurement implements Serializable {
     private Date timestamp = new Date();
 
     public Measurement() {
-        this.id = null;
+        this.id = -1l;
     }
 
     public void parseAndSetValue(final String strValue, final boolean metric) throws MeasurementException {

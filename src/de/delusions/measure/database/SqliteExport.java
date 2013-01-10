@@ -36,11 +36,20 @@ import de.delusions.measure.ment.MeasurementException;
 
 public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
 
+    private static final String TAG = SqliteExport.class.getSimpleName();
+
     private final static String EXPORT_DIR = "droidweight";
     private final static String EXPORT_FILE_NAME = "data.csv";
     private final static String EXPORT_FILE_HEADER = "value|type|date|metric|id|comment";
     private final static String DATE_STRING = "yyyy-MM-dd hh:mm:ss";
     private final static SimpleDateFormat DATE_FORMAT = new SimpleDateFormat(DATE_STRING);
+
+    private final static int VALUE_POS = 0;
+    private final static int TYPE_POS = 1;
+    private final static int TIMESTAMP_POS = 2;
+    private final static int METRIC_POS = 3;
+    private final static int ID_POS = 4;
+    private final static int COMMENT_POS = 5;
 
     private final ProgressDialog dialog;
     private final SqliteHelper db;
@@ -62,6 +71,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
 
     @Override
     protected Integer doInBackground(final Boolean... export) {
+        Log.d(TAG, "doInBackground started");
         try {
             if (this.export) {
                 return exportMeasurements();
@@ -97,6 +107,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
     }
 
     public Integer exportMeasurements() throws MeasurementException {
+        Log.d(TAG, "exportMeasurements started");
         int numberOfMeasures = 0;
         FileWriter writer = null;
         try {
@@ -129,16 +140,20 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
     }
 
     public int importMeasurements() throws MeasurementException {
+        Log.d(TAG, "importMeasurements started");
         LineNumberReader reader = null;
         int result = 0;
         try {
             reader = new LineNumberReader(new FileReader(this.exportFile));
             String line = reader.readLine();
             while (line != null) {
-                final Measurement measurement = readLine(line);
-                if (measurement != null && !this.db.exists(measurement)) {
-                    this.db.createMeasure(measurement);
-                    result++;
+                if (!line.startsWith("value")) { // header
+                    Log.d(TAG, "processing line " + line);
+                    final Measurement measurement = readLine(line);
+                    if (measurement != null && !this.db.exists(measurement)) {
+                        this.db.createMeasure(measurement);
+                        result++;
+                    }
                 }
                 line = reader.readLine();
             }
@@ -159,13 +174,20 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
     }
 
     public static String createLine(final Measurement measurement, final boolean metric) {
+        final int numberOfParts = 6;
+        final String[] parts = new String[numberOfParts];
+        parts[VALUE_POS] = Float.toString(measurement.getValue(metric));
+        parts[TYPE_POS] = measurement.getField().name();
+        parts[TIMESTAMP_POS] = DATE_FORMAT.format(measurement.getTimestamp());
+        parts[METRIC_POS] = Boolean.toString(metric);
+        parts[ID_POS] = measurement.getId() != null ? Long.toString(measurement.getId()) : "";
+        parts[COMMENT_POS] = measurement.getComment();
+
         final StringBuffer line = new StringBuffer();
-        line.append(measurement.getValue(metric)).append("|");
-        line.append(measurement.getField().name()).append("|");
-        line.append(DATE_FORMAT.format(measurement.getTimestamp())).append("|");
-        line.append(metric).append("|");
-        line.append(measurement.getId()).append("|");
-        line.append(measurement.getComment());
+        for (final String part : parts) {
+            line.append(part);
+            line.append("|");
+        }
         line.append("\n");
         return line.toString();
     }
@@ -174,18 +196,18 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
         if (!line.equals(EXPORT_FILE_HEADER)) {
             Log.d(MeasureActivity.TAG, "parsing " + line);
             final String[] parts = line.split("\\|");
-            final String value = parts[0];
-            final MeasureType type = MeasureType.valueOf(parts[1]);
-            final boolean metric = Boolean.parseBoolean(parts[3]);
+            final String value = retrieveStringFromLine(parts, VALUE_POS);
+            final MeasureType type = MeasureType.valueOf(retrieveStringFromLine(parts, TYPE_POS));
+            final boolean metric = Boolean.parseBoolean(retrieveStringFromLine(parts, METRIC_POS));
             final Date date;
             try {
-                date = DATE_FORMAT.parse(parts[2]);
+                date = DATE_FORMAT.parse(retrieveStringFromLine(parts, TIMESTAMP_POS));
             } catch (final ParseException e) {
                 throw new MeasurementException(MeasurementException.ErrorId.PARSEERROR_DATE, DATE_STRING);
             }
-            final Long id = parts.length > 4 ? Long.parseLong(parts[4]) : null;
-
-            final String comment = parts.length > 5 ? parts[5] : null;
+            final String idString = retrieveStringFromLine(parts, ID_POS);
+            final Long id = idString != null ? Long.parseLong(idString) : -1l;
+            final String comment = retrieveStringFromLine(parts, COMMENT_POS);
 
             final Measurement measurement = new Measurement();
             measurement.setId(id);
@@ -198,6 +220,21 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
             Log.d(MeasureActivity.TAG, "ignoring header");
             return null;
         }
+    }
+
+    private static String retrieveStringFromLine(final String[] parts, final int pos) {
+        final String result;
+        if (parts.length > pos) {
+            final String part = parts[pos];
+            if (part != null && !part.equals("") && !part.equals("null") && !part.equals("NULL")) {
+                result = part;
+            } else {
+                result = null;
+            }
+        } else {
+            result = null;
+        }
+        return result;
     }
 
     private File openExportFile(final boolean create) throws MeasurementException {
