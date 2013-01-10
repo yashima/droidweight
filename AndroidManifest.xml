@@ -23,9 +23,9 @@
             android:theme="@android:style/Theme.Dialog" />
 		<activity android:name="de.delusions.measure.MeasureFastEdit"
 			android:theme="@android:style/Theme.Dialog" />
-		<activity android:name="de.delusions.measure.activities.bmi.BmiTable" />
+		<activity android:name="de.delusions.measure.activities.bmi.BmiTableActivity" />
 		<activity android:name="de.delusions.measure.activities.prefs.UserPreferences" />
-		<activity android:name="de.delusions.measure.activities.bmi.BmiCalc"
+		<activity android:name="de.delusions.measure.activities.bmi.BmiCalcActivity"
 			android:theme="@android:style/Theme.Dialog" />
 		
 		<receiver android:name=".notifications.AlarmReceiver"></receiver>
