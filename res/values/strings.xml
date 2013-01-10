@@ -131,4 +131,6 @@
 <string name="notification_ticker">Weight Reminder</string>
 <string name="notification_title">Droid Weight Reminder</string>
 
+<string name="crash_report">Droidweight crashed previously. Send error report to email program:</string>
+
 </resources>
