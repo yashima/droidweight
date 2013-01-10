@@ -20,6 +20,8 @@ import java.util.Calendar;
 import android.app.*;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.TimePickerDialog.OnTimeSetListener;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -197,6 +199,13 @@ public class MeasureEdit extends Activity implements OnDateSetListener, OnTimeSe
     public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
         this.measure.updateTime(hourOfDay, minute);
         DateTimeManager.populateTimeButton(this.measure, this);
+    }
+
+    public static Intent createIntent(final Context context, final long rowId) {
+        final Intent i = new Intent(context, MeasureEdit.class);
+        i.putExtra(SqliteHelper.KEY_ROWID, rowId);
+        i.putExtra(EDIT_TYPE, UserPreferences.getDisplayField(context));
+        return i;
     }
 
 }

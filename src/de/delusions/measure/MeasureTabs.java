@@ -31,7 +31,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TabHost;
-import de.delusions.measure.activities.bmi.BmiTable;
+import de.delusions.measure.activities.bmi.BmiTableActivity;
 import de.delusions.measure.activities.chart.WeightChartActivity;
 import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.SqliteExport;
@@ -56,7 +56,7 @@ public class MeasureTabs extends TabActivity {
         spec = tabHost.newTabSpec("kg").setIndicator(res.getString(R.string.tab_weight), res.getDrawable(R.drawable.ic_tab_kg)).setContent(intent);
         tabHost.addTab(spec);
 
-        intent = new Intent().setClass(this, BmiTable.class);
+        intent = new Intent().setClass(this, BmiTableActivity.class);
         spec = tabHost.newTabSpec("bmi").setIndicator(res.getString(R.string.tab_stats), res.getDrawable(R.drawable.ic_tab_bmi)).setContent(intent);
         tabHost.addTab(spec);
 

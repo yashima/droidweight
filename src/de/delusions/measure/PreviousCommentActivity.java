@@ -5,6 +5,7 @@ package de.delusions.measure;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import de.delusions.measure.activities.prefs.UserPreferences;
 import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.Measurement;
 
@@ -24,6 +26,7 @@ import de.delusions.measure.ment.Measurement;
 public class PreviousCommentActivity extends ListActivity {
 
     private static final String TAG = "PreviousCommentActivity";
+    public static final String EDIT_TYPE = "type";
 
     private SqliteHelper db;
     private Cursor cursor;
@@ -76,5 +79,12 @@ public class PreviousCommentActivity extends ListActivity {
         dbHelper.updateMeasure(this.measurement.getId(), this.measurement);
         dbHelper.close();
         finish();
+    }
+
+    public static Intent createIntent(final Context context, final long rowId) {
+        final Intent i = new Intent(context, PreviousCommentActivity.class);
+        i.putExtra(SqliteHelper.KEY_ROWID, rowId);
+        i.putExtra(EDIT_TYPE, UserPreferences.getDisplayField(context));
+        return i;
     }
 }

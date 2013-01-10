@@ -18,6 +18,7 @@ package de.delusions.measure.activities.bmi;
 import android.app.Activity;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -30,8 +31,8 @@ import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 import de.delusions.measure.ment.MeasurementException;
 
-public class BmiCalc extends Activity {
-
+public class BmiCalcActivity extends Activity {
+    private static final String TAG = BmiCalcActivity.class.getSimpleName();
     private EditText weightField;
     private EditText heightField;
 
@@ -41,7 +42,7 @@ public class BmiCalc extends Activity {
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(TAG, "onCreate");
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         setTitle(R.string.menu_calc);
@@ -55,8 +56,8 @@ public class BmiCalc extends Activity {
         goButton.setOnClickListener(new View.OnClickListener() {
 
             public void onClick(final View view) {
-                BmiCalc.this.weight = tryGetValue(BmiCalc.this.weightField, MeasureType.WEIGHT);
-                BmiCalc.this.height = tryGetValue(BmiCalc.this.heightField, MeasureType.HEIGHT);
+                BmiCalcActivity.this.weight = tryGetValue(BmiCalcActivity.this.weightField, MeasureType.WEIGHT);
+                BmiCalcActivity.this.height = tryGetValue(BmiCalcActivity.this.heightField, MeasureType.HEIGHT);
                 tryCalculateBmi();
             }
 

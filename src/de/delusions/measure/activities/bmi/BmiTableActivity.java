@@ -33,15 +33,16 @@ import de.delusions.measure.database.SqliteHelper;
 import de.delusions.measure.ment.MeasureType;
 import de.delusions.measure.ment.Measurement;
 
-public class BmiTable extends Activity {
+public class BmiTableActivity extends Activity {
 
     private static final int UPPER_BOUND = 100;
     private static final int LOWER_BOUND = 0;
+    private static final String TAG = BmiTableActivity.class.getSimpleName();
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.i(MeasureActivity.TAG, "onCreate BmiTable");
+        Log.i(TAG, "onCreate BmiTableActivity");
         getWindow().setFormat(PixelFormat.RGBA_8888);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_DITHER);
         setContentView(R.layout.activity_bmi);
@@ -94,7 +95,7 @@ public class BmiTable extends Activity {
     }
 
     private void startCalculator() {
-        startActivity(new Intent(this, BmiCalc.class));
+        startActivity(new Intent(this, BmiCalcActivity.class));
     }
 
     private void setText(final int textId, final Measurement measurement, final String alternateLabel) {
@@ -103,13 +104,13 @@ public class BmiTable extends Activity {
     }
 
     private void setText(final int textId, final Measurement measurement) {
-        Log.d(MeasureActivity.TAG, "BmiTable.setText: " + measurement);
+        Log.d(MeasureActivity.TAG, "BmiTableActivity.setText: " + measurement);
         final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
         text.display(measurement);
     }
 
     private void setText(final int textId, final float value) {
-        Log.d(MeasureActivity.TAG, "BmiTable.setText: " + value);
+        Log.d(MeasureActivity.TAG, "BmiTableActivity.setText: " + value);
         final MeasureDisplay text = (MeasureDisplay) findViewById(textId);
         text.display(value);
     }
