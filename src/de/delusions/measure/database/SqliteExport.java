@@ -110,7 +110,7 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
                 while (!cursor.isLast()) {
                     cursor.moveToNext();
                     final Measurement measurement = Measurement.create(cursor);
-                    writer.append(createLine(measurement));
+                    writer.append(createLine(measurement, this.metric));
                     numberOfMeasures++;
                 }
             }
@@ -158,19 +158,19 @@ public class SqliteExport extends AsyncTask<Boolean, Void, Integer> {
         return result;
     }
 
-    private String createLine(final Measurement measurement) {
+    public static String createLine(final Measurement measurement, final boolean metric) {
         final StringBuffer line = new StringBuffer();
-        line.append(measurement.getValue(this.metric)).append("|");
+        line.append(measurement.getValue(metric)).append("|");
         line.append(measurement.getField().name()).append("|");
         line.append(DATE_FORMAT.format(measurement.getTimestamp())).append("|");
-        line.append(this.metric).append("|");
+        line.append(metric).append("|");
         line.append(measurement.getId()).append("|");
         line.append(measurement.getComment());
         line.append("\n");
         return line.toString();
     }
 
-    private Measurement readLine(final String line) throws MeasurementException {
+    public static Measurement readLine(final String line) throws MeasurementException {
         if (!line.equals(EXPORT_FILE_HEADER)) {
             Log.d(MeasureActivity.TAG, "parsing " + line);
             final String[] parts = line.split("\\|");
