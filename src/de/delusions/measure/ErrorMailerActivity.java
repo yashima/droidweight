@@ -39,6 +39,7 @@ public class ErrorMailerActivity extends Activity {
 
     protected void startTabs() {
         startActivity(new Intent(this, MeasureTabs.class));
+        finish();
     }
 
     @Override
@@ -80,9 +81,9 @@ public class ErrorMailerActivity extends Activity {
                 trace += line + "\n";
             }
         } catch (final FileNotFoundException fnfe) {
-            // ...
+            // no use logging a crash when reading the stacktrace
         } catch (final IOException ioe) {
-            // ...
+            // no use logging a crash when reading the stacktrace
         }
         return trace;
     }
