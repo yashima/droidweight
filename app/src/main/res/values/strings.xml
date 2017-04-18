@@ -125,7 +125,7 @@
 <string name="exporter_export">Export</string>
 <string name="exporter_import">Import</string>
 <string name="exporter_dialog_message">%1$sing database&#8230;</string>
-<string name="exporter_toast_success">%1$sed %2$s entries!</string>
+<string name="exporter_toast_success">%1$sed %2$d entries!</string>
 <string name="exporter_toast_fail">Nothing %1$sed!</string>
 
 <string name="dialog_message_deleteall">Deleting all entries! Are you sure?</string>

@@ -116,7 +116,7 @@ public class StatisticsFactory {
      * Calculates the BMI from kg and height in meter
      * 
      * @param weightInKg
-     * @param heightInMeter
+     * @param heightInCm
      * @return
      */
     public static float calculateBmi(final Measurement weightInKg, final Measurement heightInCm) {

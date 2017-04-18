@@ -13,9 +13,8 @@
    See the License for the specific language governing permissions and
    limitations under the License.-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:delusions= "http://schemas.android.com/apk/res/de.delusions.measure"
     android:layout_width="200dp"
-    android:layout_height="wrap_content"        
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="10dp"
     android:paddingBottom="10dp"

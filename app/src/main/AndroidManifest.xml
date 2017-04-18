@@ -29,8 +29,8 @@
 		<activity android:name="de.delusions.measure.activities.prefs.UserPreferences" />
 		<activity android:name="de.delusions.measure.activities.bmi.BmiCalcActivity"
 			android:theme="@android:style/Theme.Dialog" />
-		
-		<receiver android:name=".notifications.AlarmReceiver"></receiver>
+
+		<receiver android:name=".notifications.AlarmReceiver" />
 
 		<!-- receiver android:label="Droid Weight Input" android:icon="@drawable/icon2" 
 			android:name="de.delusions.measure.widget.InputAppWidgetProvider"> <intent-filter> 
@@ -43,7 +43,7 @@
 				<action android:name="android.intent.action.BOOT_COMPLETED" />
 			</intent-filter>
 		</receiver>
-		<service android:name=".notifications.NotifyService"></service>
+		<service android:name=".notifications.NotifyService" />
 	</application>
 	
 </manifest>

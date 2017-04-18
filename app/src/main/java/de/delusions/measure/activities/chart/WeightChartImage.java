@@ -158,7 +158,6 @@ public class WeightChartImage {
      * Rounded_max is the max value we want to plot and therefore the longest label on the y-axis
      * 
      * @param paint
-     * @param rounded_max
      * 
      * @return
      */

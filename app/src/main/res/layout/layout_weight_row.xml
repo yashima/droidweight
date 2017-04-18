@@ -22,7 +22,12 @@
     <TableRow>
         <TextView android:id="@+id/label_measure"  style="@style/TextMedium" android:text="@string/row_weight" android:paddingRight="15dp"/>          
         <TextView android:id="@+id/measure" style="@style/TextLarge" />
-        <ImageView android:src="@android:drawable/arrow_up_float" android:id="@+id/change_arrow" android:layout_height="fill_parent" android:layout_width="fill_parent"></ImageView>                                        
+
+        <ImageView
+            android:src="@android:drawable/arrow_up_float"
+            android:id="@+id/change_arrow"
+            android:layout_height="fill_parent"
+            android:layout_width="fill_parent" />
     </TableRow>
 
     <TableRow>

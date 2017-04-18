@@ -75,7 +75,7 @@ public class ErrorMailerActivity extends Activity {
         String trace = "";
         try {
             final BufferedReader reader = new BufferedReader(new InputStreamReader(openFileInput(TopExceptionHandler.STACKTRACE_FILE)));
-            String line = null;
+            String line;
 
             while ((line = reader.readLine()) != null) {
                 trace += line + "\n";

@@ -74,7 +74,7 @@ public class MeasureTabs extends TabActivity {
     public boolean onCreateOptionsMenu(final Menu menu) {
         super.onCreateOptionsMenu(menu);
         final MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.basic_menu, menu);
+        inflater.inflate(R.menu.basic_menu, menu);
         return true;
     }
 

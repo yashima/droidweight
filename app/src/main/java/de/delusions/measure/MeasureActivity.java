@@ -85,7 +85,7 @@ public class MeasureActivity extends ListActivity implements SharedPreferences.O
     public void onCreateContextMenu(final ContextMenu menu, final View v, final ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         final MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.layout.context_menu, menu);
+        inflater.inflate(R.menu.context_menu, menu);
     }
 
     @Override

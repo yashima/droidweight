@@ -23,11 +23,11 @@ import de.delusions.measure.activities.prefs.UserPreferences;
 
 public enum Unit {
 
-    CM(Float.valueOf(0.39f), "cm", "in"),
+    CM(0.39f, "cm", "in"),
 
-    KG(Float.valueOf(2.2f), "kg", "lb"),
+    KG(2.2f, "kg", "lb"),
 
-    PERCENT(Float.valueOf(1), "%", "%");
+    PERCENT(1f, "%", "%");
 
     private final float toImperialMultiplier;
     private final String metricUnit;

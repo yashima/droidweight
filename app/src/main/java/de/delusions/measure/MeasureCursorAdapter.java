@@ -110,7 +110,7 @@ public class MeasureCursorAdapter extends CursorAdapter {
      * Formats and displays the date
      * 
      * @param view
-     * @param circumference
+     * @param strDate
      */
     private void displayDate(final View view, final String strDate) {
         final long timestamp = Long.parseLong(strDate);
@@ -123,7 +123,7 @@ public class MeasureCursorAdapter extends CursorAdapter {
      * Converts, formats and displays the weight measure
      * 
      * @param view
-     * @param circumference
+     * @param measurement
      */
     private void displayMeasurement(final View view, final Measurement measurement) {
         final TextView t = (TextView) view.findViewById(R.id.measure);
@@ -136,7 +136,7 @@ public class MeasureCursorAdapter extends CursorAdapter {
      * Calculates, formats and displays the bmi
      * 
      * @param view
-     * @param circumference
+     * @param measurement
      */
     private void displayBMI(final View view, final Measurement measurement) {
         if (measurement.getField() == MeasureType.WEIGHT) {

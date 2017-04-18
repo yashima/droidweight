@@ -13,8 +13,7 @@
    See the License for the specific language governing permissions and
    limitations under the License.-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:delusions= "http://schemas.android.com/apk/res/de.delusions.measure"
-      style="@style/MyBasicLayout">   
+    style="@style/MyBasicLayout">
       
        
       <RelativeLayout android:layout_width="fill_parent"

@@ -100,7 +100,7 @@ public class UserPreferences extends PreferenceActivity {
                     } else if (item.getPrefClass() == String.class) {
                         defaultEditor.putString(item.getKey(), customSharedPrefs.getString(item.getKey(), ""));
                     } else if (item.getPrefClass() == Float.class) {
-                        defaultEditor.putFloat(item.getKey(), customSharedPrefs.getFloat(item.getKey(), Float.valueOf(-1)));
+                        defaultEditor.putFloat(item.getKey(), customSharedPrefs.getFloat(item.getKey(), (float) -1));
                     } else if (item.getPrefClass() == Boolean.class) {
                         defaultEditor.putBoolean(item.getKey(), customSharedPrefs.getBoolean(item.getKey(), false));
                     }
@@ -129,7 +129,7 @@ public class UserPreferences extends PreferenceActivity {
 
     public static float getUnitPreference(final Context ctx, final String key) {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-        final Float result = prefs.getFloat(key, Float.valueOf(0));
+        final Float result = prefs.getFloat(key, 0f);
         Log.d(LOG_TAG, "getUnitPreference " + result);
         return result;
     }

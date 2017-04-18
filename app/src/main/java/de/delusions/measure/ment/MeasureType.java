@@ -120,8 +120,6 @@ public class MeasureType implements Serializable {
 
     /**
      * for the default fields to make some stuff configurable
-     * 
-     * @param cursor
      */
     public void refresh(final MeasureType mt) {
         this.maxValue = mt.maxValue;

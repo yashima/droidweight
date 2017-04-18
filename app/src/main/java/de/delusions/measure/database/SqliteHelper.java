@@ -167,12 +167,7 @@ public class SqliteHelper {
     /**
      * Create a new note using the title and body provided. If the note is successfully created return the new rowId for
      * that note, otherwise return a -1 to indicate failure.
-     * 
-     * @param title
-     *            the title of the note
-     * @param body
-     *            the body of the note
-     * 
+     *
      * @return rowId or -1 if failed
      */
     public long createMeasure(final Measurement measurement) {
@@ -231,10 +226,7 @@ public class SqliteHelper {
      * 
      * @param rowId
      *            id of measure to update
-     * @param weight
-     *            value to set measure weight to
-     * @param date
-     *            value to set measure date to
+     *
      * @return true if the note was successfully updated, false otherwise
      */
     public boolean updateMeasure(final long rowId, final Measurement measurement) {
@@ -301,9 +293,6 @@ public class SqliteHelper {
     /**
      * Return a Cursor over the list of all measures in the database
      * 
-     * @param fieldName
-     *            TODO
-     * 
      * @return Cursor over all measures
      */
     public Cursor fetchAll() {
@@ -335,7 +324,6 @@ public class SqliteHelper {
     }
 
     public Cursor fetchValuesOnlyByDate(final Date dateAfter, final MeasureType field) {
-        final String[] columns = { KEY_ROWID, KEY_MEASURE_VALUE, KEY_DATE };
         final String selection = "measure_date > ? and name=?";
         final String[] selectionArgs = { dateAfter.getTime() + "", field.name() };
         return this.mDb.query(WEIGHT_TABLE, null, selection, selectionArgs, null, null, "measure_date ASC");

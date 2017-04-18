@@ -151,8 +151,8 @@
 
 <string name="exporter_export">Exporter</string>
 <string name="exporter_import">Importer</string>
-<string name="exporter_dialog_message">%1$sing database...</string>
-<string name="exporter_toast_success">%1$sed %2$s entries!</string>
+<string name="exporter_dialog_message">%1$sing database…</string>
+<string name="exporter_toast_success">%1$sed %2$d entries!</string>
 <string name="exporter_toast_fail">Rien %1$sed!</string>
 
 <string name="dialog_message_deleteall">Effacer toutes les données! Etes-vous sur?</string>
